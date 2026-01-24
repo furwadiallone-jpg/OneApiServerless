@@ -1,72 +1,74 @@
-const axios = require('axios');
-const yt = async (url,baseUrl) =>{
-let time = new Date()
-function getYouTubeVideoId(url) {
-	const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|v\/|embed\/|user\/[^\/\n\s]+\/)?(?:watch\?v=|v%3D|embed%2F|video%2F)?|youtu\.be\/|youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/shorts\/|youtube\.com\/playlist\?list=)([a-zA-Z0-9_-]{11})/;
-	const match = url.match(regex);
-	return match ? match[1] : null;
-}
-
-function delay(seconds) {
-  return new Promise(resolve => {
-    setTimeout(resolve, seconds * 1000);
-  });
-}
-  
-let videoID = await getYouTubeVideoId(url)
-// Menyiapkan data json
-const jsondata ={"youtube_id":videoID,"quality":4,"formatValue":1}
-
-const config = {
-  headers: {
+const axios = require('axios')
+const cheerio = require('cheerio')
+const yta = async (url) => {
+  const headers = {
     "Accept": "*/*",
     "Accept-Encoding": "gzip, deflate, br",
-    "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
-    "Content-Type": "application/json",
-    "Origin": "https://cnvmp3.com",
-    "Priority": "u=1, i",
-    "Referer": "https://cnvmp3.com/v23",
-    "Sec-CH-UA": '"Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"',
+    "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+    "Cookie": "_gcl_au=1.1.33156021.1769143387; _ga=GA1.1.185609915.1769143393; _fbp=fb.1.1769143448528.455671939159124611; _tt_enable_cookie=1; _ttp=01KFMJNDSZT2X5JX933254P05X_.tt.1; _ga_JWHZ1GHQ0S=GS2.1.s1769143392$o1$g1$t1769143829$j52$l0$h260965826; ttcsid=1769143449412::KRTtvh9VW4MIDOl_Q_BH.1.1769143851278.0; ttcsid_CU96RHBC77UBVOTKOTN0=1769143449411::lnMyDaFI3ng_fUetyL0x.1.1769143851278.1; XSRF-TOKEN=eyJpdiI6ImdtZ2RXQ3NMN21XcjNHVGtKR3ZJRFE9PSIsInZhbHVlIjoiNy9zbGZIWnZEWUlDc3NtV2ZJMDlaTndOR25PVTMwaVJGSGMwMlFBd2VrL2EybGt0Z1ZQbC83MXRaUEtaUmpCZzlZQllaMWNVY1hkYk1pbFhLQjZpQSt6bFFQMCtzRHZ4WlZaZXlMelNzM2RYWXExeHppR2V2YmNUSG85RU1OeDUiLCJtYWMiOiI0NDM0M2NjYTdjNWI1Y2IyNDBiZWVjYzMzMjY5NDZiMjYxZTg0ODQwM2ZkMGFmMjAyMjQ4NDUwNDMwZDczMDdjIiwidGFnIjoiIn0%3D; kolid_session=eyJpdiI6IjhTa2tsZk8vR0hXWDA4ekFYcHoyNVE9PSIsInZhbHVlIjoiSU5yRzJZUjllcU0zZjkwL2w2TlZCQ2tyamRKdldKVFAvWHBuVWxuRXl2THRRRHVJL2Q3ZGNiRUtXK0RTM09zeHUyWjdrbVlDb0VWT09zMHB5RGQ0SHlnQlljN1YyVHNaZXBFRUNzY3MxUXM4UVZCbkxyU0tKdzN3UkZTTjVZamoiLCJtYWMiOiJiOTIyMGYyZjFmNmJkN2NhMzNmY2QxMTU5MmZmZTYwNGNmMjdhMmVmMDg2YjMxZjY1MDcwNTQ1Y2ZmMjg1ZjM0IiwidGFnIjoiIn0%3D",
+    "Origin": "https://kol.id",
+    "Referer": "https://kol.id/download-video/youtube",
+    "Sec-CH-UA": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
     "Sec-CH-UA-Mobile": "?0",
-    "Sec-CH-UA-Platform": '"Windows"',
+    "Sec-CH-UA-Platform": "\"Windows\"",
     "Sec-Fetch-Dest": "empty",
     "Sec-Fetch-Mode": "cors",
     "Sec-Fetch-Site": "same-origin",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "X-Requested-With": "XMLHttpRequest"
+  };
+  const datasend = {
+    url: url,
+    _token: "xfQCCFKTepoJq107SKUGU3FJt9vBj9OTEDiiDiMi"
+  };
+  const params = new URLSearchParams(datasend);
+  try {
+    let data = await axios.post('https://kol.id/download-video/youtube', params.toString(), {
+      headers
+    })
+    if (data.status === 200) {
+      let $ = cheerio.load(data.data.html)
+      let title = $('.small-title > h2').text().trim()
+      let thumbnail = $('.video-popup-frame > img').attr('src')
+      let subcriber = $('.subscriber-info').text().trim()
+      let channel = $('.channel-info').text().trim().split('Channel: ')[1].split(subcriber)[0].trim()
+      let duration = $('.time-details').text().trim().split('Duration: ')[1]
+      let link = []
+      $('.dropdown-menu > li').each((i, el) => {
+        let download_url = $(el).find('a').attr('href')
+        let desc = $(el).find('a').text().trim()
+        link.push({
+          download_url,
+          desc
+        })
+      })
+      let metadata = {
+        title,
+        thumbnail,
+        channel,
+        subcriber,
+        duration,
+        link: {
+          audio: link[2].download_url,
+          video: link[1].download_url
+        }
+      }
+      return {
+        status: true,
+        data: metadata
+      }
+    } else {
+      return {
+        status: false,
+        message: "Failed to fetch data"
+      }
+    }
+  } catch (err) {
+    return {
+      status: false,
+      message: err.message || err.toString()
+    }
   }
-};
-
-try{
-let respon = await axios.post('https://cnvmp3.com/check_database.php', jsondata, config)
-if(respon.status == 200){
-console.log('step 1',respon.data)
-if(respon.data.success){
-  return {status: true, author: "iwan", result:{title:respon.data.data.title, link:`${baseUrl}/ytget/id?data=${encodeURIComponent(respon.data.data.server_path.replace(/&/g, '%26').replace(/#/g, '%23').replace(/\+/g, '%2B'))}`}}
-}else{
-await delay(3)
-let profildata = {"url":`https://www.youtube.com/watch?v=${videoID}`,"token":"1234"}
-let get_video_data = await axios.post('https://cnvmp3.com/get_video_data.php', profildata, config)
-console.log('step 2',get_video_data.data)
-if(get_video_data.data.success){
-await delay(3)
-let ucep = {"url":`https://www.youtube.com/watch?v=${videoID}`,"quality":4,"title":get_video_data.data.title,"formatValue":1}
-let download_video_ucep = await axios.post('https://cnvmp3.com/download_video_ucep.php', ucep, config)
-console.log('step 3',download_video_ucep.data)
-if(download_video_ucep.data.success){
-await delay(3)
-let insertdb = {"youtube_id":videoID,"server_path":download_video_ucep.data.download_link,"quality":4,"title":get_video_data.data.title,"formatValue":1}
-let finish = await axios.post('https://cnvmp3.com/insert_to_database.php', insertdb, config)
-console.log('step 4',finish.data)
-return {status: true, author: "iwan", result:{title:get_video_data.data.title, link:`${baseUrl}/ytget/id?data=${encodeURIComponent(download_video_ucep.data.download_link.replace(/&/g, '%26').replace(/#/g, '%23').replace(/\+/g, '%2B'))}`}}
 }
-}
-}
-}else{
-  return {status: false, author: "iwan", message: "Gagal mengunduh"}
-}
-}catch(e){
-  return {status: false, author: "iwan", message: e.message}
-}
-}
-
-module.exports = yt;
+module.exports = yta
