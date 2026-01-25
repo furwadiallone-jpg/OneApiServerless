@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Documentation</title>
+    <title>Dokumentasi XIXY API</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,9 +15,12 @@
 
         header {
             background-color: #1e90ff;
+            position: sticky;
             color: white;
             padding: 20px;
             text-align: center;
+            top:0;
+            border-radius: 0px 0px 20px 20px;
         }
 
         h1 {
@@ -66,11 +69,13 @@
             background-color: #1e90ff;
             color: white;
             text-align: center;
-            position: fixed;
+            position: relatif;
             height: 5%;
-            padding-bottom: 15px;
+            padding-top: 5px ;
+            padding-bottom: 5px ;
             width: 100%;
             bottom: 0;
+            border-radius: 20px 20px 0px 0px;
         }
 
         .api-endpoint {
@@ -90,13 +95,15 @@
 <body>
 
     <header>
-        <h1>API Documentation</h1>
-        <p>Welcome to the API documentation! Below you will find all the available API endpoints.</p>
+        <h1>Dokumentasi XIXY API</h1>
+        <p>Selamat Datang di Web Dokumentasi api kami. Nikmati layanan kamin secara gratis disini tanpa perlu Apikey</p>
     </header>
 
     <section class="api-endpoint">
         <h2>GET AI</h2>
-        <p><strong>URL:</strong> <a href="https://oneapiserver.vercel.app/ai/id?data=apa+itu+klorofil" target="_blank">https://oneapiserver.vercel.app/ai/id?data=apa+itu+klorofil</a></p>
+        <p><strong>URL:</strong>
+            <a id="ai" target="_blank"></a>
+        </p>
         <h3>Response</h3>
         <pre>
 {
@@ -108,18 +115,54 @@
 }
         </pre>
     </section>
+    
+    <section class="api-endpoint">
+        <h2>POST AI</h2>
+        <p><strong>URL:</strong>
+            <a id="aipro" target="_blank"></a>
+            <button id="aiprotes">Tes</button>
+        </p>
+        <h3>Request</h3>
+        <pre>
+{
+  "text": "Nama kamu siapa?",
+  "id": "120164693439849@g.us",
+  "name": "Iwan",
+  "sender": "081234566790@s.whatsapp.net",
+  "prompt": "Sekarang kamu adalah Xixy yang baik hati...."
+}
+        </pre>
+        <h3>Response</h3>
+        <pre id="aiprorespon">
+{
+  status: true,
+  result: {
+    response: 'Halo nama saya Xixy, senang berkenalan denganmu',
+    messageId: 'msg-abcde12345',
+    history: [ [Object], [Object], [Object] ]
+  }
+}
+        </pre>
+    </section>
 
     <section class="api-endpoint">
-        <h2>GET YOUTUBE MP3</h2>
-        <p><strong>URL:</strong> <a href="https://oneapiserver.vercel.app/yta/id?data=https://www.youtube.com/watch?v=0AJ1hOIyG4k" target="_blank">https://oneapiserver.vercel.app/yta/id?data=https://www.youtube.com/watch?v=0AJ1hOIyG4k</a></p>
+        <h2>GET YOUTUBE AUDIO</h2>
+        <p><strong>URL:</strong>
+            <a id="yta" target="_blank"></a>
+        </p>
         <h3>Response</h3>
         <pre>
 {
   "status": true,
   "author": "iwan",
   "result": {
-    "title": "SALLSA BINTAN Ft. LEONA ZHEN - GARAM DAN MADU | Feat. RASTAMANIEZ (Official Live Version)",
-    "link": "http://oneapiserver.vercel.app/ytget/id?data=https%3A%2F%2Fapiv13dlp.cnvmp3.me%2Fdownloads%2Fdownload.php%3Ffile%3D%2FSALLSA%20BINTAN%20Ft.%20LEONA%20ZHEN%20-%20GARAM%20DAN%20MADU%20_%20Feat.%20RASTAMANIEZ%20(Official%20Live%20Version)%204.mp3"
+    "link": "https://api.xixy.my.id/download.mp3",
+    "title": "Indonesia Raya",
+    "filesize": 6924561,
+    "progress": 100,
+    "duration": 444.546,
+    "status": "ok",
+    "msg": "success"
   }
 }
         </pre>
@@ -127,7 +170,9 @@
 
     <section class="api-endpoint">
         <h2>GET YOUTUBE MP4</h2>
-        <p><strong>URL:</strong> <a href="https://oneapiserver.vercel.app/ytv/id?data=https://www.youtube.com/watch?v=cRKYbhZXoUI" target="_blank">https://oneapiserver.vercel.app/ytv/id?data=https://www.youtube.com/watch?v=cRKYbhZXoUI</a></p>
+        <p><strong>URL:</strong>
+            <a id="ytv" target="_blank"></a>
+        </p>
         <h3>Response</h3>
         <pre>
 {
@@ -135,7 +180,7 @@
   "author": "iwan",
   "result": {
     "title": "LEONA ZHEN - BAGAIKAN LANGIT DAN BUMI | Feat. RASTAMANIEZ ( Official Live Version )",
-    "link": "http://oneapiserver.vercel.app/ytget/id?data=https%3A%2F%2Fapiv5dlp.cnvmp3.cc%2Fdownloads%2Fdownload.php%3Ffile%3D%2FLEONA%20ZHEN%20-%20BAGAIKAN%20LANGIT%20DAN%20BUMI%20_%20Feat.%20RASTAMANIEZ%20(%20Official%20Live%20Version%20)%20360.mp4"
+    "link": "https://webku.dpdns.org/ytget/id?data=https%3A%2F%2Fapiv5dlp.cnvmp3.cc%2Fdownloads%2Fdownload.php%3Ffile%3D%2FLEONA%20ZHEN%20-%20BAGAIKAN%20LANGIT%20DAN%20BUMI%20_%20Feat.%20RASTAMANIEZ%20(%20Official%20Live%20Version%20)%20360.mp4"
   }
 }
         </pre>
@@ -143,7 +188,9 @@
 
     <section class="api-endpoint">
         <h2>GET TIKTOK</h2>
-        <p><strong>URL:</strong> <a href="https://oneapiserver.vercel.app/tiktok/id?data=https://vt.tiktok.com/ZSMCtdvKm" target="_blank">https://oneapiserver.vercel.app/tiktok/id?data=https://vt.tiktok.com/ZSMCtdvKm</a></p>
+        <p><strong>URL:</strong>
+            <a id="tiktok" target="_blank"></a>
+        </p>
         <h3>Response</h3>
         <pre>
 {
@@ -161,15 +208,21 @@
 
     <section class="api-endpoint">
         <h2>GET INSTAGRAM</h2>
-        <p><strong>URL:</strong> <a href="https://oneapiserver.vercel.app/ig/id?data=https://www.instagram.com/reel/DDd7QqeRyWX/?igsh=MWdpbWl5djhxMTFkMg==" target="_blank">https://oneapiserver.vercel.app/ig/id?data=https://www.instagram.com/reel/DDd7QqeRyWX/?igsh=MWdpbWl5djhxMTFkMg==</a></p>
+        <p><strong>URL:</strong>
+            <a id="ig" target="_blank"></a>
+        </p>
         <h3>Response</h3>
         <pre>
 {
   "status": true,
   "author": "iwan",
   "result": {
-    "thumb": "https://d.rapidcdn.app/snapinsta?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LWdpZzQtMi5jZG5pbnN0YWdyYW0uY29tL3YvdTUxLjI4ODUtMTUvNDY5OTc5MTA4XzE4MzgzMjY2NTM3MTA0MjQyXzg0NDYwMjgwOTYzMzUyNDM1MTBfbi5qcGc_c3RwPWRzdC1qcGdfZTE1X2ZyX3AxMDgweDEwODBfdHQ2Jl9uY19odD1zY29udGVudC1naWc0LTIuY2RuaW5zdGFncmFtLmNvbSZfbmNfY2F0PTEwMiZfbmNfb2M9UTZjWjJBRWZIc1JlN1lTeFl2Q2lGSGxWT01HQ21VZHlYYWpEd29aQjJCaGVHOG43Z0FBY015SUxlQnhDWEhOT01YSzNLSGsmX25jX29oYz1sbGd0RFk1YmpnZ1E3a052Z0ZfTnRVMiZfbmNfZ2lkPWFmODQzYjlmN2NkZjRmYzhiMmM2ODZhODE1ZTNkYzM1JmVkbT1BUHMxN0NVQkFBQUEmY2NiPTctNSZvaD0wMF9BWUE3ZnFsaGd4T1pPdjFNdlBfRUROaC1pTFBQalJjSC1QTFF5Q2NzVlBuV05RJm9lPTY3Q0Y4QUIyJl9uY19zaWQ9MTBkMTNiIiwiZmlsZW5hbWUiOiJTbmFwaW5zdGEuYXBwX3RodW1iXzQ2OTk3OTEwOF8xODM4MzI2NjUzNzEwNDI0Ml84NDQ2MDI4MDk2MzM1MjQzNTEwX24uanBnIn0.V1VFCKtv1Hx4mylh-4EniyB1E_7iVEqCg0dRxt-MpyQ",
-    "link": "https://d.rapidcdn.app/snapinsta?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LWdpZzQtMS5jZG5pbnN0YWdyYW0uY29tL28xL3YvdDE2L2YyL204Ni9BUU9mOVdacGJnY0E0b1dWa0JKRHE0ZlZvU21ydXdaelhmTmFQQUdOR2Y5d0VhMk5XVXJJc9OglKvCHY0eJw%2Ff%2Fw8Y%2Fvfxe%3Fmd5%3D51ca3c1c049d1fb3223c52008d3f6a71%26src%3Dvideo"
+    "link": [
+      "https://api.xixy.my.id/download.mp4"
+    ],
+    "metadata": {
+      "url": "https://www.instagram.com/reel/xixyultimate"
+    }
   }
 }
         </pre>
@@ -177,29 +230,240 @@
 
     <section class="api-endpoint">
         <h2>GET FACEBOOK</h2>
-        <p><strong>URL:</strong> <a href="https://oneapiserver.vercel.app/fb/id?data=https://fb.watch/yasCLNd0ai" target="_blank">https://oneapiserver.vercel.app/fb/id?data=https://fb.watch/yasCLNd0ai</a></p>
+        <p><strong>URL:</strong>
+            <a id="fb" target="_blank"></a>
+        </p>
         <h3>Response</h3>
         <pre>
 {
   "status": true,
   "author": "iwan",
   "result": {
-    "thumb": "https://ssscdn.io/getmyfb/p/aHR0cHM6Ly9zY29udGVudC1taWEzLTEueHguZmJjZG4ubmV0L3YvdDE1LjUyNTYtMTAvNDgxMTMzNzc5XzUwMDM3NjU1Mjg1MDc1M18zNTk4Njk0ODc2Njg5NzI5NjY2X24uanBnP3N0cD1kc3QtanBnX3A1MjZ4Mjk2X3R0NiZfbmNfY2F0PTEwMCZjY2I9MS03Jl9uY19zaWQ9NDBkMzg1Jl9uY19vaGM9Ri15bzJqZFJidGtRN2tOdmdFRnduMTgmX25jX29jPUFkakoydlBoTXpkbXBSZFFFUkJjN0h0NVJFcWI3Q3dWdHRyZjFsQVdody1GWGVpNHFkOEJMWHlYVlR5ekRKdnFhRlUmX25jX3p0PTIzJl9uY19odD1zY29udGVudC1taWEzLTEueHgmZWRtPUFHbzJMLUlFQUFBQSZfbmNfZ2lkPUEyOVNBRklqTnZhQnczYTVrSzNGWGdJJm9oPTAwX0FZR094SFRwZW15VVQxeWJYU2JubFFNbDV2X1NieVRnNjlXLWdHWjVpeFowQmcmb2U9NjdEMDk3MEI=",
+    "thumb": "https://api.xixy.my.id/thumbnail.jpg",
     "link": {
-      "hd": "https://ssscdn.io/getmyfb/aHR0cHM6Ly92aWRlby1taWEzLTIueHguZmJjZG4ubmV0L28xL3YvdDIvZjIvbTY5L0FRTUZBLVY4ZzV4N1Q0N1F1QXE1SDE2NTVMaDNlNEdJMHhlR2tCbnZiQkI1TW1PS0NRVVlaYmpURHFkWHNfRjIyVjJKbHN6QTlPLUN4X3dfNkZTWk5YancubXA0P2VmZz1leUprZFhKaGRHbHZibDl6SWpveU1UTXNJblpwWDNWelpXTmhjMlZmYVdRaU9qRXdNVEl5TENKNGNIWmZZWE56WlhSZmFXUWlPakV4TlRVNE9UZzVNekk0TlRJME9Ua3NJblpsYm1OdlpHVmZkR0ZuSWpvaWVIQjJYM0J5YjJkeVpYTnphWFpsTGtaQlEwVkNUMDlMTGk1RE15NDNNakF1WkdGemFGOW9NalkwTFdKaGMybGpMV2RsYmpKZk56SXdjQ0o5Jl9uY19odD12aWRlby1taWEzLTIueHguZmJjZG4ubmV0Jl9uY19jYXQ9MTExJl9uY19vYz1BZGlFeEQ5aThXLWJpNzhhQXktalF0cUFmTnBoSjZJaFYwbDI0MjhoTnZDR3V0REVDd256eTFmQThnR0FZM2JWWnFZJnN0cmV4dD0xJnZzPTU4ZjgzNDljOTk2Y2EzNTgmX25jX3ZzPUhCa3NGUUlZT25CaGMzTjBhSEp2ZFdkb1gyVjJaWEp6ZEc5eVpTOUhTamwxY1VKNVJsSk9hekZVVkdOSlFVUkNka3M0VTFGaWVXc3RZbTFrYWtGQlFVWVZBQUxJQVFBVkFoZzZjR0Z6YzNSb2NtOTFaMmhmWlhabGNuTjBiM0psTDBkR1ZHZDBVbnBYY1ZSZlZHWkVjMFZCU2pNdFoyWXlTalZSZUhWaWNrWnhRVUZCUmhVQ0FzZ0JBQ2dBR0FBYkFvZ0hkWE5sWDI5cGJBRXhFbkJ5YjJkeVpYTnphWFpsWDNKbFkybHdaUUV4RlFBQUpxYmN6NVNXMG8wRUZRSW9Ba016TEJkQWFxdTJSYUhLd1JnWlpHRnphRjlvTWpZMExXSmhjMmxqTFdkbGJqSmZOekl3Y0JFQWRRSUEmY2NiPTktNCZvaD0wMF9BWUgwTWtZVnVHUHB2VGRKTjFYWDFPdDZGcnZSZUlrOWN6ajQxc2Z0bGtpNHp3Jm9lPTY3Q0NCMkZCJl9uY19zaWQ9MWQ1NzZk",
-      "sd": "https://ssscdn.io/getmyfb/aHR0cHM6Ly92aWRlby1taWEzLTMueHguZmJjZG4ubmV0L28xL3YvdDIvZjIvbTY5L0FRUEF2MGFrdmU1OV9mUTJRVk5mWnBTZXNPYnVuY3hJVVFXbHg1WktNMHNELUptelZvZ1ZqWnRUUFJRYjZRalNNbXBfdmJmSWttUEJOM2RodjhfVFowUXcubXA0P3N0cmV4dD0xJl9uY19jYXQ9MTA4Jl9uY19zaWQ9OGJmOGZlJl9uY19odD12aWRlby1taWEzLTMueHguZmJjZG4ubmV0Jl9uY19vaGM9SVZCbHJMVjBGMDBRN2tOdmdFcG8zSWMmZWZnPWV5SjJaVzVqYjJSbFgzUmhaeUk2SW5od2RsOXdjbTluY21WemMybDJaUzVHUVVORlFrOVBTeTR1UXpNdU16WXdMbk4yWlY5elpDSXNJbmh3ZGw5aGMzTmxkRjlwWkNJNk1URTFOVGc1T0Rrek1qZzFNalE1T1N3aWRtbGZkWE5sWTJGelpWOXBaQ0k2TVRBeE1qSXNJbVIxY21GMGFXOXVYM01pT2pJeE15d2lkWEpzWjJWdVgzTnZkWEpqWlNJNkluZDNkeUo5JmNjYj0xNy0xJl9uY196dD0yOCZvaD0wMF9BWUdMcjB0QUl2NlFlb2IxUm5RVlY3Z0c0TWlUd3A4VkVSVG5wWDNnRjg1RTVnJm9lPTY3RDA5NjE2"
+      "hd": "https://api.xixy.my.id/hd.mp4",
+      "sd": "https://api.xixy.my.id/sd.mp4"
     },
     "linkUnblock": {
-      "hd": "http://oneapiserver.vercel.app/download/id?data=https%3A%2F%2Fssscdn.io%2Fgetmyfb%2FaHR0cHM6Ly92aWRlby1taWEzLTIueHguZmJjZG4ubmV0L28xL3YvdDIvZjIvbTY5L0FRTUZBLVY4ZzV4N1Q0N1F1QXE1SDE2NTVMaDNlNEdJMHhlR2tCbnZiQkI1TW1PS0NRVVlaYmpURHFkWHNfRjIyVjJKbHN6QTlPLUN4X3dfNkZTWk5YancubXA0P2VmZz1leUprZFhKaGRHbHZibDl6SWpveU1UTXNJblpwWDNWelpXTmhjMlZmYVdRaU9qRXdNVEl5TENKNGNIWmZZWE56WlhSZmFXUWlPakV4TlRVNE9UZzVNekk0TlRJME9Ua3NJblpsYm1OdlpHVmZkR0ZuSWpvaWVIQjJYM0J5YjJkeVpYTnphWFpsTGtaQlEwVkNUMDlMTGk1RE15NDNNakF1WkdGemFGOW9NalkwTFdKaGMybGpMV2RsYmpKZk56SXdjQ0o5Jl9uY19odD12aWRlby1taWEzLTIueHguZmJjZG4ubmV0Jl9uY19jYXQ9MTExJl9uY19vYz1BZGlFeEQ5aThXLWJpNzhhQXktalF0cUFmTnBoSjZJaFYwbDI0MjhoTnZDR3V0REVDd256eTFmQThnR0FZM2JWWnFZJnN0cmV4dD0xJnZzPTU4ZjgzNDljOTk2Y2EzNTgmX25jX3ZzPUhCa3NGUUlZT25CaGMzTjBhSEp2ZFdkb1gyVjJaWEp6ZEc5eVpTOUhTamwxY1VKNVJsSk9hekZVVkdOSlFVUkNka3M0VTFGaWVXc3RZbTFrYWtGQlFVWVZBQUxJQVFBVkFoZzZjR0Z6YzNSb2NtOTFaMmhmWlhabGNuTjBiM0psTDBkR1ZHZDBVbnBYY1ZSZlZHWkVjMFZCU2pNdFoyWXlTalZSZUhWaWNrWnhRVUZCUmhVQ0FzZ0JBQ2dBR0FBYkFvZ0hkWE5sWDI5cGJBRXhFbkJ5YjJkeVpYTnphWFpsWDNKbFkybHdaUUV4RlFBQUpxYmN6NVNXMG8wRUZRSW9Ba016TEJkQWFxdTJSYUhLd1JnWlpHRnphRjlvTWpZMExXSmhjMmxqTFdkbGJqSmZOekl3Y0JFQWRRSUEmY2NiPTktNCZvaD0wMF9BWUgwTWtZVnVHUHB2VGRKTjFYWDFPdDZGcnZSZUlrOWN6ajQxc2Z0bGtpNHp3Jm9lPTY3Q0NCMkZCJl9uY19zaWQ9MWQ1NzZk",
-      "sd": "http://oneapiserver.vercel.app/download/id?data=https%3A%2F%2Fssscdn.io%2Fgetmyfb%2FaHR0cHM6Ly92aWRlby1taWEzLTMueHguZmJjZG4ubmV0L28xL3YvdDIvZjIvbTY5L0FRUEF2MGFrdmU1OV9mUTJRVk5mWnBTZXNPYnVuY3hJVVFXbHg1WktNMHNELUptelZvZ1ZqWnRUUFJRYjZRalNNbXBfdmJmSWttUEJOM2RodjhfVFowUXcubXA0P3N0cmV4dD0xJl9uY19jYXQ9MTA4Jl9uY19zaWQ9OGJmOGZlJl9uY19odD12aWRlby1taWEzLTMueHguZmJjZG4ubmV0Jl9uY19vaGM9SVZCbHJMVjBGMDBRN2tOdmdFcG8zSWMmZWZnPWV5SjJaVzVqYjJSbFgzUmhaeUk2SW5od2RsOXdjbTluY21WemMybDJaUzVHUVVORlFrOVBTeTR1UXpNdU16WXdMbk4yWlY5elpDSXNJbmh3ZGw5aGMzTmxkRjlwWkNJNk1URTFOVGc1T0Rrek1qZzFNalE1T1N3aWRtbGZkWE5sWTJGelpWOXBaQ0k2TVRBeE1qSXNJbVIxY21GMGFXOXVYM01pT2pJeE15d2lkWEpzWjJWdVgzTnZkWEpqWlNJNkluZDNkeUo5JmNjYj0xNy0xJl9uY196dD0yOCZvaD0wMF9BWUdMcjB0QUl2NlFlb2IxUm5RVlY3Z0c0TWlUd3A4VkVSVG5wWDNnRjg1RTVnJm9lPTY3RDA5NjE2"
+      "hd": "https://api.xixy.my.id/unhd.mp4",
+      "sd": "https://api.xixy.my.id/unsd.mp4"
     }
   }
 }
         </pre>
     </section>
+    
+    <section class="api-endpoint">
+        <h2>GET ONGOING ANIME</h2>
+        <p><strong>URL:</strong>
+            <a id="ongo" target="_blank"></a>
+        </p>
+        <h3>Response</h3>
+        <pre>
+{
+  "status": "success",
+  "author": "iwan",
+  "result": {
+    "logo": "https://otakudesu.best/wp-content/uploads/2019/08/otakudesu.png",
+    "anime": [
+      {
+        "title": "Jigokuraku Season 2",
+        "link": "https://otakudesu.best/anime/jigokuku-s2-sub-indo/",
+        "date": "12 Jan",
+        "episode": "Episode 1"
+      },
+      {
+        "title": "Seihantai na Kimi to Boku",
+        "link": "https://otakudesu.best/anime/seihantai-kimi-boku-sub-indo/",
+        "date": "12 Jan",
+        "episode": "Episode 1"
+      },
+      {
+        "title": "Goumon Baito-kun no Nichijou",
+        "link": "https://otakudesu.best/anime/goumon-baito-sub-indo/",
+        "date": "12 Jan",
+        "episode": "Episode 2"
+      },
+      {
+        "title": "Ikoku Nikki",
+        "link": "https://otakudesu.best/anime/ikoku-nikki-sub-indo/",
+        "date": "12 Jan",
+        "episode": "Episode 2"
+      }
+    ]
+  }
+}
+        </pre>
+    </section>
+    <section class="api-endpoint">
+        <h2>GET ANIME SEARCH</h2>
+        <p><strong>URL:</strong>
+            <a id="animesearch" target="_blank"></a>
+        </p>
+        <h3>Response</h3>
+        <pre>
+{
+  "status": "success",
+  "author": "iwan",
+  "result": {
+    "logo": "https://otakudesu.best/wp-content/uploads/2017/07/Otaku-Desu-1-e1502267840475.jpg",
+    "anime": [
+      {
+        "title": "Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi Sub Indo",
+        "link": "https://otakudesu.best/anime/mikata-yowasugite-hojo-mahou-sub-indo/"
+      },
+      {
+        "title": "Mizu Zokusei no Mahoutsukai (Episode 1 – 12) Subtitle Indonesia",
+        "link": "https://otakudesu.best/anime/mizu-zokusei-mahoutsukai-sub-indo/"
+      }
+    ]
+  }
+}
+        </pre>
+    </section>
+    <section class="api-endpoint">
+        <h2>GET ANIME EPISODE</h2>
+        <p><strong>URL:</strong>
+            <a id="epd" target="_blank"></a>
+        </p>
+        <h3>Response</h3>
+        <pre>
+{
+  "status": "success",
+  "author": "iwan",
+  "result": {
+    "title": "Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi Sub Indo ",
+    "thumbnail": "https://otakudesu.best/wp-content/uploads/2025/10/Mikata-ga-Yowasugite-Hojo-Mahou-ni-Tesshiteita-Kyuutei-Mahoushi-Sub-Indo.jpg",
+    "episode": [
+      {
+        "title": "Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi Episode 4 Subtitle Indonesia",
+        "link": "https://otakudesu.best/episode/myhm-episode-4-sub-indo/"
+      },
+      {
+        "title": "Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi Episode 3 Subtitle Indonesia",
+        "link": "https://otakudesu.best/episode/myhm-episode-3-sub-indo/"
+      },
+      {
+        "title": "Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi Episode 2 Subtitle Indonesia",
+        "link": "https://otakudesu.best/episode/myhm-episode-2-sub-indo/"
+      },
+      {
+        "title": "Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi Episode 1 Subtitle Indonesia",
+        "link": "https://otakudesu.best/episode/myhm-episode-1-sub-indo/"
+      }
+    ]
+  }
+}
+        </pre>
+    </section>
+    <section class="api-endpoint">
+        <h2>GET ANIME LINK STREAM</h2>
+        <p><strong>URL:</strong>
+            <a id="desustream" target="_blank"></a>
+        </p>
+        <h3>Response</h3>
+        <pre>
+{
+  "status": "success",
+  "author": "iwan",
+  "result": {
+    "logo": "https://otakudesu.best/wp-content/uploads/2019/08/otakudesu.png",
+    "title": "Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi Episode 1 Subtitle Indonesia",
+    "linkStream": "https://desustream.info/dstream/ondesu3/v5/index.php?id=cUVyY1NZNTB0UkUvblNCUkdoZ2x4dz09"
+  }
+}
+        </pre>
+    </section>
     <footer>
-        <p>&copy; 2025 API Documentation | Made with ❤️ by iwan</p>
+        <p>&copy; 2025 API Documentation | Made with ❤️ by Iwan</p>
     </footer>
+<script>
+  const base = window.location.origin;
+  function endpoint(path, example) {
+    return `${base}${path}${example ? example : ""}`;
+  }
 
-</body>
+  // Contoh pakai:
+//Endpoint AI
+  document.getElementById("ai").href = endpoint("/ai?text=apa+itu+klorofil");
+  document.getElementById("ai").textContent = endpoint("/ai?text=<your query>");
+
+//Endpoint YTA
+  document.getElementById("yta").href = endpoint("/yta?url=https://www.youtube.com/watch?v=uyyLot4PLXM");
+  document.getElementById("yta").textContent = endpoint("/yta?url=<your query>");
+
+//Endpoint YTV
+  document.getElementById("ytv").href = endpoint("/ytv?url=https://www.youtube.com/watch?v=uyyLot4PLXM");
+  document.getElementById("ytv").textContent = endpoint("/ytv?url=<your query>");
+
+//Endpoint Tiktok
+  document.getElementById("tiktok").href = endpoint("/tiktok?url=https://vt.tiktok.com/ZSMCtdvKm");
+  document.getElementById("tiktok").textContent = endpoint("/tiktok?url=<your query>");
+
+//Endpoint IG
+  document.getElementById("ig").href = endpoint("/ig?url=https://www.instagram.com/kompastv/reel/DCYrKEUxbEx/");
+  document.getElementById("ig").textContent = endpoint("/ig?url=<your query>");
+
+//Endpoint FB
+  document.getElementById("fb").href = endpoint("/fb?url=https://web.facebook.com/beacukairi/videos/indonesia-raya/1618433994897609");
+  document.getElementById("fb").textContent = endpoint("/fb?url=<your query>");
+
+//Endpoint AIpro
+  document.getElementById("aipro").href = endpoint("/aipro");
+  document.getElementById("aipro").textContent = endpoint("/aipro");
+
+//Endpoint Anime Ongoing
+  document.getElementById("ongo").href = endpoint("/getongoing");
+  document.getElementById("ongo").textContent = endpoint("/getongoing");
+    
+//Endpoint Anime Search
+  document.getElementById("animesearch").href = endpoint("/getanime?query=mahou");
+  document.getElementById("animesearch").textContent = endpoint("/getanime?query=<your query>");
+    
+//Endpoint Anime Episode
+  document.getElementById("epd").href = endpoint("/getepisode?url=https://otakudesu.best/anime/mikata-yowasugite-hojo-mahou-sub-indo/");
+  document.getElementById("epd").textContent = endpoint("/getepisode?url=<your url anime>");
+    
+//Endpoint Anime Desustream
+  document.getElementById("desustream").href = endpoint("/getdesustream?url=https://otakudesu.best/episode/myhm-episode-1-sub-indo");
+  document.getElementById("desustream").textContent = endpoint("/getdesustream?url=<your url anime episode>");
+</script>
+  <script>
+    document.getElementById("aiprotes").addEventListener("click", async () => {
+      const url = "/aipro"; // ganti dengan endpoint API
+
+      const data = {
+  "text": "Nama kamu siapa?",
+  "id": "120164693439849@g.us",
+  "name": "Iwan",
+  "sender": "081234566790@s.whatsapp.net",
+  "prompt": "Sekarang kamu adalah Xixy yang baik hati....",
+  "clear": true
+};
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          throw new Error("Terjadi error: " + response.status);
+        }
+
+        const result = await response.json();
+
+        // tampilkan hasil di HTML
+        document.getElementById("aiprorespon").textContent = JSON.stringify(result, null, 2);
+
+      } catch (error) {
+        document.getElementById("aiprorespon").textContent = "Error: " + error.message;
+      }
+    });
+  </script>
+
+</body>    
 </html>
