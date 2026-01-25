@@ -42,12 +42,13 @@ start()
 emulate()
 });
 
-app.get('/download/:id', async (req,res) => {
-const q = req.query.data
+//Universal Stream Download Helper
+app.get('/stream', async (req,res) => {
+const q = req.query.url
 const emulate = () =>{
 async function start() {
 try{
-const respon = await downloadFileAsBuffer(q)
+const respon = await getStream(q)
   res.send(respon)
 }catch(e){
     res.end()
