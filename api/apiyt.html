@@ -99,7 +99,7 @@
     <script>
         async function getYouTubeMP3() {
             const link = document.getElementById('youtube-link').value;
-            const apiUrl = `https://oneapiserver.vercel.app/yta/id?data=${encodeURIComponent(link)}`;
+            const apiUrl = `https://webku.dpdns.org//yt?url=${encodeURIComponent(link)}`;
 
             // Menampilkan tanda loading
             document.getElementById('loading').style.display = 'block';
@@ -115,7 +115,8 @@
                 if (data.status) {
                     document.getElementById('result').innerHTML = `
                         <h3>Judul: ${data.result.title}</h3>
-                        <a href="${data.result.link}" target="_blank">Klik di sini untuk mendownload MP3</a>
+                        <a href="${data.data.link.audio}" target="_blank">Klik di sini untuk mendownload MP3</a>
+                        <a href="${data.data.link.video}" target="_blank">Klik di sini untuk mendownload Video</a>
                     `;
                 } else {
                     document.getElementById('result').innerHTML = 'Tidak dapat memproses permintaan.';
@@ -130,3 +131,4 @@
     </script>
 </body>
 </html>
+
