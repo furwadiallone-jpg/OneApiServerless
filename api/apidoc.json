@@ -20,7 +20,13 @@
   {
     "id": "tt",
     "name": "tiktok",
-    "endpoint": "/tt?url=",
+    "endpoint": "/tiktok?url=",
     "unit-tes": "https://vt.tiktok.com/ZSMCtdvKm"
+  },
+  {
+    "id": "ai",
+    "name": "ai",
+    "endpoint": "/ai?text=",
+    "unit-tes": "apa itu Klorofil"
   }
 ]
