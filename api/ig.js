@@ -1,47 +1,133 @@
-const axios = require('axios');
-const ig = async (url,baseUrl) =>{
-let time = new Date()
-// Menyiapkan data form
-const formData = new FormData();
-formData.append('url', url);
-formData.append('new', '2');
-formData.append('lang', 'en');
-formData.append('app', '');
+const axios = require("axios");
+const cheerio = require("cheerio");
 
-const config = {
-  headers: {
-    'Accept': '*/*',
-    'Accept-Encoding': 'gzip, deflate, br, zstd',
-    'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
-    'Content-Length': '477',
-    'Content-Type': 'multipart/form-data',
-    'Origin': 'https://snapinsta.app',
-    'Priority': 'u=1, i',
-    'Referer': 'https://snapinsta.app/',
-    'Sec-CH-UA': '"Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"',
-    'Sec-CH-UA-Mobile': '?0',
-    'Sec-CH-UA-Platform': '"Windows"',
-    'Sec-Fetch-Dest': 'empty',
-    'Sec-Fetch-Mode': 'cors',
-    'Sec-Fetch-Site': 'same-origin',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
-  }
+const BASE_URL = "https://snapsave.app/action.php?lang=en";
+const HEADERS = {
+  "User-Agent":
+    "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Mobile Safari/537.36",
+  Referer: "https://snapsave.app/instagram-video-download",
+  "Content-Type": "application/x-www-form-urlencoded",
 };
 
-try{
+// fungsi decode
+function decodeData(data) {
+  let [part1, part2, part3, part4, part5] = data;
+  let part6 = "";
 
-let respon = await axios.post('https://snapinsta.app/get-data.php', formData, config)
-if(respon.status == 200){
+  const decodeSegment = (segment, base, length) => {
+    const charSet =
+      "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/".split("");
+    let baseSet = charSet.slice(0, base);
+    let decodeSet = charSet.slice(0, length);
 
-let thumb = respon.data.files[0].thumbnail_url
-let link = respon.data.files[0].video_url
-return {status: true, author: "iwan", result:{thumb:thumb, link:link,linkUnblock:`${baseUrl}/download/id?data=${encodeURIComponent(link)}`}}
-}else{
-  return {status: false, author: "iwan", message: "Gagal mengunduh"}
-}
-}catch(e){
-  return {status: false, author: "iwan", message: e.message}
-}
+    let decodedValue = segment
+      .split("")
+      .reverse()
+      .reduce((accum, char, index) => {
+        return accum + baseSet.indexOf(char) * Math.pow(base, index);
+      }, 0);
+
+    let result = "";
+    while (decodedValue > 0) {
+      result = decodeSet[decodedValue % length] + result;
+      decodedValue = Math.floor(decodedValue / length);
+    }
+    return result || "0";
+  };
+
+  for (let i = 0, len = part1.length; i < len; i++) {
+    let segment = "";
+    while (part1[i] !== part3[part5]) {
+      segment += part1[i];
+      i++;
+    }
+    for (let j = 0; j < part3.length; j++) {
+      segment = segment.replace(new RegExp(part3[j], "g"), j.toString());
+    }
+    part6 += String.fromCharCode(decodeSegment(segment, part5, 10) - part4);
+  }
+  return decodeURIComponent(encodeURIComponent(part6));
 }
 
-module.exports = ig;
+// fungsi extract parameter
+function extractParams(data) {
+  try {
+    return data
+      .split("decodeURIComponent(escape(r))}(")[1]
+      .split("))")[0]
+      .split(",")
+      .map((item) => item.replace(/"/g, "").trim());
+  } catch (error) {
+    throw new Error("Gagal mengekstrak parameter");
+  }
+}
+
+// ambil URL video dari data
+function getVideoUrl(data) {
+  return decodeData(extractParams(data));
+}
+
+// parsing data SnapSave
+function parseFsaveData(data, url) {
+  try {
+    const html = data
+      .split('getElementById("download-section").innerHTML = "')[1]
+      .split('"; document.getElementById("inputData").remove(); ')[0]
+      .replace(/\\(\\)?/g, "");
+    const $ = cheerio.load(html);
+
+    const downloadLinks = [];
+    $("div.download-items__btn a").each((index, button) => {
+      let downloadUrl = $(button).attr("href");
+      if (!/https?:\/\//.test(downloadUrl || "")) {
+        downloadUrl = "https://snapsave.app" + downloadUrl;
+      }
+      downloadLinks.push(downloadUrl);
+    });
+
+    if (!downloadLinks.length) {
+      return {
+        status: false,
+        author: "iwan",
+        message: "Tidak dapat menemukan tautan unduhan",
+      }
+    }
+
+    return {
+      status: true,
+      author: "iwan",
+      result: {
+      link: {video: downloadLinks[0]},
+      metadata: {
+        url: url,
+      }
+      }
+    };
+  } catch (error) {
+    return {
+      status: false,
+      author: "iwan",
+      message: error.message||error.toString(),
+    }
+  }
+}
+
+// fetch data utama
+async function fetchData(url) {
+  try {
+    const response = await axios.post(
+      BASE_URL,
+      new URLSearchParams({ url }),
+      { headers: HEADERS }
+    );
+    return parseFsaveData(getVideoUrl(response.data), url);
+  } catch (error) {
+    return {
+      status: false,
+      author: "iwan",
+      message: error.message||error.toString()
+    }
+  }
+}
+
+module.exports = fetchData;
