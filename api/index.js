@@ -8,7 +8,7 @@ const yt = require('./yt.js');
 const fb = require('./fb.js');
 const {getBuffer} = require('./myfunc.js');
 const downloaderyt = require('./downloaderyt.js');
-const downloadFileAsBuffer = require('./downloadFileAsBuffer.js');
+const getStream = require('./getStream.js');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Serve static files (CSS, images, etc.) from the 'public' directory
