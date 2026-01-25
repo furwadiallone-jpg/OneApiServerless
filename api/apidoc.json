@@ -1,21 +1,25 @@
 [
   {
     "id": "yt",
+    "name": "youtube",
     "endpoint": "/yt?url=",
     "unit-tes": "https://www.youtube.com/watch?v=uyyLot4PLXM"
   },
   {
     "id": "ig",
+    "name": "instagram",
     "endpoint": "/ig?url=",
     "unit-tes": "https://www.instagram.com/kompastv/reel/DCYrKEUxbEx"
   },
   {
     "id": "fb",
+    "name": "facebook",
     "endpoint": "/fb?url=",
     "unit-tes": "https://web.facebook.com/beacukairi/videos/indonesia-raya/1618433994897609"
   },
   {
     "id": "tt",
+    "name": "tiktok",
     "endpoint": "/tt?url=",
     "unit-tes": "https://vt.tiktok.com/ZSMCtdvKm"
   },
