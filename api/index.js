@@ -58,8 +58,9 @@ start()
 emulate()
 });
 
-app.get('/getbuffer/:id', async (req,res) => {
-const q = req.query.data
+//Universal Download Helper Unblock
+app.get('/buffer', async (req,res) => {
+const q = req.query.url
 const emulate = () =>{
 async function start() {
 try{
