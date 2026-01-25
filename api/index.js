@@ -5,8 +5,7 @@ const ytmp3 = require("./savetube.js");
 const {aichat,interactive} = require('./aitoxic.js');
 const tikwm = require('./tikwm.js');
 const ig = require('./ig.js');
-const yta = require('./yta.js');
-const ytv = require('./ytv.js');
+const yt = require('./yt.js');
 const fb = require('./fb.js');
 const {getBuffer} = require('./myfunc.js');
 const downloaderyt = require('./downloaderyt.js');
@@ -173,6 +172,23 @@ const respon = await fb(q,baseUrl)
 start()
 }
 emulate()
+});
+
+app.get('/yt', async (req,res) => {
+const q = req.query.url
+async function start() {
+try{
+let baseUrl = `${req.protocol}://${req.headers.host}`
+let respon = await yt(q);
+res.json(respon)
+}catch(e){
+res.json({
+      status : true,
+      message : e.message||e.toString()
+})
+}
+}
+start()
 });
 
 app.get('/yta/:id', async (req,res) => {
