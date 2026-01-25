@@ -7,7 +7,6 @@ const ig = require('./ig.js');
 const yt = require('./yt.js');
 const fb = require('./fb.js');
 const {getBuffer} = require('./myfunc.js');
-const downloaderyt = require('./downloaderyt.js');
 const getStream = require('./getStream.js');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
