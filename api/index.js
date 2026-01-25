@@ -1,9 +1,8 @@
 const express = require("express");
 const app = express();
 const path = require('path');
-const ytmp3 = require("./savetube.js");
-const {aichat,interactive} = require('./aitoxic.js');
-const tikwm = require('./tikwm.js');
+const aitoxic = require('./aitoxic.js');
+const tt = require('./tt.js');
 const ig = require('./ig.js');
 const yt = require('./yt.js');
 const fb = require('./fb.js');
@@ -75,12 +74,14 @@ start()
 emulate()
 });
 
-app.get('/ai/:id', async (req,res) => {
-const q = req.query.data
+//AI Toxic
+app.get('/ai', async (req,res) => {
+const q = req.query.text
+//console.log(q)
 const emulate = () =>{
 async function start() {
 try{
-const respon = await aichat(q)
+const respon = await aitoxic(q)
   res.send(respon)
 }catch(e){
     res.end()
@@ -108,46 +109,33 @@ start()
 emulate()
 });
 
-app.get('/ytmp3/:id', async (req,res) => {
-const q = req.query.data
-const emulate = () =>{
+//Instagram Respon Link
+app.get('/ig', async (req,res) => {
+const q = req.query.url
 async function start() {
 try{
-const respon = await ytmp3(q,"128","audio")
-  res.send(respon)
+let baseUrl = `${req.protocol}://${req.headers.host}`
+let respon = await ig(q);
+res.json(respon)
 }catch(e){
-    res.end()
+res.json({
+    status : true,
+    message : e.message||e.toString()
+})
 }
 }
 start()
-}
-emulate()
 });
 
-app.get('/tiktok/:id', async (req,res) => {
-const q = req.query.data
-const emulate = () =>{
-async function start() {
-try{
-const respon = await tikwm(q)
-  res.send(respon)
-}catch(e){
-    res.end()
-}
-}
-start()
-}
-emulate()
-});
-
-app.get('/ig/:id', async (req,res) => {
-const q = req.query.data
+//Tiktok Respon Link
+app.get('/tiktok', async (req,res) => {
+const q = req.query.url
 const emulate = () =>{
 async function start() {
 try{
 let baseUrl = `${req.protocol}://${req.headers.host}`
-const respon = await ig(q,baseUrl)
-  res.send(respon)
+const respon = await tt(q,baseUrl)
+res.send(respon)
 }catch(e){
     res.end()
 }
@@ -157,8 +145,9 @@ start()
 emulate()
 });
 
-app.get('/fb/:id', async (req,res) => {
-const q = req.query.data
+//Facebook Respon Link
+app.get('/fb', async (req,res) => {
+const q = req.query.url
 const emulate = () =>{
 async function start() {
 try{
@@ -191,39 +180,6 @@ res.json({
 start()
 });
 
-app.get('/yta/:id', async (req,res) => {
-const q = req.query.data
-const emulate = () =>{
-async function start() {
-try{
-let baseUrl = `${req.protocol}://${req.headers.host}`
-const respon = await yta(q,baseUrl)
-  res.send(respon)
-}catch(e){
-    res.end()
-}
-}
-start()
-}
-emulate()
-});
-
-app.get('/ytv/:id', async (req,res) => {
-const q = req.query.data
-const emulate = () =>{
-async function start() {
-try{
-let baseUrl = `${req.protocol}://${req.headers.host}`
-const respon = await ytv(q,baseUrl)
-  res.send(respon)
-}catch(e){
-    res.end()
-}
-}
-start()
-}
-emulate()
-});
 
 app.listen(3000, () => console.log("Server ready on port 3000"));
 
