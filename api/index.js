@@ -48,6 +48,7 @@ const q = req.query.url
 const emulate = () =>{
 async function start() {
 try{
+let baseUrl = `${req.protocol}://${req.headers.host}`
 const respon = await getStream(q)
   res.send(respon)
 }catch(e){
