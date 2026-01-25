@@ -141,7 +141,8 @@
       code: kode,
     })
   })
-    logEl.textContent = data.text()
+	let result = await data.text()
+    logEl.textContent = result
     logEl.scrollTop = logEl.scrollHeight;
   }
   </script>
