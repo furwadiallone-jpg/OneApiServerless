@@ -107,43 +107,8 @@
   function endpoint(path, example) {
     return `${base}${path}${example ? example : ""}`;
   }
-</script>
-  <script>
-    document.getElementById("aiprotes").addEventListener("click", async () => {
-      const url = "/aipro"; // ganti dengan endpoint API
-
-      const data = {
-  "text": "Nama kamu siapa?",
-  "id": "120164693439849@g.us",
-  "name": "Iwan",
-  "sender": "081234566790@s.whatsapp.net",
-  "prompt": "Sekarang kamu adalah Xixy yang baik hati....",
-  "clear": true
-};
-
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-        });
-
-        if (!response.ok) {
-          throw new Error("Terjadi error: " + response.status);
-        }
-
-        const result = await response.json();
-
-        // tampilkan hasil di HTML
-        document.getElementById("aiprorespon").textContent = JSON.stringify(result, null, 2);
-
-      } catch (error) {
-        document.getElementById("aiprorespon").textContent = "Error: " + error.message;
-      }
-    });
   </script>
+
   <script>
     async function loadApi() {
       const container = document.getElementById("apicard");
@@ -173,7 +138,8 @@
           <section class="api-endpoint">
         <h2>${apidoc.name.toUpperCase()}</h2>
         <p><strong>URL: ${window.location.origin}${apidoc.endpoint}</strong>
-            <button id="${apidoc.id}" onclick="apiTes('${apidoc.endpoint}${apidoc.unit-tes}','pre${apidoc.id}')">Tes Api</button>
+            <button id="${apidoc.id}" onclick="apiTes('${apidoc.endpoint}${apidoc["unit-tes"]}','pre${apidoc.id}')"
+>Tes Api</button>
         </p>
         <h3>Response</h3>
         <pre id="pre${apidoc.id}"></pre>
@@ -188,26 +154,18 @@
         `;
       }
     }
-  </script>
-  <script>
- async function apiTes(unit,pre) {
-      const pretext = document.getElementById(pre);
 
-      if (!pretext) {
-        console.error(`Element #${pre} tidak ditemukan`);
-        return;
-      }
+async function apiTes(unit, pre) {
+  const pretext = document.getElementById(pre);
 
-      try {
-    const res = await fetch("/apidoc");
+  try {
+    const res = await fetch(unit);
     const data = await res.json();
-    pretext.innerHTML = data.toSting()
-    } catch (e) {
-        pretext.innerHTML = `
-          <p style="color:red">${e.message}</p>
-        `;
-      }
-    }
+    pretext.textContent = JSON.stringify(data, null, 2);
+  } catch (e) {
+    pretext.innerHTML = `<span style="color:red">${e.message}</span>`;
+  }
+}
  loadApi()
   </script>
 </body>    
