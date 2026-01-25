@@ -17,6 +17,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'home.html'));
 });
 
+app.get('/eval', (req, res) => {
+    res.send(__dirname);
+});
+
 app.get('/ytget/:id', async (req,res) => {
 const q = req.query.data
 const emulate = () =>{
