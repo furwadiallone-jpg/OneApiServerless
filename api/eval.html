@@ -3,149 +3,140 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Riru Bot - Status Koneksi</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <title>Riru Bot - Eval Panel</title>
+
   <style>
     body {
       margin: 0;
-      background-image: url('./background.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
+      min-height: 100vh;
       font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: white;
-    }
-
-    .navbar {
-      position: sticky;
-      top: 0;
       display: flex;
       justify-content: center;
-      gap: 1.5rem;
-      background-color: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      padding: 12px 0;
-      z-index: 999;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .nav-item {
-      text-decoration: none;
-      color: white;
-      font-size: 1.2rem;
-      padding: 14px;
-      border-radius: 12px;
-      transition: 0.3s;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .nav-item:hover {
-      background: linear-gradient(135deg, #c01736 0%, #8b17b6 100%);
+      align-items: center;
     }
 
     .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: calc(100vh - 80px);
-      text-align: center;
-      padding: 20px;
+      width: 100%;
+      max-width: 700px;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
 
     h1 {
-      margin-bottom: 10px;
+      margin-top: 0;
+      text-align: center;
     }
 
     .log-box {
-      width: 90%;
-      max-width: 600px;
-      height: 300px;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
-      padding: 15px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-      text-align: left;
+      width: 100%;
+      height: 260px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      padding: 12px;
       font-family: monospace;
-      margin-top: 20px;
-      backdrop-filter: blur(10px);
+      white-space: pre-wrap;
+      overflow-y: auto;
+      border: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 15px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      resize: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-family: monospace;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: white;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    textarea::placeholder {
+      color: #ccc;
+    }
+
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #00f2fe, #4facfe);
+      color: black;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.02);
     }
 
     footer {
-      margin-top: 40px;
+      text-align: center;
+      font-size: 12px;
       color: #aaa;
-      font-size: 0.8rem;
-    }
-
-    @media (max-width: 500px) {
-      .navbar {
-        gap: 1rem;
-        flex-wrap: wrap;
-        padding: 10px 5px;
-      }
-
-      .nav-item {
-        font-size: 1rem;
-        padding: 12px;
-        border-radius: 10px;
-      }
-
-      .log-box {
-        height: 250px;
-      }
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-  <!-- Konten Utama -->
+
   <div class="container">
-    <h1>Status Koneksi WebSocket</h1>
-    <div id="log" class="log-box">eval console</div>
-    <textarea
-  rows="10"
-  placeholder="Eval Code..."
-  style="
-    width: 70%;
-    margin: 20px;
-    padding: 15px;
-    border-radius: 10px;
-    background: rgba(148, 255, 201, 0.12);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    color: rgb(0, 0, 0);
-    font-family: monospace;
-  "
-  id="kode"
-></textarea>
-		<button onclick="eval()" style="padding: 8px 15px; font-size: 16px; cursor: pointer; border-radius: 5px; border: 1px solid #00caca; background-color: #00ffff;">
-      eval
-    </button>
+    <h1>Eval Console</h1>
+
+    <div id="log" class="log-box">
+Klik tombol "RUN EVAL" untuk melihat output
+    </div>
+
+    <textarea id="kode" placeholder="Tulis kode eval di sini..."></textarea>
+
+    <button onclick="runEval()">RUN EVAL</button>
 
     <footer>
-      &copy; 2025 Riru Project. All rights reserved.
+      © 2025 Riru Project
     </footer>
   </div>
 
   <script>
-  async function eval(){
-    const kode = document.getElementById('kode').value.trim()
-    const logEl = document.getElementById("log");
-    let data = await fetch('/eval', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      code: kode,
-    })
-  })
-	let result = await data.text()
-    logEl.textContent = result
-    logEl.scrollTop = logEl.scrollHeight;
-  }
+    async function runEval() {
+      const kode = document.getElementById('kode').value.trim()
+      const logEl = document.getElementById('log')
+
+      if (!kode) {
+        logEl.textContent = '⚠️ Kode eval kosong'
+        return
+      }
+
+      logEl.textContent = '⏳ Mengeksekusi...'
+
+      try {
+        const res = await fetch('/eval', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ code: kode })
+        })
+
+        const text = await res.text()
+        logEl.textContent = text
+      } catch (err) {
+        logEl.textContent = '❌ Error: ' + err.message
+      }
+
+      logEl.scrollTop = logEl.scrollHeight
+    }
   </script>
 
 </body>
-</html
+</html>
