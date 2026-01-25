@@ -8,6 +8,8 @@ const yt = require('./yt.js');
 const fb = require('./fb.js');
 const {getBuffer} = require('./myfunc.js');
 const getStream = require('./getStream.js');
+const format = require('util').format;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Serve static files (CSS, images, etc.) from the 'public' directory
@@ -18,7 +20,36 @@ app.get('/', (req, res) => {
 });
 
 app.get('/eval', (req, res) => {
-    res.send(__dirname);
+    res.sendFile(path.join(__dirname, 'eval.html'));
+});
+
+app.post('/eval', async (req,res) => {
+const q = req.body
+const emulate = () =>{
+async function start() {
+try{
+let evaluate = false
+try {
+evaluate = await eval(`const evalspace = async()=>{${q.code};};evalspace()`);
+try {
+evaluate = format(evaluate)
+} catch { }
+} catch (e) {
+evaluate = e.stack.toString();
+};
+let result = format(evaluate)
+res.send(result)
+}catch(e){
+res.end()
+}
+}
+start()
+}
+emulate()
+});
+
+app.get('/youtube', (req, res) => {
+    res.sendFile(path.join(__dirname, 'youtube.html'));
 });
 
 app.get('/ytget/:id', async (req,res) => {
