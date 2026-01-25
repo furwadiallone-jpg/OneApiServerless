@@ -23,6 +23,10 @@ app.get('/eval', (req, res) => {
     res.sendFile(path.join(__dirname, 'eval.html'));
 });
 
+app.get('/apidoc', (req, res) => {
+    res.sendFile(path.join(__dirname, 'apidoc.json'));
+});
+
 app.post('/eval', async (req,res) => {
 const q = req.body
 const emulate = () =>{
