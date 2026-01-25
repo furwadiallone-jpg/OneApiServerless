@@ -120,9 +120,9 @@ async function ytb(url) {
 
 async function yt(url){
 let res = yta(url)
-if(res.status) return res
-let res2 = ytb(url)
-return res2
+//if(res.status) return res
+//let res2 = ytb(url)
+return res
 }
 
 module.exports = yt;
