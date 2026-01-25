@@ -1,52 +1,6 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
-async function yta(url) {
-try{
-  const res = await axios.post('https://api.vidssave.com/api/contentsite_api/media/parse',
-    new URLSearchParams({
-      auth: '20250901majwlqo',
-      domain: 'api-ak.vidssave.com',
-      origin: 'source',
-      link: url
-    }).toString(),
-    {
-      headers: {
-        'user-agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36',
-        'content-type': 'application/x-www-form-urlencoded',
-        origin: 'https://vidssave.com',
-        referer: 'https://vidssave.com/'
-      }
-    }
-  )
-  if (res.status === 200) {
-  const { title, thumbnail, duration, resources } = res.data.data
-  if(resources.length === 0)return {
-        status: false,
-        message: "Failed to fetch data"
-      }
-  let audio = resources.filter(v => v.type === 'audio' && v.quality === '128KBPS')[0]?.download_url
-  let video = resources.filter(v => v.type === 'video' && (v.quality === '360P'||v.quality === '480P'))[0]?.download_url
-  return {status:true,data:{
-    title,
-    thumbnail,
-    duration,
-    link: { audio:audio, video:video}
-  }}
-  }else {
-      return {
-        status: false,
-        message: "Failed to fetch data"
-      }
-    }
-}catch (err) {
-    return {
-      status: false,
-      message: err.message || err.toString()
-    }
-  }
-}
-
-async function ytb(url) {
+async function yt(url) {
   const headers = {
     "Accept": "*/*",
     "Accept-Encoding": "gzip, deflate, br",
@@ -116,13 +70,6 @@ async function ytb(url) {
       message: err.message || err.toString()
     }
   }
-}
-
-async function yt(url){
-let res = yta(url)
-//if(res.status) return res
-//let res2 = ytb(url)
-return res
 }
 
 module.exports = yt;
