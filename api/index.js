@@ -8,7 +8,7 @@ const yt = require('./yt.js');
 const fb = require('./fb.js');
 const {getBuffer} = require('./myfunc.js');
 const downloaderyt = require('./downloaderyt.js');
-const downloadFileAsBuffer = require('./downloadFileAsBuffer.js');
+const getStream = require('./getStream.js');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Serve static files (CSS, images, etc.) from the 'public' directory
@@ -42,12 +42,14 @@ start()
 emulate()
 });
 
-app.get('/download/:id', async (req,res) => {
-const q = req.query.data
+//Universal Stream Download Helper
+app.get('/stream', async (req,res) => {
+const q = req.query.url
 const emulate = () =>{
 async function start() {
 try{
-const respon = await downloadFileAsBuffer(q)
+let baseUrl = `${req.protocol}://${req.headers.host}`
+const respon = await getStream(q)
   res.send(respon)
 }catch(e){
     res.end()
@@ -58,8 +60,9 @@ start()
 emulate()
 });
 
-app.get('/getbuffer/:id', async (req,res) => {
-const q = req.query.data
+//Universal Download Helper Unblock
+app.get('/buffer', async (req,res) => {
+const q = req.query.url
 const emulate = () =>{
 async function start() {
 try{
