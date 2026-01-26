@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚀 Web Hosting dan Uploader</title>
+  <style>
+    :root {
+      --primary-color: #ffffff;
+      --secondary-color: #e0e0e0;
+      --accent-color: #b763e0;
+      --card-bg-color: rgba(255, 255, 255, 0.05);
+      --shadow-light: rgba(0, 0, 0, 0.3);
+      --shadow-medium: rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--primary-color);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding-top: 50px;
+      
+      background: url("/animeillustration.jpg") no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.15);
+      z-index: -1;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 700px;
+      background-color: var(--card-bg-color);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px var(--shadow-medium);
+      padding: 30px;
+      animation: fadeIn 1s ease-in-out;
+      backdrop-filter: blur(2px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 25px;
+      text-shadow: 1px 1px 3px var(--shadow-light);
+      font-weight: 600;
+    }
+
+    .upload-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      display: flex;
+      width: 100%;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .input-group input[type="text"],
+    .input-group input[type="file"] {
+      flex-grow: 1;
+      padding: 12px 15px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--primary-color);
+    }
+
+    .input-group input[type="text"]::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .input-group input[type="text"]:focus,
+    .input-group input[type="file"]:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+    
+    .input-group input[type="file"] {
+      cursor: pointer;
+    }
+
+    .upload-button {
+      padding: 12px 25px;
+      background: linear-gradient(45deg, #6a0596, #b763e0);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .upload-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px var(--shadow-light);
+    }
+
+    .file-list {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 15px;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .file-list::-webkit-scrollbar {
+        width: 8px;
+    }
+    .file-list::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+    }
+    .file-list::-webkit-scrollbar-track {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background-color 0.3s ease;
+    }
+
+    .file-item:last-child {
+      border-bottom: none;
+    }
+
+    .file-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    
+    .file-icon {
+      font-size: 24px;
+      line-height: 1;
+    }
+    
+    .file-name {
+      word-break: break-word;
+      color: var(--primary-color);
+    }
+
+    .file-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .file-actions button,
+    .file-actions a button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+    }
+
+    .view-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .download-button {
+      background-color: #2196F3;
+      color: white;
+    }
+    
+    .copy-button {
+      background-color: #FFC107;
+      color: white;
+    }
+
+    .view-button:hover { background-color: #45a049; }
+    .download-button:hover { background-color: #0b7dda; }
+    .copy-button:hover { background-color: #e0b400; }
+
+    /* Gaya untuk Progress Bar */
+    .progress-container {
+      width: 100%;
+      height: 10px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      margin-top: 10px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(45deg, #00C9FF, #92FE9D);
+      transition: width 0.3s ease;
+    }
+
+    /* Gaya untuk Container Hasil Unggahan */
+    #uploadResult {
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      display: none;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    #uploadResult h3 {
+        margin: 0 0 10px 0;
+        font-weight: 600;
+        color: var(--primary-color);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    #uploadResult p {
+        margin: 5px 0;
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    
+    #uploadResult a {
+        color: var(--primary-color);
+        word-break: break-all;
+    }
+
+    #uploadResult .copy-button {
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: #FFC107;
+        color: #333;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    
+    #uploadResult .copy-button:hover {
+        background-color: #e0b400;
+        transform: scale(1.05);
+    }
+    
+    @media (max-width: 768px) {
+      .input-group {
+        flex-direction: column;
+      }
+      .upload-button {
+        width: 100%;
+      }
+      .file-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 Web Hosting dan Uploader</h1>
+    <form class="upload-form" id="uploadForm">
+      <div class="input-group">
+        <input type="text" name="customName" placeholder="Nama file (tanpa ekstensi)..." />
+        <input type="file" name="file" id="fileInput" required />
+      </div>
+      <button type="submit" class="upload-button" id="uploadButton">Upload</button>
+      
+      <div class="progress-container" id="progressBarContainer">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </form>
+    
+    <div id="uploadResult"></div>
+
+    <div class="file-list" id="fileList"></div>
+  </div>
+
+  <script>
+    const uploadForm = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const progressBarContainer = document.getElementById('progressBarContainer');
+    const progressBar = document.getElementById('progressBar');
+    const uploadButton = document.getElementById('uploadButton');
+    const uploadResultContainer = document.getElementById('uploadResult');
+
+    function getIcon(filename) {
+      const ext = filename.split(".").pop().toLowerCase();
+      if (["jpg","jpeg","png","gif","webp"].includes(ext)) return "🖼️";
+      if (["mp4","mkv","avi","mov"].includes(ext)) return "🎥";
+      if (["mp3","wav","ogg","flac"].includes(ext)) return "🎵";
+      if (["zip","rar","7z","tar","gz"].includes(ext)) return "📦";
+      if (["pdf"].includes(ext)) return "📕";
+      if (["doc","docx"].includes(ext)) return "📄";
+      if (["xls","xlsx"].includes(ext)) return "📊";
+      if (["ppt","pptx"].includes(ext)) return "📑";
+      if (["txt", "md"].includes(ext)) return "📝";
+      if (["html", "css", "js", "json", "py", "php", "cpp", "java"].includes(ext)) return "💻";
+      return "📄";
+    }
+
+    async function loadFiles() {
+      const container = document.getElementById("fileList");
+      try {
+        const res = await fetch("/files");
+        if (!res.ok) {
+          throw new Error('Gagal memuat berkas.');
+        }
+        const files = await res.json();
+        container.innerHTML = "";
+        
+        if (files.length === 0) {
+          container.innerHTML = '<p style="text-align: center; color: var(--primary-color); padding: 20px;">Belum ada berkas yang diunggah. Mulai unggah berkas Anda!</p>';
+        } else {
+          files.forEach(file => {
+            const div = document.createElement("div");
+            div.className = "file-item";
+            div.innerHTML = `
+              <div class="file-info">
+                <span class="file-icon">${getIcon(file.name)}</span>
+                <span class="file-name">${file.name}</span>
+              </div>
+              <div class="file-actions">
+                <a href="${window.location.origin}${file.url}" target="_blank"><button class="view-button">Lihat</button></a>
+                <a href="${window.location.origin}${file.url}" download><button class="download-button">Unduh</button></a>
+                <button class="copy-button" onclick="copyUrl('${window.location.origin}${file.url}')">Link</button>
+              </div>
+            `;
+            container.appendChild(div);
+          });
+        }
+      } catch (error) {
+        container.innerHTML = `<p style="text-align: center; color: #d9534f; padding: 20px;">${error.message}</p>`;
+        console.error("Kesalahan saat memuat berkas:", error);
+      }
+    }
+
+    function copyUrl(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        alert("URL berhasil disalin!");
+      }).catch(err => {
+        console.error("Gagal menyalin URL:", err);
+      });
+    }
+
+    uploadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(uploadForm);
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        alert('Mohon pilih file terlebih dahulu.');
+        return;
+      }
+      
+      uploadResultContainer.style.display = 'none';
+      progressBarContainer.style.display = 'block';
+      progressBar.style.width = '0%';
+      uploadButton.disabled = true;
+
+      const xhr = new XMLHttpRequest();
+      
+      xhr.upload.addEventListener('progress', (event) => {
+        if (event.lengthComputable) {
+          const percent = (event.loaded / event.total) * 100;
+          progressBar.style.width = percent.toFixed(2) + '%';
+        }
+      });
+      
+      xhr.addEventListener('load', () => {
+        progressBarContainer.style.display = 'none';
+        uploadButton.disabled = false;
+        
+        if (xhr.status === 200) {
+          try {
+            const response = JSON.parse(xhr.responseText);
+            uploadResultContainer.innerHTML = `
+              <h3>File berhasil diunggah! 🎉</h3>
+              <p>Nama File: ${response.fileName}</p>
+              <p>URL: <a href="${response.url}" target="_blank">${window.location.origin}${response.url}</a></p>
+              <button class="copy-button" onclick="copyUrl('${window.location.origin}${response.url}')">Salin URL</button>
+            `;
+            uploadResultContainer.style.display = 'block';
+          } catch (e) {
+            alert('Unggahan berhasil, namun gagal menampilkan detail.');
+            console.error(e);
+          }
+        } else {
+          alert('Unggahan gagal. Silakan coba lagi.');
+        }
+        
+        loadFiles();
+      });
+      
+      xhr.addEventListener('error', () => {
+        alert('Terjadi kesalahan saat mengunggah file.');
+        progressBarContainer.style.display = 'none';
+        uploadButton.disabled = false;
+      });
+
+      xhr.open('POST', '/upload', true);
+      xhr.send(formData);
+    });
+
+    loadFiles();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+<style>
+    /* Perbesar card */
+    .container {
+        max-width: 900px !important;
+        padding: 40px !important;
+    }
+    h1 { font-size: 1.9rem !important; }
+
+    /* Status bar: speed + storage */
+    #statusBar {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 18px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+    }
+    #storageInfo, #speedInfo {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 180px;
+    }
+    .storage-progress-outer {
+        width: 260px;
+        background: rgba(255,255,255,0.08);
+        border-radius: 8px;
+        height: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.06);
+    }
+    .storage-progress-inner {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg,#92FE9D,#00C9FF);
+        transition: width 0.5s ease;
+    }
+    #speedInfo .speed-value {
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    @media (max-width: 600px) {
+        #statusBar { flex-direction: column; align-items: stretch; gap: 10px; }
+        .storage-progress-outer { width: 100%; }
+    }
+</style>
+
+<script>
+(function(){
+    // Utility: human readable bytes
+    function formatBytes(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B','KB','MB','GB','TB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // Create status UI and insert right above fileList
+    const fileListEl = document.getElementById('fileList');
+    if (fileListEl) {
+        const statusBar = document.createElement('div');
+        statusBar.id = 'statusBar';
+        statusBar.innerHTML = `
+            <div id="storageInfo">
+                <div style="font-size:14px;color:rgba(255,255,255,0.9);font-weight:600">Penyimpanan Terpakai</div>
+                <div style="display:flex;align-items:center;gap:10px">
+                    <div class="storage-progress-outer"><div class="storage-progress-inner" id="storageProgressInner"></div></div>
+                    <div style="min-width:120px;color:rgba(255,255,255,0.9)" id="storageText">Menghitung...</div>
+                </div>
+            </div>
+            <div id="speedInfo">
+                <div style="font-size:14px;color:rgba(255,255,255,0.9);font-weight:600">Kecepatan Unggah</div>
+                <div style="color:rgba(255,255,255,0.95);font-size:15px" class="speed-value" id="speedText">-</div>
+            </div>
+        `;
+        fileListEl.parentNode.insertBefore(statusBar, fileListEl);
+    }
+
+    const storageInner = document.getElementById('storageProgressInner');
+    const storageText = document.getElementById('storageText');
+    const speedText = document.getElementById('speedText');
+
+    // Update storage usage by summing file.size if provided; fallback: HEAD request for each file url
+    async function updateStorage() {
+        try {
+            const res = await fetch('/files');
+            if (!res.ok) throw new Error('Gagal memuat daftar berkas.');
+            const files = await res.json();
+            let totalUsed = 0;
+            const headPromises = [];
+
+            for (const f of files) {
+                if (typeof f.size === 'number' && !isNaN(f.size)) {
+                    totalUsed += f.size;
+                } else if (f.url) {
+                    // lazy HEAD to attempt to get size, but don't fail whole flow
+                    headPromises.push(
+                        fetch(window.location.origin + f.url, { method: 'HEAD' })
+                        .then(hres => {
+                            const cl = hres.headers.get('content-length');
+                            if (cl) totalUsed += parseInt(cl, 10);
+                        }).catch(()=>{/* ignore */})
+                    );
+                }
+            }
+
+            await Promise.all(headPromises);
+
+            const ONE_GB = 1024 * 1024 * 1024;
+            const percent = Math.min(100, (totalUsed / ONE_GB) * 100);
+            if (storageInner) storageInner.style.width = percent.toFixed(2) + '%';
+            if (storageText) storageText.textContent = `${formatBytes(totalUsed)} / 1 GB`;
+            // color change if exceeded
+            if (storageInner) storageInner.style.background = totalUsed > ONE_GB ? 'linear-gradient(90deg,#ff7a7a,#ff4d4d)' : 'linear-gradient(90deg,#92FE9D,#00C9FF)';
+        } catch (err) {
+            if (storageText) storageText.textContent = 'Tidak dapat menghitung';
+            console.error('updateStorage error:', err);
+        }
+    }
+
+    // Call initially
+    updateStorage();
+
+    // Observe file list changes to recalc storage
+    const observer = new MutationObserver(() => updateStorage());
+    if (fileListEl) observer.observe(fileListEl, { childList: true, subtree: true });
+
+    // Kecepatan unggah: sample progress bar width and file size to estimate speed
+    let sampleInterval = null;
+    let prevLoaded = 0;
+    let prevTime = Date.now();
+
+    const progressBar = document.getElementById('progressBar');
+    const progressBarContainer = document.getElementById('progressBarContainer');
+    const uploadForm = document.getElementById('uploadForm');
+    const uploadButton = document.getElementById('uploadButton');
+    const fileInput = document.getElementById('fileInput');
+
+    function startSpeedSampler() {
+        clearInterval(sampleInterval);
+        prevLoaded = 0;
+        prevTime = Date.now();
+        const file = fileInput && fileInput.files && fileInput.files[0];
+        const totalSize = file ? file.size : 0;
+
+        sampleInterval = setInterval(() => {
+            if (!progressBar) return;
+            const widthStr = (progressBar.style.width || '0%').trim();
+            const width = parseFloat(widthStr.replace('%','')) || 0;
+            const loaded = totalSize * (width / 100);
+            const now = Date.now();
+            const deltaBytes = Math.max(0, loaded - prevLoaded);
+            const deltaTime = Math.max(0.001, (now - prevTime) / 1000);
+            const speed = deltaBytes / deltaTime; // bytes/sec
+            prevLoaded = loaded;
+            prevTime = now;
+
+            if (speedText) {
+                if (loaded >= totalSize && totalSize > 0) {
+                    speedText.textContent = formatBytes(speed) + '/s';
+                } else {
+                    speedText.textContent = speed > 0 ? formatBytes(speed) + '/s' : '-';
+                }
+            }
+
+            // Stop conditions: progress hidden or upload button re-enabled
+            if ((progressBarContainer && progressBarContainer.style.display === 'none') || (uploadButton && uploadButton.disabled === false)) {
+                clearInterval(sampleInterval);
+                // final update after small delay to set final numbers
+                setTimeout(() => { if (speedText) speedText.textContent = '-'; }, 800);
+            }
+
+        }, 400);
+    }
+
+    // Run sampler when user submits — add a supplementary submit listener that only starts sampler
+    if (uploadForm) {
+        uploadForm.addEventListener('submit', (e) => {
+            const file = fileInput && fileInput.files && fileInput.files[0];
+            // only start sampler if a file exists
+            if (file) {
+                // small delay to let original handler set progress bar visible / reset
+                setTimeout(startSpeedSampler, 50);
+            }
+        }, true);
+    }
+
+    // Update storage also after uploads finish. We'll watch the progress container's display attribute to know end.
+    if (progressBarContainer) {
+        const mo = new MutationObserver(() => {
+            // when it becomes hidden, update storage (upload likely finished)
+            if (progressBarContainer.style.display === 'none') {
+                // slight delay so server has time to update /files
+                setTimeout(() => {
+                    updateStorage();
+                }, 900);
+            }
+        });
+        mo.observe(progressBarContainer, { attributes: true, attributeFilter: ['style'] });
+    }
+
+    // Also refresh storage periodically (every 45s) for background changes
+    setInterval(updateStorage, 45000);
+})();
+</script>
+<!-- System stats: CPU / RAM / Network (inserted dynamically) -->
+<style>
+    /* System stats card */
+    #sysStats {
+        margin-top: 14px;
+        margin-bottom: 18px;
+        padding: 14px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.06);
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .stat-block {
+        min-width: 160px;
+        max-width: 320px;
+        flex: 1 1 220px;
+    }
+    .stat-title { font-size: 13px; color: rgba(255,255,255,0.85); font-weight:600; margin-bottom:8px; }
+    .stat-value { font-weight:700; color:var(--primary-color); font-size:15px; }
+    .stat-sub { font-size:12px; color:rgba(255,255,255,0.7); margin-top:6px; }
+    .stat-bar-outer {
+        height: 10px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top:8px;
+        border: 1px solid rgba(255,255,255,0.03);
+    }
+    .stat-bar-inner {
+        height:100%;
+        width:0%;
+        transition: width 0.4s ease, background 0.4s ease;
+        background: linear-gradient(90deg,#92FE9D,#00C9FF);
+    }
+    .network-row { display:flex; justify-content:space-between; gap:8px; align-items:center; margin-top:6px; }
+    .net-label { color:rgba(255,255,255,0.8); font-size:13px; }
+    @media (max-width:600px) {
+        #sysStats { flex-direction:column; align-items:stretch; }
+        .stat-block { flex: 1 1 auto; }
+    }
+</style>
+
+
+
+<style>
+    /* Confirm & Loading modal styles */
+    .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.6);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+    .modal {
+        width: 92%;
+        max-width: 520px;
+        background: rgba(10,10,10,0.95);
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+        color: var(--primary-color);
+        border: 1px solid rgba(255,255,255,0.06);
+    }
+    .modal h2 { margin:0 0 8px 0; font-size:18px; }
+    .modal p { margin:6px 0; color: rgba(255,255,255,0.9); }
+    .modal .meta { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
+    .meta .chip {
+        background: rgba(255,255,255,0.04);
+        padding:8px 10px;
+        border-radius:8px;
+        font-size:13px;
+        min-width: 110px;
+    }
+    .modal .actions { display:flex; gap:10px; justify-content:flex-end; margin-top:16px; }
+    .btn {
+        padding:10px 14px;
+        border-radius:8px;
+        border:none;
+        cursor:pointer;
+        font-weight:600;
+    }
+    .btn.ghost { background:transparent; color:var(--primary-color); border:1px solid rgba(255,255,255,0.06); }
+    .btn.primary { background: linear-gradient(45deg,#6a0596,#b763e0); color:#fff; }
+    .loading-center { display:flex; gap:12px; align-items:center; }
+    .spinner {
+        width:36px; height:36px; border-radius:50%; border:4px solid rgba(255,255,255,0.08);
+        border-top-color: #92FE9D; animation:spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-speed { font-weight:700; color:var(--primary-color); }
+</style>
+
+<!-- Confirm Modal -->
+<div id="confirmModalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+        <h2 id="confirmTitle">Konfirmasi Unggah</h2>
+        <p id="confirmMessage">Periksa detail file sebelum mengunggah.</p>
+
+        <div class="meta">
+            <div class="chip"><strong>Nama:</strong> <span id="confirmName">-</span></div>
+            <div class="chip"><strong>Ukuran:</strong> <span id="confirmSize">-</span></div>
+            <div class="chip"><strong>Format:</strong> <span id="confirmFormat">-</span></div>
+        </div>
+
+        <p style="margin-top:12px;color:rgba(255,255,255,0.85)">Apakah Anda yakin ingin mengunggah file ini?</p>
+
+        <div class="actions">
+            <button id="confirmCancelBtn" class="btn ghost">Batal</button>
+            <button id="confirmOkBtn" class="btn primary">Ya, Unggah</button>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Modal -->
+<div id="loadingModalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="status" aria-live="polite">
+        <div class="loading-center">
+            <div class="spinner" aria-hidden="true"></div>
+            <div>
+                <div style="font-size:16px;font-weight:700">Loading Upload...</div>
+                <div style="margin-top:6px;color:rgba(255,255,255,0.9)">Kecepatan: <span id="loadingSpeed" class="loading-speed">-</span></div>
+            </div>
+        </div>
+        <div style="margin-top:12px;color:rgba(255,255,255,0.7);font-size:13px">Proses akan dimulai setelah Anda konfirmasi.</div>
+    </div>
+</div>
+
+<script>
+    (function(){
+        // small helper (local)
+        function formatBytes(bytes) {
+            if (bytes === 0 || bytes == null) return '0 B';
+            const k = 1024;
+            const sizes = ['B','KB','MB','GB','TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        const uploadForm = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const customNameInput = uploadForm.querySelector('input[name="customName"]');
+
+        const confirmBackdrop = document.getElementById('confirmModalBackdrop');
+        const confirmName = document.getElementById('confirmName');
+        const confirmSize = document.getElementById('confirmSize');
+        const confirmFormat = document.getElementById('confirmFormat');
+        const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+        const confirmOkBtn = document.getElementById('confirmOkBtn');
+
+        const loadingBackdrop = document.getElementById('loadingModalBackdrop');
+        const loadingSpeed = document.getElementById('loadingSpeed');
+
+        // Show/hide helpers
+        function showConfirm(file) {
+            // set details
+            const displayName = (customNameInput && customNameInput.value.trim()) ? customNameInput.value.trim() + (file && file.name ? '.' + file.name.split('.').pop() : '') : (file ? file.name : '-');
+            confirmName.textContent = displayName;
+            confirmSize.textContent = file ? formatBytes(file.size) : '-';
+            const ext = file && file.name && file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : '-';
+            confirmFormat.textContent = ext;
+            confirmBackdrop.style.display = 'flex';
+            confirmBackdrop.setAttribute('aria-hidden','false');
+        }
+        function hideConfirm() {
+            confirmBackdrop.style.display = 'none';
+            confirmBackdrop.setAttribute('aria-hidden','true');
+        }
+        function showLoading() {
+            loadingBackdrop.style.display = 'flex';
+            loadingBackdrop.setAttribute('aria-hidden','false');
+        }
+        function hideLoading() {
+            loadingBackdrop.style.display = 'none';
+            loadingBackdrop.setAttribute('aria-hidden','true');
+            loadingSpeed.textContent = '-';
+        }
+
+        // Early-submit interceptor (capture phase)
+        const earlyListener = function(e){
+            // Only intercept form submit initiated by user (not programmatic requestSubmit when bypassing)
+            // We'll check a bypass flag on the form
+            if (uploadForm._bypassConfirm) return;
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            const file = fileInput && fileInput.files && fileInput.files[0];
+            if (!file) {
+                alert('Mohon pilih file terlebih dahulu.');
+                return;
+            }
+            showConfirm(file);
+        };
+        uploadForm.addEventListener('submit', earlyListener, true);
+
+        // Cancel confirm
+        confirmCancelBtn.addEventListener('click', () => {
+            hideConfirm();
+        });
+
+        // Confirm -> show loading + proceed with original submit
+        confirmOkBtn.addEventListener('click', () => {
+            hideConfirm();
+
+            // Show loading UI
+            showLoading();
+
+            // Mark to bypass our confirm on the immediate next submit
+            uploadForm._bypassConfirm = true;
+
+            // Slight delay to ensure bypass flag is set
+            setTimeout(() => {
+                // programmatic submit that will trigger original upload handler
+                // requestSubmit will trigger submit event but our capture listener will skip because of _bypassConfirm
+                if (typeof uploadForm.requestSubmit === 'function') {
+                    uploadForm.requestSubmit();
+                } else {
+                    // fallback
+                    uploadForm._bypassConfirm = true;
+                    uploadForm.submit();
+                }
+                // Reset bypass after a short delay (original handler will have started)
+                setTimeout(() => { uploadForm._bypassConfirm = false; }, 800);
+            }, 40);
+        });
+
+        // Sync loading modal visibility with progress container & speed display
+        const progContainer = document.getElementById('progressBarContainer');
+        const progBar = document.getElementById('progressBar');
+
+        // Update loading speed by sampling progress bar percent * file size
+        let sampleInterval = null;
+        function startLoadingSpeedSampler() {
+            clearInterval(sampleInterval);
+            const file = fileInput && fileInput.files && fileInput.files[0];
+            if (!file) { loadingSpeed.textContent = '-'; return; }
+            let prevLoaded = 0;
+            let prevTime = Date.now();
+            sampleInterval = setInterval(() => {
+                const w = parseFloat((progBar.style.width || '0%').replace('%','')) || 0;
+                const loaded = file.size * (w / 100);
+                const now = Date.now();
+                const deltaBytes = Math.max(0, loaded - prevLoaded);
+                const deltaTime = Math.max(0.001, (now - prevTime) / 1000);
+                const speed = deltaBytes / deltaTime;
+                prevLoaded = loaded; prevTime = now;
+                loadingSpeed.textContent = speed > 0 ? formatBytes(speed) + '/s' : '-';
+            }, 350);
+        }
+        function stopLoadingSpeedSampler() {
+            clearInterval(sampleInterval);
+            loadingSpeed.textContent = '-';
+        }
+
+        // Observe progress container style changes
+        if (progContainer) {
+            const mo = new MutationObserver(() => {
+                const hidden = progContainer.style.display === 'none' || getComputedStyle(progContainer).display === 'none';
+                if (hidden) {
+                    // upload finished
+                    hideLoading();
+                    stopLoadingSpeedSampler();
+                } else {
+                    // upload started
+                    showLoading();
+                    startLoadingSpeedSampler();
+                }
+            });
+            mo.observe(progContainer, { attributes: true, attributeFilter: ['style'] });
+        }
+
+        // Also hide loading if user navigates away or upload error occurs (listen to xhr error via global events)
+        // Hook into window to catch upload button re-enable (a sign upload ended)
+        const uploadBtn = document.getElementById('uploadButton');
+        if (uploadBtn) {
+            const obs = new MutationObserver(() => {
+                if (uploadBtn.disabled === false) {
+                    // likely finished
+                    hideLoading();
+                    stopLoadingSpeedSampler();
+                }
+            });
+            obs.observe(uploadBtn, { attributes: true, attributeFilter: ['disabled'] });
+        }
+
+        // keyboard: ESC closes confirm modal
+        document.addEventListener('keydown', (ev) => {
+            if (ev.key === 'Escape') {
+                if (confirmBackdrop.style.display === 'flex') hideConfirm();
+                else if (loadingBackdrop.style.display === 'flex') { /* do not close loading (upload in progress) */ }
+            }
+        });
+    })();
+</script>
+
+
+
+
+<script>
+(function(){
+    // Ensure elements exist
+    const loadingBackdrop = document.getElementById('loadingModalBackdrop');
+    const loadingSpeed = document.getElementById('loadingSpeed');
+    const progBar = document.getElementById('progressBar');
+    const progContainer = document.getElementById('progressBarContainer');
+    const fileInput = document.getElementById('fileInput');
+
+    if (!loadingBackdrop || !loadingSpeed || !progBar || !progContainer) return;
+
+    // Create persistent percent element in loading modal (if not present)
+    let loadingPercent = document.getElementById('loadingPercent');
+    if (!loadingPercent) {
+        loadingPercent = document.createElement('span');
+        loadingPercent.id = 'loadingPercent';
+        loadingPercent.style.fontWeight = '700';
+        loadingPercent.style.marginLeft = '10px';
+        loadingPercent.textContent = '0%';
+        // insert after speed element
+        loadingSpeed.parentNode.appendChild(loadingPercent);
+    }
+
+    // Helper: parse progress percent from style or computed sizes
+    function getProgressPercent() {
+        const wStyle = (progBar.style.width || '').trim();
+        if (wStyle && wStyle.endsWith('%')) return parseFloat(wStyle.replace('%','')) || 0;
+        // fallback: compute from widths
+        const parent = progBar.parentElement;
+        if (parent && parent.clientWidth) {
+            return (progBar.clientWidth / parent.clientWidth) * 100;
+        }
+        return 0;
+    }
+
+    // Format bytes
+    function fmtBytes(bytes){
+        if (!bytes && bytes !== 0) return '-';
+        const k = 1024; const sizes = ['B','KB','MB','GB','TB'];
+        if (bytes === 0) return '0 B';
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k,i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // Sampler: estimate speed using file size + percent delta
+    let sampler = null;
+    function startSampler(){
+        clearInterval(sampler);
+        const file = fileInput && fileInput.files && fileInput.files[0];
+        const total = file ? file.size : 0;
+        let prevLoaded = total * (getProgressPercent()/100);
+        let prevTime = Date.now();
+
+        // update immediately
+        updateDisplay(prevLoaded, total);
+
+        sampler = setInterval(() => {
+            const percent = Math.min(100, Math.max(0, getProgressPercent()));
+            const now = Date.now();
+            const loaded = total ? (total * (percent/100)) : 0;
+            const dt = Math.max(0.001, (now - prevTime) / 1000);
+            const dBytes = Math.max(0, loaded - prevLoaded);
+            const speed = dBytes / dt;
+
+            prevLoaded = loaded;
+            prevTime = now;
+
+            updateDisplay(loaded, total, speed, percent);
+
+            // stop if upload ended (percent >= 100)
+            if (percent >= 100) {
+                // keep final values visible briefly, then stop sampler
+                clearInterval(sampler);
+            }
+        }, 300);
+    }
+
+    function stopSampler() {
+        clearInterval(sampler);
+    }
+
+    function updateDisplay(loaded, total, speed, percentArg){
+        const percent = typeof percentArg === 'number' ? percentArg : (total ? (loaded/total*100) : getProgressPercent());
+        // Percent
+        loadingPercent.textContent = percent.toFixed(2) + '%';
+        // Speed (keep showing as long as sampler running or progress visible)
+        if (typeof speed === 'number' && speed > 0) {
+            loadingSpeed.textContent = fmtBytes(speed) + '/s';
+        } else {
+            // estimate small delta-based fallback: try to show '-' only if not uploading
+            loadingSpeed.textContent = '-';
+        }
+    }
+
+    // Observe progress container visibility to start/stop sampler and ensure percent+speed stay visible
+    const mo = new MutationObserver(() => {
+        const hidden = getComputedStyle(progContainer).display === 'none';
+        if (!hidden) {
+            // upload started
+            startSampler();
+            loadingBackdrop.style.display = 'flex';
+            loadingBackdrop.setAttribute('aria-hidden','false');
+        } else {
+            // upload ended -> keep final values for 800ms then clear
+            setTimeout(() => {
+                stopSampler();
+                // ensure UI hide of loading modal is handled elsewhere; here we clear values after short delay
+                loadingPercent.textContent = '0%';
+                loadingSpeed.textContent = '-';
+            }, 800);
+        }
+    });
+    mo.observe(progContainer, { attributes: true, attributeFilter: ['style'] });
+
+    // Also start sampler if user triggers submit (covers edge-cases)
+    document.getElementById('uploadForm')?.addEventListener('submit', () => {
+        // small delay so progress bar resets first
+        setTimeout(() => {
+            if (getComputedStyle(progContainer).display !== 'none') startSampler();
+        }, 60);
+    }, true);
+
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => stopSampler());
+})();
+</script>
+
+<script>
+(function () {
+    // Ensure viewport disables zoom
+    const vpContent = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no';
+    let vp = document.querySelector('meta[name="viewport"]');
+    if (vp) vp.setAttribute('content', vpContent);
+    else {
+        vp = document.createElement('meta');
+        vp.name = 'viewport';
+        vp.content = vpContent;
+        document.head.appendChild(vp);
+    }
+
+    // Prevent pinch (multi-touch) and double-tap zoom on touch devices
+    function preventMultiTouch(e) {
+        if (e.touches && e.touches.length > 1) e.preventDefault();
+    }
+    document.addEventListener('touchstart', preventMultiTouch, { passive: false });
+    document.addEventListener('touchmove', preventMultiTouch, { passive: false });
+
+    // Prevent double-tap zoom
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (e) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) e.preventDefault();
+        lastTouchEnd = now;
+    }, { passive: false });
+
+    // iOS gesture events
+    window.addEventListener('gesturestart', function (e) { e.preventDefault(); });
+
+    // Prevent Ctrl/Cmd + (+/-/0) and Ctrl/Cmd + wheel zoom on desktop
+    window.addEventListener('keydown', function (e) {
+        if (e.ctrlKey || e.metaKey) {
+            const key = e.key;
+            if (key === '+' || key === '-' || key === '=' || key === '0') e.preventDefault();
+        }
+    }, { passive: false });
+
+    window.addEventListener('wheel', function (e) {
+        if (e.ctrlKey || e.metaKey) e.preventDefault();
+    }, { passive: false });
+})();
+</script>
+
+
+
+<style>
+    /* Thumbnail box to replace the 🖼️ emoji for image files */
+    .file-icon {
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 56px;
+        font-size: 24px; /* fallback emoji size */
+    }
+    .thumb-box {
+        width: 56px;
+        height: 56px;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.06);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+        background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+    }
+    .thumb-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    @media (max-width: 768px) {
+        .file-icon, .thumb-box { width: 44px; height: 44px; flex: 0 0 44px; }
+    }
+</style>
+
+<script>
+(function(){
+    const imageExt = new Set(['jpg','jpeg','png','gif','webp','svg','avif']);
+
+    function makeAbsolute(href){
+        if(!href) return href;
+        try {
+            return new URL(href, window.location.origin).href;
+        } catch (e) { return href; }
+    }
+
+    function enhanceThumbnails(root){
+        root = root || document.getElementById('fileList');
+        if(!root) return;
+        root.querySelectorAll('.file-item').forEach(item=>{
+            const iconEl = item.querySelector('.file-icon');
+            const nameEl = item.querySelector('.file-name');
+            if(!iconEl || !nameEl) return;
+            // avoid re-processing
+            if(iconEl.dataset.thumbProcessed) return;
+
+            const fname = (nameEl.textContent || '').trim();
+            const ext = fname.includes('.') ? fname.split('.').pop().toLowerCase() : '';
+            if(imageExt.has(ext)){
+                // find anchor that links to the file (first .file-actions a[href])
+                const a = item.querySelector('.file-actions a[href]');
+                const href = a ? a.getAttribute('href') : null;
+                if(href){
+                    const src = makeAbsolute(href);
+                    const box = document.createElement('div');
+                    box.className = 'thumb-box';
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = fname;
+                    // fallback: if image fails to load, restore emoji
+                    img.onerror = function(){
+                        box.remove();
+                        iconEl.textContent = '🖼️';
+                        iconEl.dataset.thumbProcessed = '1';
+                    };
+                    box.appendChild(img);
+                    iconEl.innerHTML = '';
+                    iconEl.appendChild(box);
+                    iconEl.dataset.thumbProcessed = '1';
+                    return;
+                }
+            }
+            // Non-image files: keep existing icon (emoji) and mark processed
+            iconEl.dataset.thumbProcessed = '1';
+        });
+    }
+
+    // Run once after initial load (allow loadFiles to populate)
+    window.addEventListener('load', () => setTimeout(enhanceThumbnails, 120));
+
+    // Observe fileList changes and enhance thumbnails on updates
+    const fileListEl = document.getElementById('fileList');
+    if(fileListEl){
+        const mo = new MutationObserver(() => setTimeout(() => enhanceThumbnails(fileListEl), 40));
+        mo.observe(fileListEl, { childList: true, subtree: true });
+    }
+})();
+</script></style>
+
+
+<!-- Video preview modal + handler -->
+<style>
+    #videoPreviewModal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0,0,0,0.75);
+        z-index: 10000;
+    }
+    #videoPreviewModal .vp-card {
+        width: 90%;
+        max-width: 900px;
+        background: rgba(10,10,10,0.95);
+        border-radius: 12px;
+        padding: 12px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+        border: 1px solid rgba(255,255,255,0.06);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    #videoPreviewModal video {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        background: #000;
+    }
+    #videoPreviewModal .vp-meta {
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:10px;
+        color:var(--primary-color);
+        font-weight:600;
+    }
+    #videoPreviewModal .vp-close {
+        background:transparent;
+        border:1px solid rgba(255,255,255,0.06);
+        color:var(--primary-color);
+        padding:8px 10px;
+        border-radius:8px;
+        cursor:pointer;
+    }
+    @media (max-width:600px){
+        #videoPreviewModal .vp-card { padding:10px; }
+    }
+</style>
+
+<div id="videoPreviewModal" aria-hidden="true">
+    <div class="vp-card" role="dialog" aria-modal="true">
+        <div class="vp-meta">
+            <div id="vpTitle">Preview Video</div>
+            <div style="display:flex;gap:8px;align-items:center">
+                <button id="vpDownload" class="vp-close">Unduh</button>
+                <button id="vpClose" class="vp-close">Tutup</button>
+            </div>
+        </div>
+        <video id="vpPlayer" controls playsinline preload="metadata"></video>
+    </div>
+</div>
+
+<script>
+(function(){
+    const videoExt = new Set(['mp4','webm','ogg','mkv','mov','avi','m4v']);
+    const fileList = document.getElementById('fileList');
+    const modal = document.getElementById('videoPreviewModal');
+    const player = document.getElementById('vpPlayer');
+    const vpTitle = document.getElementById('vpTitle');
+    const vpClose = document.getElementById('vpClose');
+    const vpDownload = document.getElementById('vpDownload');
+
+    function getExtFromUrl(url){
+        if(!url) return '';
+        try { url = new URL(url, window.location.origin).pathname; } catch(e){/*ignore*/ }
+        const p = url.split('/').pop() || '';
+        return p.includes('.') ? p.split('.').pop().toLowerCase() : '';
+    }
+
+    function openModal(src, name){
+        player.pause();
+        player.removeAttribute('src');
+        player.src = src;
+        player.load();
+        player.play().catch(()=>{/* autoplay might be blocked */});
+        vpTitle.textContent = name || 'Preview Video';
+        vpDownload.onclick = () => {
+            // trigger download
+            const a = document.createElement('a');
+            a.href = src;
+            a.download = name || '';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        };
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(){
+        player.pause();
+        player.removeAttribute('src');
+        player.load();
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+    }
+
+    // Delegated click handler for "Lihat" buttons
+    fileList?.addEventListener('click', function(e){
+        const btn = e.target.closest('.view-button');
+        if(!btn) return;
+        // find anchor that points to file (closest a[href] in same .file-actions or ancestor)
+        const item = btn.closest('.file-item');
+        if(!item) return;
+        const a = item.querySelector('.file-actions a[href]') || item.querySelector('a[href]');
+        const href = a ? a.getAttribute('href') : null;
+        const nameEl = item.querySelector('.file-name');
+        const displayName = (nameEl && nameEl.textContent) ? nameEl.textContent.trim() : (href ? href.split('/').pop(): 'Video');
+        const ext = getExtFromUrl(href) || (displayName.includes('.') ? displayName.split('.').pop().toLowerCase() : '');
+        if(!href) return; // fallback: let default behavior
+        if(videoExt.has(ext)){
+            e.preventDefault();
+            openModal(href.startsWith('http') ? href : (window.location.origin + href), displayName);
+        } // otherwise let anchor open in new tab as before
+    });
+
+    // Close controls
+    vpClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){
+        if(e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && modal.style.display === 'flex') closeModal();
+    });
+})();
+</script>
+
+
+
+
+<!-- Kategori UI + CSS -->
+<style>
+    /* Category bar */
+    .category-bar {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 12px;
+        margin-bottom: 14px;
+        border-radius: 12px;
+        background: linear-gradient(90deg, rgba(183,99,224,0.06), rgba(0,201,255,0.03));
+        border: 1px solid rgba(255,255,255,0.04);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    }
+    .cat-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+        color: rgba(255,255,255,0.95);
+        font-weight:600;
+        font-size: 14px;
+        cursor: pointer;
+        border: 1px solid rgba(255,255,255,0.04);
+        transition: transform .14s ease, box-shadow .14s ease, opacity .14s;
+        opacity: 0.95;
+    }
+    .cat-chip:hover { transform: translateY(-3px); opacity: 1; box-shadow: 0 8px 20px rgba(0,0,0,0.45); }
+    .cat-chip.active {
+        background: linear-gradient(90deg,#6a0596,#b763e0);
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(103,40,140,0.35);
+        transform: translateY(-4px);
+    }
+    .cat-count {
+        background: rgba(255,255,255,0.08);
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        color: rgba(255,255,255,0.9);
+        font-weight:700;
+    }
+
+    /* Tag badge on file items */
+    .file-tag {
+        background: linear-gradient(90deg,#ffd966,#ff9a00);
+        color: #1a1a1a;
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight:700;
+        margin-left: 8px;
+    }
+
+    /* Tag button */
+    .tag-button {
+        background: rgba(255,255,255,0.06);
+        color: var(--primary-color);
+        border-radius: 8px;
+        padding: 6px 8px;
+        font-weight:600;
+        border: none;
+        cursor: pointer;
+    }
+    .tag-button:hover { background: rgba(255,255,255,0.1); }
+
+    /* Small popover for choosing category */
+    .cat-popover {
+        position: absolute;
+        z-index: 12000;
+        min-width: 160px;
+        background: rgba(10,10,10,0.98);
+        border-radius: 10px;
+        padding: 8px;
+        border: 1px solid rgba(255,255,255,0.06);
+        box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+    }
+    .cat-popover .item {
+        padding: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        color: var(--primary-color);
+        font-weight:600;
+        font-size: 13px;
+    }
+    .cat-popover .item:hover { background: rgba(255,255,255,0.03); }
+
+    /* Manage categories button */
+    .manage-cats {
+        margin-left: auto;
+        display:flex;
+        gap:8px;
+        align-items:center;
+    }
+    .manage-btn {
+        background: transparent;
+        border: 1px dashed rgba(255,255,255,0.06);
+        color: rgba(255,255,255,0.9);
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-weight:600;
+        cursor:pointer;
+        font-size: 13px;
+    }
+    .manage-btn:hover { background: rgba(255,255,255,0.02); }
+
+    /* Responsive tweaks */
+    @media (max-width:700px) {
+        .category-bar { padding: 10px; gap:8px; }
+    }
+</style>
+
+<script>
+(function(){
+    // default category groups (extensions)
+    const DEFAULT_CATEGORIES = {
+        "All": [],
+        "Images": ["jpg","jpeg","png","gif","webp","svg","avif"],
+        "Videos": ["mp4","mkv","mov","webm","avi","m4v"],
+        "Audio": ["mp3","wav","ogg","flac","m4a"],
+        "Documents": ["pdf","doc","docx","ppt","pptx","xls","xlsx","txt","md"],
+        "Archives": ["zip","rar","7z","tar","gz"],
+        "Code": ["html","css","js","json","py","php","cpp","java","c","rb"]
+    };
+
+    const STORAGE_KEYS = {
+        customCats: 'customCategories_v1',
+        fileTags: 'fileTagMap_v1'
+    };
+
+    // helpers
+    function getExt(name){
+        if(!name) return '';
+        const p = name.split('?')[0].split('#')[0].split('/').pop();
+        return (p.includes('.') ? p.split('.').pop().toLowerCase() : '').trim();
+    }
+
+    function loadCustomCategories(){
+        try {
+            const raw = localStorage.getItem(STORAGE_KEYS.customCats);
+            return raw ? JSON.parse(raw) : {};
+        } catch(e){ return {}; }
+    }
+    function saveCustomCategories(obj){
+        localStorage.setItem(STORAGE_KEYS.customCats, JSON.stringify(obj));
+    }
+    function loadFileTags(){ try {
+        const raw = localStorage.getItem(STORAGE_KEYS.fileTags); return raw ? JSON.parse(raw) : {};
+    } catch(e){ return {}; } }
+    function saveFileTags(obj){ localStorage.setItem(STORAGE_KEYS.fileTags, JSON.stringify(obj)); }
+
+    // build effective category map (name -> ext array)
+    function getCategoryMap(){
+        const map = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+        const custom = loadCustomCategories();
+        for(const name in custom){
+            map[name] = Array.isArray(custom[name]) ? custom[name].slice() : [];
+        }
+        return map;
+    }
+
+    // insert category bar above fileList
+    const fileListEl = document.getElementById('fileList');
+    if(!fileListEl) return;
+
+    const catBar = document.createElement('div');
+    catBar.className = 'category-bar';
+    fileListEl.parentNode.insertBefore(catBar, fileListEl);
+
+    // manage button
+    const manageWrap = document.createElement('div');
+    manageWrap.className = 'manage-cats';
+    const manageBtn = document.createElement('button');
+    manageBtn.type = 'button';
+    manageBtn.className = 'manage-btn';
+    manageBtn.textContent = 'Kelola Kategori';
+    manageWrap.appendChild(manageBtn);
+    catBar.appendChild(manageWrap);
+
+    // build chips
+    function buildChips(){
+        const map = getCategoryMap();
+        // remove existing chips (except manageWrap)
+        Array.from(catBar.children).forEach(ch => { if(!ch.classList.contains('manage-cats')) catBar.removeChild(ch); });
+        const items = fileListEl.querySelectorAll('.file-item');
+        // compute counts
+        const counts = {};
+        for(const k in map) counts[k] = 0;
+        counts['All'] = items.length;
+
+        items.forEach(item => {
+            const nameEl = item.querySelector('.file-name');
+            const fname = nameEl ? nameEl.textContent.trim() : '';
+            const ext = getExt(fname);
+            let matched = false;
+            for(const cat in map){
+                if(cat === 'All') continue;
+                if(map[cat] && map[cat].includes(ext)){
+                    counts[cat] = (counts[cat]||0) + 1;
+                    matched = true;
+                }
+            }
+            if(!matched) counts['Others'] = (counts['Others']||0) + 1;
+        });
+
+        // order: All, default categories order, Others, custom
+        const order = ['All','Images','Videos','Audio','Documents','Archives','Code','Others'];
+        // include any custom categories not already included
+        const extra = Object.keys(map).filter(n => !order.includes(n) && n !== 'All');
+        const final = order.concat(extra);
+
+        final.forEach(name => {
+            if(name === undefined) return;
+            const chip = document.createElement('div');
+            chip.className = 'cat-chip';
+            chip.dataset.cat = name;
+            const label = document.createElement('span');
+            label.textContent = name;
+            const cnt = document.createElement('span');
+            cnt.className = 'cat-count';
+            cnt.textContent = counts[name] !== undefined ? counts[name] : 0;
+            chip.appendChild(label);
+            chip.appendChild(cnt);
+            // default active -> All
+            if(name === 'All') chip.classList.add('active');
+            catBar.insertBefore(chip, manageWrap);
+        });
+    }
+
+    // filter function
+    function applyCategoryFilter(cat){
+        const map = getCategoryMap();
+        const items = fileListEl.querySelectorAll('.file-item');
+        items.forEach(item => {
+            const nameEl = item.querySelector('.file-name');
+            const fname = nameEl ? nameEl.textContent.trim() : '';
+            const ext = getExt(fname);
+            const fileTags = loadFileTags();
+            const tagged = fileTags[fname]; // local mapping may override
+            let show = true;
+            if(cat && cat !== 'All'){
+                if(tagged){
+                    show = (tagged === cat);
+                } else if(map[cat] && map[cat].length){
+                    show = map[cat].includes(ext);
+                } else {
+                    // custom category with empty ext list -> nothing matches by ext; require tag assignment
+                    show = false;
+                }
+            }
+            item.style.display = show ? '' : 'none';
+        });
+        // update active class
+        Array.from(catBar.querySelectorAll('.cat-chip')).forEach(ch => {
+            ch.classList.toggle('active', ch.dataset.cat === cat);
+        });
+    }
+
+    // append tag buttons and badges to each .file-item after load
+    function ensureTagControls(){
+        const tags = loadFileTags();
+        fileListEl.querySelectorAll('.file-item').forEach(item => {
+            if(item.dataset.tagControlsProcessed) return;
+            const actions = item.querySelector('.file-actions');
+            if(!actions) return;
+            // add tag button
+            const tagBtn = document.createElement('button');
+            tagBtn.type = 'button';
+            tagBtn.className = 'tag-button';
+            tagBtn.textContent = 'Tag';
+            tagBtn.title = 'Tandai kategori';
+            tagBtn.style.marginLeft = '6px';
+            actions.appendChild(tagBtn);
+
+            // show badge if tagged
+            const nameEl = item.querySelector('.file-name');
+            const fname = nameEl ? nameEl.textContent.trim() : '';
+            const currentTag = tags[fname];
+            if(currentTag){
+                let badge = item.querySelector('.file-tag');
+                if(!badge){
+                    badge = document.createElement('span');
+                    badge.className = 'file-tag';
+                    actions.insertBefore(badge, actions.firstChild);
+                }
+                badge.textContent = currentTag;
+            }
+
+            item.dataset.tagControlsProcessed = '1';
+        });
+    }
+
+    // popover for selecting category (reused)
+    let currentPopover = null;
+    function openCategoryPopover(button, fileName, itemEl){
+        closePopover();
+        const map = getCategoryMap();
+        const allCats = Object.keys(map).concat(['Others']).filter((v,i,a)=> a.indexOf(v)===i);
+        const pop = document.createElement('div');
+        pop.className = 'cat-popover';
+        allCats.forEach(cat => {
+            const it = document.createElement('div');
+            it.className = 'item';
+            it.textContent = cat;
+            it.dataset.cat = cat;
+            pop.appendChild(it);
+        });
+        // anchor
+        document.body.appendChild(pop);
+        currentPopover = pop;
+        // position near button
+        const rect = button.getBoundingClientRect();
+        pop.style.left = Math.min(window.innerWidth - 180, rect.left) + 'px';
+        pop.style.top = (rect.bottom + 8) + 'px';
+
+        pop.addEventListener('click', (ev) => {
+            const it = ev.target.closest('.item');
+            if(!it) return;
+            const cat = it.dataset.cat;
+            // assign tag (localStorage)
+            const tags = loadFileTags();
+            tags[fileName] = cat;
+            saveFileTags(tags);
+            // update badge
+            let badge = itemEl.querySelector('.file-tag');
+            if(!badge){
+                badge = document.createElement('span');
+                badge.className = 'file-tag';
+                itemEl.querySelector('.file-actions').insertBefore(badge, itemEl.querySelector('.file-actions').firstChild);
+            }
+            badge.textContent = cat;
+            closePopover();
+            // refresh chips counts and filtering
+            buildChips();
+        }, { once: false });
+        // click outside to close
+        setTimeout(() => {
+            document.addEventListener('click', outsideHandler);
+        }, 10);
+
+        function outsideHandler(e){
+            if(!pop.contains(e.target) && e.target !== button){
+                closePopover();
+            }
+        }
+        function closePopover(){
+            if(currentPopover && currentPopover.parentNode) currentPopover.remove();
+            currentPopover = null;
+            document.removeEventListener('click', outsideHandler);
+        }
+        // expose close
+        window._closeCatPopover = closePopover;
+    }
+
+    function closePopover(){
+        if(window._closeCatPopover) window._closeCatPopover();
+    }
+
+    // Observe the fileList to rebuild chips & controls
+    const rebuild = () => { buildChips(); ensureTagControls(); };
+    const mo = new MutationObserver(rebuild);
+    mo.observe(fileListEl, { childList: true, subtree: true });
+
+    // initial build (in case items already present)
+    setTimeout(rebuild, 120);
+
+    // delegate chip clicks
+    catBar.addEventListener('click', (e) => {
+        const ch = e.target.closest('.cat-chip');
+        if(!ch) return;
+        const cat = ch.dataset.cat;
+        applyCategoryFilter(cat);
+    });
+
+    // delegate tag-button clicks
+    fileListEl.addEventListener('click', (e) => {
+        const btn = e.target.closest('.tag-button');
+        if(!btn) return;
+        const item = btn.closest('.file-item');
+        const nameEl = item.querySelector('.file-name');
+        const fname = nameEl ? nameEl.textContent.trim() : '';
+        openCategoryPopover(btn, fname, item);
+    });
+
+    // manage categories UI (simple prompt-based)
+    manageBtn.addEventListener('click', () => {
+        const custom = loadCustomCategories();
+        let msg = 'Kategori kustom saat ini (nama:ext, koma dipisah). Contoh: "Meme:gif,jpg" \n\n';
+        msg += Object.keys(custom).length ? Object.keys(custom).map(k => `${k}:${custom[k].join(',')}`).join('\n') : '(tidak ada)';
+        msg += '\n\nMasukkan definisi baru atau kosongkan untuk batal. Untuk menghapus kategori, tulis nama diikuti "DELETE" (contoh: "Meme DELETE").';
+        const input = prompt(msg, '');
+        if(!input) return;
+        // parse lines (allow multiple by newline)
+        const lines = input.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        for(const ln of lines){
+            // support "Name:ext1,ext2" or "Name DELETE"
+            const parts = ln.split(/\s+/);
+            if(parts.length === 2 && parts[1].toUpperCase() === 'DELETE'){
+                const name = parts[0].trim();
+                if(custom[name]) { delete custom[name]; }
+                continue;
+            }
+            if(ln.includes(':')){
+                const [name, extList] = ln.split(':').map(s => s.trim());
+                const exts = extList.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+                if(name) custom[name] = exts;
+            }
+        }
+        saveCustomCategories(custom);
+        buildChips();
+        alert('Kategori kustom diperbarui.');
+    });
+
+    // expose a small API (optional)
+    window.CategoryUI = {
+        rebuild,
+        getCategoryMap: getCategoryMap,
+        assignTagToFile: (fileName, cat) => {
+            const tags = loadFileTags(); tags[fileName] = cat; saveFileTags(tags); rebuild();
+        }
+    };
+
+    // ensure clicking "All" initially shows all
+    applyCategoryFilter('All');
+
+})();
+</script>

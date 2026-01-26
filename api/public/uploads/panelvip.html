@@ -1,0 +1,3592 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Ocin Shop PanelVIP</title>
+<style>
+    :root{
+        --bg-dark:#071129;
+        --bg-blue:#43006f;
+        --panel:#43006f;
+        --accent-red:#e53935;
+        --accent-orange:#ff8a00;
+        --glass: rgba(255,255,255,0.04);
+        --unlock-green:#2ecc71;
+    }
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;color:#dddddd;background:linear-gradient(180deg,var(--bg-dark),#1c0928);background-attachment:fixed}
+    body::before{
+        content:"";
+        position:fixed;inset:0;
+        background:url("animeillustration.jpg") center/cover no-repeat;
+        opacity:0.07;filter:blur(1px);
+        z-index:0;
+    }
+    .app{position:relative;z-index:1;max-width:1200px;margin:30px auto;padding:20px;display:grid;grid-template-columns:300px 1fr;gap:18px}
+    header.site{
+        grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:14px;border-radius:12px;background:linear-gradient(135deg,var(--panel), rgba(11,59,139,0.06));
+        box-shadow: 0 6px 22px rgba(23, 2, 2, 0.6), inset 0 -1px 0 rgba(255,255,255,0.02)
+    }
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo img{width:56px;height:56px;object-fit:cover;border-radius:8px;border:2px solid rgba(255,255,255,0.04)}
+    .title{font-size:20px;font-weight:700;color:#fff}
+    .subtitle{font-size:12px;color:#ff9f9f;opacity:0.9}
+    /* Left panel */
+    .panel{background:linear-gradient(180deg, rgba(139, 11, 135, 0.12), rgba(0,0,0,0.3));padding:18px;border-radius:12px;min-height:520px;display:flex;flex-direction:column;gap:14px}
+    .user-card{display:flex;gap:12px;align-items:center}
+    .avatar{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#8a121200,#43006f);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:22px}
+    .user-info small{display:block;color:#ffa8a8}
+    .login-box{margin-top:6px;display:flex;gap:8px}
+    .input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff}
+    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+    .btn-red{background:linear-gradient(180deg,var(--accent-red),#621cb7);color:#fff}
+    .btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#cfe0ff}
+    .status{font-size:13px;padding:8px;border-radius:10px;background:rgba(255,255,255,0.02);text-align:center}
+    .open-games{display:flex;flex-direction:column;gap:8px}
+    .open-games .btn{display:flex;align-items:center;gap:8px;justify-content:center}
+    /* Main content */
+    .content{background:linear-gradient(180deg, rgba(0, 0, 0, 0.3), rgba(14, 2, 23, 0.5));padding:18px;border-radius:12px;min-height:520px;overflow:auto}
+    .section{margin-bottom:18px;padding:14px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+    .section h3{margin:0 0 10px 0;color:#ffcfcf}
+    .flex{display:flex;gap:12px;flex-wrap:wrap}
+    .card{flex:1 1 240px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.008));padding:12px;border-radius:10px;position:relative}
+    .price{font-size:13px;color:#ffd9d9;margin-top:8px}
+    .toggle{display:inline-flex;align-items:center;gap:8px}
+    .switch{width:52px;height:28px;border-radius:20px;background:#43006f;padding:3px;display:inline-flex;align-items:center;cursor:pointer}
+    .knob{width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .22s;box-shadow:0 2px 6px rgba(23, 2, 2, 0.6)}
+    .switch.on{background:linear-gradient(90deg,#2ecc71,#16a34a)}
+    .switch.on .knob{transform:translateX(24px)}
+    .locked-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.6));display:flex;align-items:center;justify-content:center;border-radius:10px;color:#ffd9d9;font-weight:700;font-size:20px}
+    .locked-overlay small{display:block;font-size:12px;margin-top:6px;opacity:0.9}
+    .lock-icon{font-size:22px}
+    /* Slider rainbow */
+    .slider{width:100%;-webkit-appearance:none;height:14px;border-radius:10px;background:linear-gradient(90deg,#ffffff 0%,#00fff2 20%,#00ff0d 40%,#ffb700 60%,#ff8800 75%,#ff0000 100%);outline:none}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;background:var(--accent-orange);border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.6)}
+    .slider-wrap{display:flex;align-items:center;gap:12px}
+    .small{font-size:13px;color:#cfe0ff}
+    /* hologram buttons */
+    .holo-row{display:flex;gap:8px;flex-wrap:wrap}
+    .holo-btn{padding:8px 12px;border-radius:8px;border:0;color:#1e0729;font-weight:800;cursor:pointer}
+    .h-red{background:#ff4d4d}
+    .h-yellow{background:#ffd54d}
+    .h-green{background:#7aff9e}
+    .h-blue{background:#6fb3ff}
+    .h-purple{background:#c99bff}
+    /* fancy buttons */
+    .fancy{border-radius:12px;padding:10px 14px;font-weight:800;background:linear-gradient(90deg,#5c0b8b,#1d073a);color:#fff;border:1px solid rgba(255,255,255,0.04)}
+    /* multicolor loading */
+    .loader{width:34px;height:34px;border-radius:50%;position:relative;display:inline-block}
+    .loader:before,.loader:after{content:"";position:absolute;inset:0;border-radius:50%;border:4px solid transparent}
+    .loader:before{border-top-color:#ff0047;border-right-color:#ff8a00;border-bottom-color:#ffd600;animation:spin 1s linear infinite}
+    .loader:after{border-left-color:#06a5ff;border-top-color:#8a2be2;animation:spin 1.6s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    /* responsive */
+    @media(max-width:880px){
+        .app{grid-template-columns:1fr; padding:12px}
+        header.site{flex-direction:column;align-items:flex-start;gap:8px}
+    }
+    /* lock badge small */
+    .badge{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(0,0,0,0.4);font-weight:700}
+    .note{font-size:12px;color:#9fb6ff;opacity:0.9}
+</style>
+</head>
+<body>
+    <div class="app">
+        <header class="site">
+            <div class="logo">
+                <img src="logobaru.jpg" alt="logo" />
+                <div>
+                    <div class="title">Injektor FF — Panel</div>
+                    <div class="subtitle">OCIN SHOP</div>
+                </div>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+                <div class="note">Gunakan dengan bijak</div>
+                <div class="badge"></div>
+            </div>
+        </header>
+
+        <aside class="panel">
+            <div class="user-card">
+                <div class="avatar" id="avatar">?</div>
+                <div class="user-info">
+                    <div id="who" style="font-weight:800;color:#fff">Tamu</div>
+                    <small id="tierNote">Belum login</small>
+                </div>
+            </div>
+
+            <div class="login-box">
+                <input id="username" class="input" placeholder="Masukkan Kode" aria-label="username" />
+                <button id="btnLogin" class="btn btn-red">OK</button>
+            </div>
+            <div id="loginMsg" class="status">Silakan ketik Kode Anda lalu tekan OK</div>
+
+            <div style="display:flex;gap:8px;flex-direction:column;margin-top:6px">
+                <button id="btnLogout" class="btn btn-outline" style="display:none">Logout</button>
+            </div>
+
+            <div style="margin-top:12px" class="open-games">
+                <div class="small">Buka game</div>
+                <button class="btn fancy" id="openFF">Buka Free Fire</button>
+                <button class="btn fancy" id="openFFMax">Buka Free Fire Max</button>
+            </div>
+
+            <div style="margin-top:auto">
+                <div class="small">Catatan:</div>
+                <div class="note">Username admin tidak ditampilkan</div>
+            </div>
+        </aside>
+
+        <main class="content">
+            <section class="section">
+                <h3>Fitur Utama</h3>
+                <div class="flex">
+                    <div class="card" data-price="30" id="feat1">
+                        <strong>Nembak Badan - Headshoot</strong>
+                        <div class="price">Khusus 30rb-50rb</div>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="body_hs"><div class="knob"></div></div>
+                            <div class="small">On / Off</div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-price="20" id="feat2">
+                        <strong>Nembak Dada - Headshoot</strong>
+                        <div class="price">Khusus 20rb-50rb</div>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="chest_hs"><div class="knob"></div></div>
+                            <div class="small">On / Off</div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-price="70" id="feat3">
+                        <strong>Nembak Badan Headshoot Lengket</strong>
+                        <div class="price">Khusus 70rb-100rb</div>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="sticky_body"><div class="knob"></div></div>
+                            <div class="small">On / Off</div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-price="70" id="feat4">
+                        <strong>Nembak Dada Headshoot Lengket</strong>
+                        <div class="price">Khusus 70rb-100rb</div>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="sticky_chest"><div class="knob"></div></div>
+                            <div class="small">On / Off</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3>Hight Damage & Pilihan</h3>
+                <div class="flex">
+                    <div class="card" data-price="10" id="hd1">
+                        <strong>High Damage 80%</strong>
+                        <div class="price">80% khusus 10rb</div>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="hd_80"><div class="knob"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-price="20" id="hd2">
+                        <strong>High Damage 100%</strong>
+                        <div class="price">100% khusus 20rb-50rb</div>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="hd_100"><div class="knob"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-price="35" id="hd3">
+                        <strong>High Damage 500%</strong>
+                        <div class="price">500% khusus 35rb-50rb</div>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="hd_500"><div class="knob"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-price="70" id="hdAll">
+                        <strong>Harga 70-100rb: Semua terbuka</strong>
+                        <div class="price">Unlock penuh</div>
+                        <div style="margin-top:10px" class="small">Jika tier >= 70 semua menjadi aktif</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3>Damage</h3>
+                <div class="card" style="margin-bottom:12px">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <strong>Optimalisasi Damage (%)</strong>
+                        <div class="small">1-100%</div>
+                    </div>
+                    <div style="margin-top:10px" class="slider-wrap">
+                        <input id="rainbowSlider" class="slider" type="range" min="1" max="100" value="50" />
+                        <div class="small" id="sliderValue">50%</div>
+                    </div>
+                </div>
+                
+                <section class="section">
+                <h3>Sensitivitas</h3>
+                <div class="card" style="margin-bottom:12px">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <strong>Sensitivitas (%)</strong>
+                        <div class="small">1-100%</div>
+                    </div>
+                    <div style="margin-top:10px" class="slider-wrap">
+                        <input id="rainbowSlider" class="slider" type="range" min="1" max="100" value="100" />
+                        <div class="small" id="sliderValue">100%</div>
+                    </div>
+                </div>
+
+                <div class="flex">
+                    <div class="card" data-price="10" id="head1">
+                        <strong>Headshot 80%</strong>
+                        <div class="price">80% 10rb</div>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="hs_80"><div class="knob"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-price="20" id="head2">
+                        <strong>Headshot 100%</strong>
+                        <div class="price">100% 20rb</div>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="hs_100"><div class="knob"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-price="50" id="head3">
+                        <strong>Headshot 200%</strong>
+                        <div class="price">200% 50rb</div>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="hs_200"><div class="knob"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-price="70" id="head4">
+                        <strong>Headshot 500%</strong>
+                        <div class="price">500% 70rb-100rb</div>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="hs_500"><div class="knob"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3>Shotguns Damage</h3>
+                <div class="flex">
+                    <div class="card" data-price="20"><strong>SG Damage 50%</strong><div class="price">20rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="sg_50"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="30"><strong>SG Damage 100%</strong><div class="price">30rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="sg_100"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="35"><strong>SG Damage 150%</strong><div class="price">35rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="sg_150"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="50"><strong>SG Damage 300%</strong><div class="price">50rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="sg_300"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="70"><strong>SG Damage 400%</strong><div class="price">70rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="sg_400"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="100"><strong>SG Damage 500%</strong><div class="price">100rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="sg_500"><div class="knob"></div></div></div></div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3>Support Ranked</h3>
+                <div class="flex">
+                    <div class="card" data-price="30"><strong>Ranked Battle Royal(BR Ranked)</strong><div class="price">30rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="sg_50"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="20"><strong>Ranked Clash Squad (CS Ranked)</strong><div class="price">20rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="sg_100"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="10"><strong>Battle Royal Classic</strong><div class="price">10rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="sg_150"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="10"><strong>Clash Squad Classic</strong><div class="price">10rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="sg_300"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="10"><strong>Lone Wolf</strong><div class="price">10rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="sg_400"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="10"><strong>Custom Room</strong><div class="price">10rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="sg_500"><div class="knob"></div></div></div></div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3>Hologram Body (30rb - 100rb)</h3>
+                <div class="holo-row">
+                    <button class="holo-btn h-red" data-holo="red">MERAH</button>
+                    <button class="holo-btn h-yellow" data-holo="yellow">KUNING</button>
+                    <button class="holo-btn h-green" data-holo="green">HIJAU</button>
+                    <button class="holo-btn h-blue" data-holo="blue">BIRU</button>
+                    <button class="holo-btn h-purple" data-holo="purple">UNGU</button>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3>Aim</h3>
+                <div class="flex">
+                    <div class="card" data-price="10"><strong>Aimlock</strong><div class="price">10rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="aimlock"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="20"><strong>Aimbot</strong><div class="price">20rb-50rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="aimbot"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="20"><strong>Aim Head</strong><div class="price">20rb-50rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="aim_head"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="30"><strong>Body Lock</strong><div class="price">30rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="aim_body"><div class="knob"></div></div></div></div>
+                    <div class="card" data-price="70"><strong>Aim Good</strong><div class="price">70rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="aim_good"><div class="knob"></div></div></div></div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3>Stabilizers & Bypass</h3>
+                <div class="flex">
+                    <div class="card" data-price="10"><strong>Layar Licin</strong><div class="price">10rb - 100rb</div><div style="margin-top:8px" class="toggle"><div class="switch" data-key="slick_screen"><div class="knob"></div></div></div></div>
+
+                    <div class="card" data-price="10" id="bypassCard">
+                        <strong>Anti Banned</strong>
+                        <p>Melindungi akun dari banned Dan Surcin</p>
+                        <div class="price">10rb - 100rb</div>
+                        <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+                            <button class="btn btn-red" id="bypassBtn">Anti Banned On/Off</button>
+                            <div id="bypassLoader" style="display:none"><span class="loader"></span></div>
+                        </div>
+                        <div class="note" style="margin-top:8px">Saat diaktifkan tampil loading warna-warni</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script>
+/* Simple user-tier map */
+const USER_MAP = {
+    "ocqpk": 10,
+    "ocwpk": 20,
+    "ocepk": 30,
+    "ocetk": 35,
+    "ocrpk": 40,
+    "octpk": 50,
+    "ocupk": 70,
+    "0505": 100
+};
+
+const state = { username:null, tier:0 };
+
+const btnLogin = document.getElementById('btnLogin');
+const btnLogout = document.getElementById('btnLogout');
+const loginMsg = document.getElementById('loginMsg');
+const who = document.getElementById('who');
+const tierNote = document.getElementById('tierNote');
+const avatar = document.getElementById('avatar');
+
+btnLogin.addEventListener('click', ()=>{
+    const u = document.getElementById('username').value.trim();
+    if(!u){ loginMsg.textContent = 'Masukkan KodeVIP terlebih dahulu'; return; }
+    const tier = USER_MAP[u] || 0;
+    state.username = u;
+    state.tier = tier;
+    who.textContent = u;
+    avatar.textContent = u.slice(0,2).toUpperCase();
+    if(tier>0){
+        loginMsg.textContent = 'Login berhasil • Tier: ' + tier + 'rb';
+        tierNote.textContent = 'Tier: ' + tier + 'rb';
+        btnLogout.style.display = 'inline-block';
+        lockManager();
+    } else {
+        loginMsg.textContent = 'Username VIP tidak terdaftar Akses terbatas.';
+        tierNote.textContent = 'Tamu';
+        lockManager();
+    }
+});
+
+btnLogout.addEventListener('click', ()=>{
+    state.username = null; state.tier = 0;
+    who.textContent = 'Tamu'; tierNote.textContent = 'Belum login';
+    avatar.textContent = '?';
+    document.getElementById('username').value = '';
+    loginMsg.textContent = 'Anda telah logout';
+    btnLogout.style.display = 'none';
+    lockManager();
+});
+
+/* lock logic: any card with data-price > state.tier will show lock overlay.
+     Price 70 means unlocked when tier >=70 OR any tier exactly 70-100 rules apply.
+*/
+function lockManager(){
+    document.querySelectorAll('.card, .card[data-price]').forEach(card=>{
+        const price = parseInt(card.getAttribute('data-price')||0,10);
+        // price 0 means open
+        const locked = price > 0 && state.tier < price;
+        // Remove existing overlays
+        const existing = card.querySelector('.locked-overlay');
+        if(existing) existing.remove();
+        if(locked){
+            const overlay = document.createElement('div');
+            overlay.className='locked-overlay';
+            overlay.innerHTML = '<div style="text-align:center"><div class="lock-icon">🔒</div><small>Terbuka pada ' + price + 'rb</small></div>';
+            card.appendChild(overlay);
+        }
+    });
+    // Some global features (like hdAll) unlock all if tier >=70
+    if(state.tier >=70){
+        document.querySelectorAll('.switch').forEach(s=>{
+            s.classList.remove('disabled');
+        });
+    }
+}
+
+/* Toggle interactions (visual only) */
+document.querySelectorAll('.switch').forEach(sw=>{
+    sw.addEventListener('click', ()=>{
+        // find containing card to check lock state
+        const card = sw.closest('.card');
+        const price = card ? parseInt(card.getAttribute('data-price')||0,10) : 0;
+        if(price>0 && state.tier < price){
+            // show quick message
+            loginMsg.textContent = 'Fitur terkunci • Buka pada ' + price + 'rb';
+            return;
+        }
+        sw.classList.toggle('on');
+    });
+});
+
+/* Slider display */
+const slider = document.getElementById('rainbowSlider');
+const sVal = document.getElementById('sliderValue');
+slider.addEventListener('input', ()=> sVal.textContent = slider.value + '%' );
+
+/* Hologram buttons: require tier >=30 to be enabled */
+document.querySelectorAll('.holo-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+        if(state.tier < 30){ loginMsg.textContent = 'Hologram body tersedia untuk 30rb ke atas'; return; }
+        const color = btn.getAttribute('data-holo');
+        loginMsg.textContent = 'Hologram ' + color.toUpperCase() + ' dipilih';
+    });
+});
+
+/* Bypass button shows loader and checks tier */
+const bypassBtn = document.getElementById('bypassBtn');
+const bypassLoader = document.getElementById('bypassLoader');
+bypassBtn.addEventListener('click', ()=>{
+    const card = document.getElementById('bypassCard');
+    const price = parseInt(card.getAttribute('data-price')||0,10);
+    if(state.tier < price){ loginMsg.textContent = 'Bypass terkunci • Minimal ' + price + 'rb'; return; }
+    // show loader
+    bypassLoader.style.display = 'inline-block';
+    loginMsg.textContent = 'Menjalankan Bypass...';
+    setTimeout(()=>{ bypassLoader.style.display = 'none'; loginMsg.textContent = 'Bypass selesai'; }, 2400);
+});
+
+/* Open game buttons: try to open app protocol, fallback to web */
+document.getElementById('openFF').addEventListener('click', ()=>{
+    loginMsg.textContent = 'Membuka Free Fire...';
+    // Try to open app via intent (may be blocked in browser). Fallback to web.
+    try {
+        window.location = 'freefire://';
+        setTimeout(()=> window.open('https://play.google.com/store/apps/details?id=com.dts.freefireth','_blank'), 800);
+    } catch(e){
+        window.open('https://play.google.com/store/apps/details?id=com.dts.freefireth','_blank');
+    }
+});
+document.getElementById('openFFMax').addEventListener('click', ()=>{
+    loginMsg.textContent = 'Membuka Free Fire Max...';
+    try {
+        window.location = 'freefiremax://';
+        setTimeout(()=> window.open('https://play.google.com/store/apps/details?id=com.dts.freefiremax','_blank'), 800);
+    } catch(e){
+        window.open('https://play.google.com/store/apps/details?id=com.dts.freefiremax','_blank');
+    }
+});
+
+/* Small UX: clicking locked overlays scroll to login */
+document.addEventListener('click', (e)=>{
+    if(e.target.closest('.locked-overlay')){
+        loginMsg.textContent = 'Fitur terkunci • Silakan login dengan username berbayar';
+        const el = document.getElementById('username');
+        if(el) el.focus();
+    }
+});
+
+
+/* initialize locks */
+lockManager();
+</script>
+</body>
+</html></div></section></div></section></div></section></div></header>
+
+<style>
+/* Prevent text auto-zoom on iOS and improve touch behavior */
+html,body{
+    -webkit-text-size-adjust:100%;
+    -ms-text-size-adjust:100%;
+    touch-action: manipulation;
+}
+
+/* Make images and logos flexible */
+.logo img{max-width:100%;height:auto}
+
+/* Improve responsive layout for small screens */
+@media (max-width:880px){
+    .app{grid-template-columns:1fr; padding:10px}
+    .panel{min-height:unset;padding:12px}
+    .content{min-height:unset;padding:12px}
+    .card{flex:1 1 100%}
+    .logo img{width:48px;height:48px}
+    .title{font-size:16px}
+    .subtitle{font-size:11px}
+    .input{padding:8px}
+    .btn{padding:8px 10px}
+}
+
+/* Tighter layout on very small screens */
+@media (max-width:420px){
+    header.site{gap:10px}
+    .logo img{width:40px;height:40px}
+    .title{font-size:15px}
+    .small,.note{font-size:12px}
+}
+
+/* Optional: ensure overlays and controls are usable on small screens */
+.locked-overlay{font-size:16px;padding:8px}
+</style>
+
+<script>
+(function(){
+    // Update viewport meta to disable pinch/zoom and scaling
+    try {
+        let meta = document.querySelector('meta[name="viewport"]');
+        const content = 'width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no';
+        if(meta) meta.setAttribute('content', content);
+        else {
+            meta = document.createElement('meta');
+            meta.name = 'viewport';
+            meta.content = content;
+            document.head.appendChild(meta);
+        }
+    } catch(e){ /* silent */ }
+
+    // Prevent pinch / multi-touch zoom
+    function preventMultiTouch(e){
+        if(e.touches && e.touches.length > 1) e.preventDefault();
+    }
+    document.addEventListener('touchstart', preventMultiTouch, {passive:false});
+    document.addEventListener('touchmove', preventMultiTouch, {passive:false});
+    // iOS gesturestart
+    document.addEventListener('gesturestart', function(e){ e.preventDefault(); });
+
+    // Prevent Ctrl/Cmd + wheel zoom and Ctrl/Cmd +/- / 0 keys on desktop
+    window.addEventListener('wheel', function(e){
+        if(e.ctrlKey || e.metaKey) e.preventDefault();
+    }, {passive:false});
+
+    window.addEventListener('keydown', function(e){
+        const ctrl = e.ctrlKey || e.metaKey;
+        if(!ctrl) return;
+        // keys: + - = 0 (some keyboards use '=' for + with shift)
+        if(e.key === '+' || e.key === '-' || e.key === '=' || e.key === '0') e.preventDefault();
+    });
+
+    // Prevent double-tap zoom on touch devices
+    (function(){
+        let lastTap = 0;
+        document.addEventListener('touchend', function(e){
+            const now = Date.now();
+            if (now - lastTap <= 300) {
+                e.preventDefault();
+            }
+            lastTap = now;
+        }, {passive:false});
+    })();
+
+    // Small accessibility: ensure layout recalculates on orientation change
+    window.addEventListener('orientationchange', function(){ setTimeout(function(){ window.scrollTo(0,0); },300); });
+})();
+</script>
+
+
+
+
+<!-- whatsapp floating button -->
+<style>
+    .wa-fab {
+        position: fixed;
+        right: 16px;            /* tetap di sisi kanan */
+        top: 83%;               /* tengah vertikal layar */
+        transform: translateY(-50%); /* pusatkan secara vertikal */
+        z-index: 99999;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(180deg,#20c65b,#12a34a);
+        box-shadow: 0 8px 20px rgba(18,163,74,0.25), 0 2px 6px rgba(0,0,0,0.3);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform .12s ease, box-shadow .12s ease;
+        border: 2px solid rgba(255,255,255,0.06);
+    }
+    .wa-fab:active { transform: translateY(-50%) scale(.97); }
+    .wa-fab:hover { box-shadow: 0 10px 26px rgba(18,163,74,0.32); transform: translateY(-50%) translateY(-2px); }
+
+    .wa-fab svg { width: 26px; height: 26px; display:block; fill: #fff; }
+
+    /* subtle pulse to draw attention */
+    @keyframes wa-pulse {
+        0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.32); }
+        70% { box-shadow: 0 0 0 18px rgba(34,197,94,0); }
+        100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+    }
+    .wa-fab.pulse { animation: wa-pulse 2.6s infinite; animation-delay: .5s; }
+
+    /* hide/adjust on very small screens */
+    @media (max-width:480px){
+        .wa-fab{
+            right: 10px;
+            width: 48px;
+            height: 48px;
+        }
+        .wa-fab:active { transform: translateY(-50%) scale(.97); }
+        .wa-fab:hover { transform: translateY(-50%) translateY(-1px); }
+    }
+</style>
+<a
+    class="wa-fab pulse"
+    id="waFab"
+    href="https://wa.me/639094023904?text=Halo%20Admin%2C%20saya%20ingin%20membeli%20username%20vip%20untuk%20panel."
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Chat via WhatsApp"
+    title="Chat admin via WhatsApp">
+    <!-- WhatsApp SVG icon -->
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M20.52 3.48A11.85 11.85 0 0012 0C5.37 0 .03 5.34.03 11.97c0 2.11.55 4.18 1.6 6.01L0 24l6.25-1.64a11.93 11.93 0 005.76 1.5c6.63 0 12-5.34 12-11.97 0-3.2-1.25-6.21-3.49-8.41zM12 21.1c-1.86 0-3.66-.5-5.24-1.44l-.37-.22-3.71.97.99-3.6-.24-.37A8.98 8.98 0 013.03 11.97C3.03 7.07 7.1 3 12 3c2.53 0 4.9.99 6.7 2.78A9.41 9.41 0 0121.7 12c0 5-4.07 9.1-9.7 9.1z"/>
+        <path d="M17.53 14.34c-.28-.14-1.66-.82-1.92-.9-.26-.08-.45-.13-.64.14-.19.27-.74.9-.9 1.09-.16.19-.32.21-.6.07-.28-.14-1.18-.43-2.25-1.39-.83-.74-1.39-1.66-1.55-1.94-.16-.27-.02-.42.12-.55.12-.12.28-.31.42-.47.14-.16.19-.27.28-.45.09-.19.04-.35-.02-.49-.06-.14-.64-1.55-.88-2.12-.23-.56-.47-.48-.64-.49l-.55-.01c-.19 0-.5.07-.76.35-.26.28-1 1-1 2.43 0 1.42 1.03 2.79 1.17 2.98.15.19 2.03 3.1 4.92 4.35 2.89 1.25 2.89.83 3.41.78.52-.05 1.66-.67 1.9-1.32.24-.65.24-1.2.17-1.32-.07-.12-.26-.19-.54-.33z"/>
+    </svg>
+</a>
+<script>
+    (function(){
+        const wa = document.getElementById('waFab');
+        if(!wa) return;
+        // Remove pulse after first visible interaction to avoid distraction
+        function stopPulse(){
+            wa.classList.remove('pulse');
+            wa.removeEventListener('click', stopPulse);
+            document.removeEventListener('touchstart', stopPulse);
+        }
+        wa.addEventListener('click', stopPulse, {once:true});
+        document.addEventListener('touchstart', stopPulse, {once:true});
+
+        // Optional: on desktop, open a small popup instead of new tab (fallback to target=_blank)
+        wa.addEventListener('click', function(e){
+            // prefer default anchor behavior; on desktop open whatsapp web in new tab (already target=_blank)
+            // no-op here but kept for future enhancements
+        });
+    })();
+</script>
+
+
+<script>
+(function(){
+    // insert UID input UI under the existing username input box
+    const loginBox = document.querySelector('.login-box');
+    if(!loginBox) return;
+
+    const uidWrap = document.createElement('div');
+    uidWrap.className = 'login-box';
+    uidWrap.style.marginTop = '8px';
+    uidWrap.style.display = 'flex';
+    uidWrap.style.gap = '8px';
+
+    const uidInput = document.createElement('input');
+    uidInput.id = 'uidInput';
+    uidInput.className = 'input';
+    uidInput.placeholder = 'Masukkan ID';
+    uidInput.type = 'text';
+    uidInput.setAttribute('inputmode','numeric');
+    uidInput.setAttribute('aria-label','uid');
+
+    const btnSet = document.createElement('button');
+    btnSet.id = 'btnSetUID';
+    btnSet.className = 'btn btn-outline';
+    btnSet.textContent = 'OK';
+
+    uidWrap.appendChild(uidInput);
+    uidWrap.appendChild(btnSet);
+
+    const uidMsg = document.createElement('div');
+    uidMsg.id = 'uidMsg';
+    uidMsg.className = 'status';
+    uidMsg.style.marginTop = '8px';
+    uidMsg.textContent = 'UID belum diset';
+
+    // Place UI after the username box
+    loginBox.parentNode.insertBefore(uidWrap, loginBox.nextSibling);
+    loginBox.parentNode.insertBefore(uidMsg, uidWrap.nextSibling);
+
+    // add small UID display under user-info
+    const userInfo = document.querySelector('.user-info');
+    if(userInfo && !document.getElementById('uidDisplay')){
+        const uidDisplay = document.createElement('small');
+        uidDisplay.id = 'uidDisplay';
+        uidDisplay.style.display = 'block';
+        uidDisplay.textContent = 'UID: -';
+        userInfo.appendChild(uidDisplay);
+    }
+
+    // validation and saving to state
+    function setUID(){
+        const v = uidInput.value.trim();
+        // basic validation: digits only, typical UID length 7-12
+        if(!/^\d{7,12}$/.test(v)){
+            uidMsg.textContent = 'UID tidak valid • gunakan 7-12 angka';
+            return;
+        }
+        state.uid = v;
+        uidMsg.textContent = 'UID disimpan: ' + v;
+        const d = document.getElementById('uidDisplay');
+        if(d) d.textContent = 'UID: ' + v;
+    }
+
+    btnSet.addEventListener('click', setUID);
+    uidInput.addEventListener('keydown', function(e){ if(e.key === 'Enter') setUID(); });
+
+    // clear UID on logout (coexists with existing logout handler)
+    const btnLogout = document.getElementById('btnLogout');
+    if(btnLogout){
+        btnLogout.addEventListener('click', ()=>{
+            state.uid = null;
+            if(uidInput) uidInput.value = '';
+            if(uidMsg) uidMsg.textContent = 'UID dibersihkan';
+            const d = document.getElementById('uidDisplay');
+            if(d) d.textContent = 'UID: -';
+        });
+    }
+
+    // If a UID was previously set in state (e.g. via other code), reflect it
+    if(state.uid){
+        uidInput.value = state.uid;
+        uidMsg.textContent = 'UID disimpan: ' + state.uid;
+        const d = document.getElementById('uidDisplay');
+        if(d) d.textContent = 'UID: ' + state.uid;
+    }
+})();
+</script>
+
+
+
+<style>
+/* visually disable holo buttons when not in allowed tier range */
+.holo-btn.holo-locked {
+    opacity: 0.45;
+    filter: grayscale(60%);
+    cursor: not-allowed;
+    box-shadow: none;
+    pointer-events: none; /* reinforce non-interactive */
+}
+</style>
+
+<script>
+(function(){
+    // Ensure hologram only available for tiers 30..100 (inclusive)
+    function updateHoloButtons(){
+        const tier = (window.state && window.state.tier) ? window.state.tier : 0;
+        document.querySelectorAll('.holo-btn').forEach(btn=>{
+            const allowed = (tier >= 30 && tier <= 100);
+            btn.disabled = !allowed;
+            if(!allowed){
+                btn.classList.add('holo-locked');
+                btn.setAttribute('aria-disabled','true');
+                btn.title = 'Hologram tersedia untuk 30rb - 100rb';
+            } else {
+                btn.classList.remove('holo-locked');
+                btn.removeAttribute('aria-disabled');
+                btn.removeAttribute('title');
+            }
+        });
+    }
+
+    // init
+    updateHoloButtons();
+
+    // update after login / logout actions (existing handlers change window.state.tier)
+    const btnLogin = document.getElementById('btnLogin');
+    const btnLogout = document.getElementById('btnLogout');
+    if(btnLogin) btnLogin.addEventListener('click', ()=> setTimeout(updateHoloButtons, 80));
+    if(btnLogout) btnLogout.addEventListener('click', ()=> setTimeout(updateHoloButtons, 80));
+
+    // fallback: simple watcher to react to programmatic tier changes
+    let lastTier = (window.state && window.state.tier) ? window.state.tier : 0;
+    setInterval(() => {
+        const t = (window.state && window.state.tier) ? window.state.tier : 0;
+        if(t !== lastTier){ lastTier = t; updateHoloButtons(); }
+    }, 700);
+})();
+</script>
+
+<script>
+(function(){
+    // Make the existing state object available globally for other scripts
+    window.state = state;
+
+    // After the existing login handler runs, normalize username lookup (case-insensitive)
+    btnLogin.addEventListener('click', function(){
+        setTimeout(function(){
+            if(!state.username) return;
+            const key = state.username.toLowerCase();
+            const resolvedTier = USER_MAP[key] || state.tier || 0;
+            if(resolvedTier !== state.tier){
+                state.tier = resolvedTier;
+                // update small UI bits to reflect normalized lookup
+                if(state.tier > 0){
+                    tierNote.textContent = 'Tier: ' + state.tier + 'rb';
+                    loginMsg.textContent = 'Login berhasil • Tier: ' + state.tier + 'rb';
+                    btnLogout.style.display = 'inline-block';
+                } else {
+                    tierNote.textContent = 'Tamu';
+                    loginMsg.textContent = 'Username tidak terdaftar Akses terbatas.';
+                }
+            }
+            // keep global reference in sync and re-evaluate locks/buttons
+            window.state = state;
+            if(typeof lockManager === 'function') lockManager();
+        }, 60);
+    });
+
+    // Keep global state in sync on logout as well
+    btnLogout.addEventListener('click', function(){
+        window.state = state;
+        if(typeof lockManager === 'function') lockManager();
+    });
+
+    // Ensure other modules that poll window.state see the current value immediately
+    window.state = state;
+})();
+</script>
+
+
+<script>
+(function(){
+    // Inject ESP section with two features: ESP Line and ESP Name (20rb - 100rb)
+    const main = document.querySelector('main.content');
+    if(!main) return;
+
+    // create section
+    const espSection = document.createElement('section');
+    espSection.className = 'section';
+    espSection.innerHTML = `
+        <h3>ESP New Fitur</h3>
+        <div class="flex">
+            <div class="card" data-price="20" id="espLineCard">
+                <strong>ESP Line</strong>
+                <div class="price">20rb - 100rb</div>
+                <div style="margin-top:10px" class="toggle">
+                    <div class="switch" data-key="esp_line"><div class="knob"></div></div>
+                    <div class="small">Garis ESP (On / Off)</div>
+                </div>
+                <div class="note" style="margin-top:8px">Menampilkan garis ke musuh • Tier minimal 20rb</div>
+            </div>
+
+            <div class="card" data-price="20" id="espNameCard">
+                <strong>ESP Name</strong>
+                <div class="price">20rb - 100rb</div>
+                <div style="margin-top:10px" class="toggle">
+                    <div class="switch" data-key="esp_name"><div class="knob"></div></div>
+                    <div class="small">Nama ESP (On / Off)</div>
+                </div>
+                <div class="note" style="margin-top:8px">Menampilkan nama musuh di layar • Tier minimal 20rb</div>
+            </div>
+        </div>
+    `;
+    // append near end of content
+    main.appendChild(espSection);
+
+    // helper to check locked state for a card
+    function isCardLocked(card){
+        const price = parseInt(card.getAttribute('data-price')||0,10);
+        return price > 0 && (window.state && (window.state.tier || 0) < price);
+    }
+
+    // attach interactive handlers for the new switches
+    espSection.querySelectorAll('.switch').forEach(sw=>{
+        sw.addEventListener('click', function(e){
+            const card = sw.closest('.card');
+            const label = (card && card.querySelector('strong')) ? card.querySelector('strong').textContent.trim() : (sw.dataset.key || 'ESP Feature');
+            if(isCardLocked(card)){
+                // visual: don't toggle
+                if(typeof showNotif === 'function'){
+                    showNotif('🔒 Fitur terkunci: ' + label + ' • Upgrade ke 20rb+', 'danger', 3500);
+                }
+                const loginMsg = document.getElementById('loginMsg');
+                if(loginMsg) loginMsg.textContent = 'Fitur ' + label + ' terkunci • Minimal 20rb';
+                return;
+            }
+
+            // toggle visual state
+            sw.classList.toggle('on');
+
+            // notification
+            const enabled = sw.classList.contains('on');
+            if(typeof showNotif === 'function'){
+                if(enabled) showNotif('✅ ESP Enable: ' + label, 'success', 2600);
+                else showNotif('❌ ESP Disable: ' + label, 'warn', 2000);
+            }
+        });
+    });
+
+    // ensure lockManager updates overlays for the new cards immediately
+    if(typeof lockManager === 'function') lockManager();
+
+    // If login/logout changes, reflect current ESP buttons (enable/disable) - reuse existing notifier/update pattern
+    const updateESPVisual = () => {
+        espSection.querySelectorAll('.card').forEach(card=>{
+            const locked = isCardLocked(card);
+            const sw = card.querySelector('.switch');
+            if(!sw) return;
+            if(locked){
+                sw.classList.remove('on');
+            }
+        });
+    };
+    // run once and after small delay on login/logout to catch state changes
+    updateESPVisual();
+    const btnLogin = document.getElementById('btnLogin');
+    const btnLogout = document.getElementById('btnLogout');
+    if(btnLogin) btnLogin.addEventListener('click', ()=> setTimeout(()=>{ if(typeof lockManager==='function') lockManager(); updateESPVisual(); }, 80));
+    if(btnLogout) btnLogout.addEventListener('click', ()=> setTimeout(()=>{ if(typeof lockManager==='function') lockManager(); updateESPVisual(); }, 80));
+
+})();
+</script>
+
+<!-- Device Detector: modern UI, appended section + styles + script -->
+<style>
+/* Device detector card — uses existing theme variables */
+.device-section .device-card{
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+    padding:14px;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    box-shadow: 0 8px 18px rgba(0,0,0,0.45), inset 0 -1px 0 rgba(255,255,255,0.02);
+}
+.device-card .icon{
+    min-width:86px; min-height:86px; border-radius:12px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    display:flex; align-items:center; justify-content:center; font-size:36px; color:#fff;
+    border:1px solid rgba(255,255,255,0.03);
+}
+.device-card .meta{flex:1; display:flex; flex-direction:column; gap:8px;}
+.device-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:13px;color:#cfe0ff}
+.device-grid .k{color:#9fb6ff;font-weight:700}
+.device-actions{display:flex;gap:8px;margin-top:8px;align-items:center}
+.device-badge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:800;background:linear-gradient(90deg,#ffbe6b,#ff758f);color:#071129}
+.device-small{font-size:12px;color:#9fb6ff}
+.device-card .muted{font-size:12px;color:rgba(255,255,255,0.6)}
+@media (max-width:880px){
+    .device-card{flex-direction:column;align-items:stretch}
+    .device-grid{grid-template-columns:1fr}
+}
+</style>
+
+<script>
+(function(){
+    // Build and inject the UI under the main content (near top)
+    const main = document.querySelector('main.content');
+    if(!main) return;
+
+    const section = document.createElement('section');
+    section.className = 'section device-section';
+    section.innerHTML = `
+        <h3>Perangkat</h3>
+        <div class="device-card">
+            <div class="icon" id="deviceIcon">📱</div>
+            <div class="meta">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <div style="font-weight:900;color:#fff" id="deviceTitle">Perangkat: —</div>
+                        <div class="device-small" id="deviceSub">Deteksi otomatis — informasi lengkap</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="device-badge" id="deviceType">—</div>
+                        <div class="muted" style="margin-top:6px;font-size:12px" id="deviceDP">DPR: —</div>
+                    </div>
+                </div>
+
+                <div class="device-grid" id="deviceGrid">
+                    <div><div class="k">OS</div><div id="det-os">—</div></div>
+                    <div><div class="k">Browser</div><div id="det-browser">—</div></div>
+                    <div><div class="k">Agent</div><div id="det-ua" style="word-break:break-word;opacity:0.85">—</div></div>
+                    <div><div class="k">Bahasa</div><div id="det-lang">—</div></div>
+                    <div><div class="k">Resolusi</div><div id="det-res">—</div></div>
+                    <div><div class="k">Orientation</div><div id="det-orient">—</div></div>
+                    <div><div class="k">Cores</div><div id="det-cores">—</div></div>
+                    <div><div class="k">Memory (GB)</div><div id="det-memory">—</div></div>
+                    <div><div class="k">Touch</div><div id="det-touch">—</div></div>
+                    <div><div class="k">Platform</div><div id="det-platform">—</div></div>
+                </div>
+
+                <div class="device-actions">
+                    <button id="devRefresh" class="btn fancy">Relog</button>
+                    <button id="devCopy" class="btn btn-outline">Salin Info</button>
+                    <a id="devReport" class="btn h-blue" target="_blank" rel="noopener noreferrer">Send To Admin</a>
+                    <div style="margin-left:auto" id="devNotifHolder"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    // insert near top of main content
+    main.insertBefore(section, main.firstChild);
+
+    // detection helpers
+    function detectOS(ua){
+        if(/android/i.test(ua)) return 'Android';
+        if(/iphone|ipad|ipod/i.test(ua)) return 'iOS';
+        if(/win(dows)?/i.test(ua)) return 'Windows';
+        if(/macintosh|mac os x/i.test(ua)) return 'macOS';
+        if(/linux/i.test(ua)) return 'Linux';
+        return 'Unknown';
+    }
+    function detectBrowser(ua){
+        // Simple fingerprinting order matters
+        if(/edg\//i.test(ua)) return parseVer(ua,/edg\/([\d\.]+)/i,'Edge');
+        if(/opr\/|opera/i.test(ua)) return parseVer(ua,/opr\/([\d\.]+)/i,'Opera');
+        if(/chrome\/|crios\//i.test(ua) && !/edg\//i.test(ua)) return parseVer(ua,/chrome\/([\d\.]+)/i,'Chrome');
+        if(/firefox\/|fxios\//i.test(ua)) return parseVer(ua,/firefox\/([\d\.]+)/i,'Firefox');
+        if(/safari/i.test(ua) && !/chrome|crios|android/i.test(ua)) return parseVer(ua,/version\/([\d\.]+)/i,'Safari');
+        return 'Unknown';
+    }
+    function parseVer(ua, regex, name){
+        const m = ua.match(regex);
+        return name + (m && m[1] ? ' ' + m[1].split('.')[0] : '');
+    }
+    function isTablet(ua){
+        return /ipad|tablet|kindle|silk|playbook/i.test(ua) || (screen.width >= 768 && screen.width <= 1100 && /android/i.test(ua));
+    }
+    function isMobile(ua){
+        return /mobi|android|iphone|ipod|phone/i.test(ua) && !isTablet(ua);
+    }
+
+    function getUAData(){
+        const ua = navigator.userAgent || '';
+        const uaData = (navigator.userAgentData && navigator.userAgentData.brands) ? navigator.userAgentData : null;
+        return { ua, uaData };
+    }
+
+    function detectAll(){
+        const { ua, uaData } = getUAData();
+        const os = oaFallback();
+        const browser = detectBrowser(ua);
+        const lang = navigator.language || navigator.userLanguage || '—';
+        const dpr = window.devicePixelRatio || 1;
+        const w = screen.width || window.innerWidth;
+        const h = screen.height || window.innerHeight;
+        const orient = (screen.orientation && screen.orientation.type) ? screen.orientation.type : (Math.abs(window.orientation || 0) === 90 ? 'landscape' : 'portrait');
+        const cores = navigator.hardwareConcurrency || 'n/a';
+        const mem = navigator.deviceMemory || 'n/a';
+        const touch = (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+        const platform = navigator.platform || '—';
+        const typeText = isMobile(ua) ? 'Mobile' : isTablet(ua) ? 'Tablet' : 'Desktop';
+        const friendlyTitle = (isMobile(ua) ? (isTablet(ua) ? 'Tablet' : 'Handphone') : 'Desktop/Laptop');
+
+        return {
+            ua, uaData, os, browser, lang, dpr, w, h, orient, cores, mem, touch: !!touch, platform, typeText, friendlyTitle
+        };
+
+        function oaFallback(){
+            // prefer NAD (navigator.userAgentData.platform) if available
+            if(navigator.userAgentData && navigator.userAgentData.platform) return navigator.userAgentData.platform;
+            return detectOS(ua);
+        }
+    }
+
+    // DOM elements
+    const el = {
+        icon: document.getElementById('deviceIcon'),
+        title: document.getElementById('deviceTitle'),
+        sub: document.getElementById('deviceSub'),
+        type: document.getElementById('deviceType'),
+        dp: document.getElementById('deviceDP'),
+        os: document.getElementById('det-os'),
+        browser: document.getElementById('det-browser'),
+        ua: document.getElementById('det-ua'),
+        lang: document.getElementById('det-lang'),
+        res: document.getElementById('det-res'),
+        orient: document.getElementById('det-orient'),
+        cores: document.getElementById('det-cores'),
+        memory: document.getElementById('det-memory'),
+        touch: document.getElementById('det-touch'),
+        platform: document.getElementById('det-platform'),
+        refresh: document.getElementById('devRefresh'),
+        copy: document.getElementById('devCopy'),
+        report: document.getElementById('devReport'),
+        notifHolder: document.getElementById('devNotifHolder')
+    };
+
+    function render(){
+        const d = detectAll();
+        // choose icon
+        let icon = '💻';
+        if(d.typeText === 'Mobile') icon = '📱';
+        if(d.typeText === 'Tablet') icon = '📟';
+        if(/mac/i.test(d.os)) icon = '🍎';
+        if(/windows/i.test(d.os)) icon = '🪟';
+        el.icon.textContent = icon;
+
+        el.title.textContent = d.friendlyTitle + ' • ' + d.os;
+        el.sub.textContent = d.browser + ' • ' + (d.uaData ? 'UAData active' : 'UserAgent fallback');
+        el.type.textContent = d.typeText;
+        el.dp.textContent = 'DPR: ' + d.dpr;
+
+        el.os.textContent = d.os;
+        el.browser.textContent = d.browser;
+        el.ua.textContent = (d.uaData && d.uaData.brands) ? d.uaData.brands.map(b=>b.brand + ' ' + b.version).join(', ') : (d.ua.length > 120 ? d.ua.slice(0,120) + '…' : d.ua);
+        el.lang.textContent = d.lang;
+        el.res.textContent = d.w + '×' + d.h + ' px';
+        el.orient.textContent = String(d.orient);
+        el.cores.textContent = d.cores;
+        el.memory.textContent = d.mem;
+        el.touch.textContent = d.touch ? 'Ya' : 'Tidak';
+        el.platform.textContent = d.platform;
+
+        // prepare WA report link (prefill)
+        const reportText = encodeURIComponent(
+            `Halo, saya membuka panel dari perangkat:\n- Tipe: ${d.typeText}\n- OS: ${d.os}\n- Browser: ${d.browser}\n- Resolusi: ${d.w}x${d.h}\n- DPR: ${d.dpr}\n- Cores: ${d.cores}\n- Memory: ${d.mem}\n- Touch: ${d.touch}\n- Lang: ${d.lang}\n- UA: ${navigator.userAgent}`
+        );
+        // Set WA number to existing wa link in page or keep default
+        const waNumber = (document.getElementById('waFab') && document.getElementById('waFab').href) ? null : null;
+        el.report.href = 'https://wa.me/639094023904?text=' + reportText;
+    }
+
+    // copy formatter
+    function buildPlain(){
+        const d = detectAll();
+        return [
+            `Perangkat: ${d.friendlyTitle} (${d.typeText})`,
+            `OS: ${d.os}`,
+            `Browser: ${d.browser}`,
+            `Resolusi: ${d.w}x${d.h} px (DPR ${d.dpr})`,
+            `Orientation: ${d.orient}`,
+            `Cores: ${d.cores}`,
+            `Memory(GB): ${d.mem}`,
+            `Touch: ${d.touch ? 'Ya' : 'Tidak'}`,
+            `Bahasa: ${d.lang}`,
+            `Platform: ${d.platform}`,
+            `UA: ${navigator.userAgent}`
+        ].join('\n');
+    }
+
+    // attempt to use central showNotif if available, else small fallback update
+    function notify(msg, type='info', time=2200){
+        if(typeof showNotif === 'function') showNotif(msg, type, time);
+        else {
+            const eln = document.getElementById('loginMsg');
+            if(eln) eln.textContent = msg;
+        }
+    }
+
+    // events
+    el.refresh.addEventListener('click', function(){
+        render();
+        notify('Deteksi perangkat diperbarui', 'info', 1800);
+    });
+
+    el.copy.addEventListener('click', function(){
+        const txt = buildPlain();
+        if(navigator.clipboard && navigator.clipboard.writeText){
+            navigator.clipboard.writeText(txt).then(()=> notify('Info perangkat disalin ke clipboard', 'success'))
+            .catch(()=> { fallbackCopy(txt); });
+        } else fallbackCopy(txt);
+
+        function fallbackCopy(t){
+            const ta = document.createElement('textarea');
+            ta.value = t; ta.style.position='fixed'; ta.style.left='-9999px';
+            document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); notify('Info perangkat disalin', 'success'); }
+            catch(e){ notify('Gagal menyalin', 'warn'); }
+            ta.remove();
+        }
+    });
+
+    // update on resize/orientation change to keep info fresh
+    window.addEventListener('resize', render);
+    window.addEventListener('orientationchange', function(){ setTimeout(render,120); });
+
+    // initial render
+    render();
+
+    // expose for debugging if needed
+    window.deviceDetector = {
+        detect: detectAll,
+        render: render,
+        buildPlain: buildPlain
+    };
+
+})();
+</script>
+
+
+<script>
+(function(){
+    if(!window.deviceDetector) return;
+
+    function detectBrand(ua){
+        ua = (ua || navigator.userAgent || '').toLowerCase();
+        const map = [
+            {r: /(?:sm-|samsung|samsung-)/i, name:'Samsung'},
+            {r: /\bpixel\b/i, name:'Google'},
+            {r: /\bxiaomi\b|\bmi\b|\bredmi\b/i, name:'Xiaomi'},
+            {r: /\bhuawei\b/i, name:'Huawei'},
+            {r: /\bhonor\b/i, name:'Honor'},
+            {r: /\boppo\b/i, name:'Oppo'},
+            {r: /\bvivo\b/i, name:'Vivo'},
+            {r: /\brealme\b/i, name:'Realme'},
+            {r: /\boneplus\b/i, name:'OnePlus'},
+            {r: /moto|motorola/i, name:'Motorola'},
+            {r: /\bnokia\b/i, name:'Nokia'},
+            {r: /\bsony\b/i, name:'Sony'},
+            {r: /\blg\b/i, name:'LG'},
+            {r: /\blenovo\b/i, name:'Lenovo'},
+            {r: /\basus\b/i, name:'Asus'},
+            {r: /\bzte\b/i, name:'ZTE'},
+            {r: /\btecno\b/i, name:'Tecno'},
+            {r: /\binfinix\b/i, name:'Infinix'},
+            {r: /\bitel\b/i, name:'Itel'},
+            {r: /\bpoco\b/i, name:'Poco'}
+        ];
+        for(const e of map) if(e.r.test(ua)) return e.name;
+        return 'Unknown/Other';
+    }
+
+    function detectModel(ua){
+        ua = ua || navigator.userAgent || '';
+        let m;
+        m = ua.match(/(SM-[A-Z0-9\-]+)/i) || ua.match(/Pixel\s?[\w\-]+/i) || ua.match(/\b(M\d{2,}|A\d{2,}|P\d{2,}|V\d{2,}|[A-Z]{1,2}\d{3,4})\b/);
+        return m ? (m[0].trim()) : '';
+    }
+
+    function ensureBrandRow(){
+        const grid = document.getElementById('deviceGrid');
+        if(!grid) return;
+        if(!document.getElementById('det-brand-row')){
+            const wrap = document.createElement('div');
+            wrap.id = 'det-brand-row';
+            wrap.innerHTML = '<div><div class="k">Merek</div><div id="det-brand">—</div></div>';
+            grid.appendChild(wrap);
+        }
+    }
+
+    function updateBrandUI(){
+        ensureBrandRow();
+        const d = window.deviceDetector && window.deviceDetector.detect ? window.deviceDetector.detect() : {ua: navigator.userAgent};
+        const brand = detectBrand(d.ua);
+        const model = detectModel(d.ua);
+        const el = document.getElementById('det-brand');
+        if(el) el.textContent = brand + (model ? ' • ' + model : '');
+        // append brand to title/sub if meaningful
+        const title = document.getElementById('deviceTitle');
+        const sub = document.getElementById('deviceSub');
+        if(title && brand && brand !== 'Unknown/Other'){
+            if(!title.dataset._brandAppended){
+                title.textContent = title.textContent + ' • ' + brand;
+                title.dataset._brandAppended = '1';
+            }
+        }
+        if(sub && model){
+            if(!sub.dataset._modelAppended){
+                sub.textContent = sub.textContent + ' • ' + model;
+                sub.dataset._modelAppended = '1';
+            }
+        }
+    }
+
+    // Run once and re-run on refresh/resize/orientation
+    updateBrandUI();
+    const refresh = document.getElementById('devRefresh');
+    if(refresh) refresh.addEventListener('click', function(){ setTimeout(updateBrandUI, 80); });
+
+    window.addEventListener('resize', function(){ setTimeout(updateBrandUI, 120); });
+    window.addEventListener('orientationchange', function(){ setTimeout(updateBrandUI, 150); });
+
+    // Extend deviceDetector.buildPlain to include brand/model at top
+    if(window.deviceDetector && typeof window.deviceDetector.buildPlain === 'function'){
+        const orig = window.deviceDetector.buildPlain.bind(window.deviceDetector);
+        window.deviceDetector.buildPlain = function(){
+            const d = window.deviceDetector.detect();
+            const brand = detectBrand(d.ua);
+            const model = detectModel(d.ua);
+            const header = 'Merek: ' + brand + (model ? ' (' + model + ')' : '') + '\n';
+            return header + orig();
+        };
+    }
+
+    // expose small helpers for debugging
+    window.detectPhoneBrand = detectBrand;
+    window.detectPhoneModel = detectModel;
+})();
+</script>
+
+<!-- Bypass Diagnostics: UI + Logic (injected at $SELECTION_PLACEHOLDER$) -->
+<style>
+/* Bypass diagnostics UI */
+.bypass-logs {
+    margin-top:12px;
+    padding:12px;
+    border-radius:10px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+    font-size:13px;
+    color:#cfe0ff;
+}
+.bypass-logs .header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bypass-logs .log-list{max-height:220px;overflow:auto;padding:8px;border-radius:8px;background:rgba(0,0,0,0.12);box-shadow: inset 0 -1px 0 rgba(255,255,255,0.02)}
+.bypass-logs .log-item{padding:8px;border-radius:8px;margin-bottom:8px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;gap:10px;align-items:flex-start}
+.bypass-logs .log-item .time{font-size:11px;color:#9fb6ff;min-width:68px}
+.bypass-logs .log-item .msg{flex:1;word-break:break-word;color:#e8f0ff}
+.bypass-logs .log-item.success{border-left:4px solid #2ecc71}
+.bypass-logs .log-item.warn{border-left:4px solid #ffb020}
+.bypass-logs .log-item.danger{border-left:4px solid #ff6b6b}
+.bypass-logs .controls{display:flex;gap:8px;margin-top:8px}
+.bypass-logs .small-note{font-size:12px;color:#a8c0ff;margin-top:8px}
+</style>
+
+<script>
+(function(){
+    // Insert diagnostics UI under the bypass card
+    const bypassCard = document.getElementById('bypassCard');
+    if(!bypassCard) return;
+
+    // create container
+    const diagWrap = document.createElement('div');
+    diagWrap.className = 'bypass-logs';
+    diagWrap.innerHTML = `
+        <div class="header">
+            <strong>Bypass Diagnostics</strong>
+            <div class="small-note" style="margin-left:auto">Scan</div>
+        </div>
+        <div class="log-list" id="bypassLogList" aria-live="polite"></div>
+        <div class="controls">
+            <button id="bypassRunDiag" class="btn h-blue">Enable</button>
+            <button id="bypassClearDiag" class="btn btn-outline">Clear</button>
+            <button id="bypassExport" class="btn fancy">Ekspor</button>
+        </div>
+        
+    `;
+    bypassCard.appendChild(diagWrap);
+
+    const list = document.getElementById('bypassLogList');
+    const runBtn = document.getElementById('bypassRunDiag');
+    const clearBtn = document.getElementById('bypassClearDiag');
+    const exportBtn = document.getElementById('bypassExport');
+
+    function ts(){ return new Date().toLocaleTimeString(); }
+    function pushLog(text, level='info'){
+        const item = document.createElement('div');
+        item.className = 'log-item ' + (level==='info' ? '' : level);
+        item.innerHTML = '<div class="time">'+ts()+'</div><div class="msg">'+(text||'—')+'</div>';
+        list.prepend(item);
+        // keep max items
+        while(list.children.length > 60) list.removeChild(list.lastChild);
+    }
+
+    // Helpers for network/public IP/provider
+    async function fetchJson(url, opts){ try{ const r = await fetch(url, opts); if(!r.ok) throw new Error('HTTP '+r.status); return await r.json(); }catch(e){ return {error: String(e)}; } }
+
+    async function getPublicIP(){
+        // try a couple of public endpoints, fallback gracefully
+        const endpoints = [
+            'https://api.ipify.org?format=json',
+            'https://ipapi.co/json/',
+            'https://ipinfo.io/json'
+        ];
+        for(const ep of endpoints){
+            try{
+                const res = await fetch(ep, {cache:'no-store'});
+                if(!res.ok) continue;
+                const j = await res.json();
+                // normalize
+                if(j.ip) return {ip:j.ip, raw:j};
+                if(j.hostname || j.city || j.org || j.org_name) {
+                    // ipapi / ipinfo
+                    return {ip:j.ip || j.ip_address || j.ipv4 || 'n/a', raw:j};
+                }
+            }catch(e){}
+        }
+        throw new Error('Gagal mendapatkan IP publik');
+    }
+
+    // Geolocation + reverse geocode (Nominatim)
+    function getGeoPosition(timeout=12000){
+        return new Promise((resolve, reject)=>{
+            if(!navigator.geolocation) return reject(new Error('Geolocation tidak tersedia'));
+            let done=false;
+            const ok = (pos)=>{ if(done) return; done=true; resolve(pos); };
+            const err = (e)=>{ if(done) return; done=true; reject(e); };
+            navigator.geolocation.getCurrentPosition(ok, err, {enableHighAccuracy:true, timeout, maximumAge:0});
+            setTimeout(()=>{ if(done) return; done=true; reject(new Error('Timeout memerlukan izin lokasi'))}, timeout+200);
+        });
+    }
+    async function reverseGeocode(lat, lon){
+        try{
+            const url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+encodeURIComponent(lat)+'&lon='+encodeURIComponent(lon);
+            // Nominatim asks for a valid user-agent / referer — browser will set referrer
+            const r = await fetch(url, {cache:'no-store'});
+            if(!r.ok) throw new Error('Reverse geocode failed');
+            return await r.json();
+        }catch(e){
+            return {error: String(e)};
+        }
+    }
+
+    // Network info (navigator.connection)
+    function getNetworkInfo(){
+        const c = navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
+        if(!c) return null;
+        return {
+            type: c.type || 'unknown',
+            effectiveType: c.effectiveType || 'unknown',
+            downlink: c.downlink || null,
+            rtt: c.rtt || null,
+            saveData: c.saveData || false
+        };
+    }
+
+    // Detect if Free Fire / Free Fire Max app installed (best-effort)
+    async function detectFFinstalled(timeout=1200){
+        // 1) try getInstalledRelatedApps (Chrome + Trusted Web Activities) - requires app manifest support
+        if(navigator.getInstalledRelatedApps){
+            try{
+                const apps = await navigator.getInstalledRelatedApps();
+                if(Array.isArray(apps) && apps.length){
+                    for(const a of apps){
+                        const id = (a.id || a.platform || a.url || '').toString().toLowerCase();
+                        if(id.includes('com.dts.freefire') || id.includes('freefire')) return {found:true, method:'getInstalledRelatedApps', info:a};
+                    }
+                }
+            }catch(e){}
+        }
+        // 2) attempt to open protocol and detect visibility change / blur trick (not guaranteed)
+        const protocols = [
+            {scheme:'freefire://', label:'Free Fire'},
+            {scheme:'freefiremax://', label:'Free Fire Max'}
+        ];
+        for(const p of protocols){
+            const detected = await attemptProtocolOpen(p.scheme, timeout);
+            if(detected) return {found:true, method:'protocol', info:p.label};
+        }
+        return {found:false};
+    }
+    function attemptProtocolOpen(scheme, timeout=1000){
+        return new Promise((resolve)=>{
+            let handled=false;
+            const start = Date.now();
+            // create invisible iframe (older technique)
+            const ifr = document.createElement('iframe');
+            ifr.style.width='0'; ifr.style.height='0'; ifr.style.border='0'; ifr.style.position='absolute'; ifr.style.left='-9999px';
+            document.body.appendChild(ifr);
+            const onBlur = ()=>{ if(handled) return; handled=true; cleanup(); resolve(true); };
+            const cleanup = ()=>{ try{ window.removeEventListener('pagehide', onBlur); window.removeEventListener('blur', onBlur); ifr.remove(); }catch(e){} };
+            window.addEventListener('pagehide', onBlur);
+            window.addEventListener('blur', onBlur);
+            try{
+                ifr.src = scheme;
+            }catch(e){}
+            setTimeout(()=>{
+                if(handled) return;
+                const elapsed = Date.now()-start;
+                handled=true;
+                cleanup();
+                // If we ended up hidden/blurred earlier we would have resolved true
+                resolve(false);
+            }, timeout);
+        });
+    }
+
+    // Main diagnostics runner
+    async function runDiagnostics(showLogs=true){
+        try{
+            pushLog('Memulai deteksi bypass', 'info');
+            // public IP / provider
+            try{
+                const ipInfo = await getPublicIP();
+                pushLog('IP publik: ' + (ipInfo.ip || 'n/a'), 'success');
+                // try to extract ISP / org if available
+                const raw = ipInfo.raw || {};
+                const org = raw.org || raw.org_name || raw.isp || raw.as || raw.hostname || '';
+                if(org) pushLog('Provider / ASN: ' + (typeof org === 'object' ? JSON.stringify(org) : org), 'info');
+                // record full raw for export
+                lastRun.public = ipInfo;
+            }catch(e){
+                pushLog('Gagal deteksi IP publik: ' + e.message, 'warn');
+            }
+
+            // network info
+            const net = getNetworkInfo();
+            if(net){
+                pushLog('Koneksi: type=' + net.type + ', effective=' + net.effectiveType + (net.downlink ? ', downlink='+net.downlink+'Mb/s' : '') , 'info');
+                pushLog('Penghemat data: ' + (net.saveData ? 'aktif' : 'mati'), 'info');
+                lastRun.network = net;
+            } else {
+                pushLog('Info jaringan tidak tersedia', 'warn');
+            }
+
+            // attempt to categorize wifi vs mobile
+            const connType = net && net.type ? net.type.toLowerCase() : (net && net.effectiveType ? net.effectiveType : '');
+            if(connType.includes('wifi') || connType === 'wifi') pushLog('Koneksi terdeteksi: Wi‑Fi (nama SSID tidak tersedia di browser)', 'success');
+            else if(connType.includes('cellular') || /2g|3g|4g|5g/.test(connType)) pushLog('Koneksi terdeteksi: Data seluler (provider di atas)', 'success');
+            else pushLog('Tipe koneksi tidak pasti (' + connType + ')', 'info');
+
+            // location (requires permission)
+            try{
+                const pos = await getGeoPosition();
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                pushLog('Koordinat: ' + lat.toFixed(5) + ', ' + lon.toFixed(5), 'success');
+                // reverse geocode
+                const rev = await reverseGeocode(lat, lon);
+                if(rev && !rev.error){
+                    // Nominatim typically returns display_name, address
+                    const display = rev.display_name || (rev.address ? JSON.stringify(rev.address) : '—');
+                    pushLog('Perkiraan lokasi: ' + display, 'info');
+                    // attempt to derive "alamat rumah" approximate: city + road + suburb
+                    try{
+                        const a = rev.address || {};
+                        const approx = [a.road, a.suburb || a.neighbourhood, a.city || a.town || a.village, a.state, a.country].filter(Boolean).join(', ');
+                        if(approx) pushLog('Alamat (perkiraan): ' + approx, 'info');
+                        lastRun.location = rev;
+                    }catch(e){}
+                } else {
+                    pushLog('Reverse geocode gagal: ' + (rev && rev.error ? rev.error : 'tidak tersedia'), 'warn');
+                }
+            }catch(e){
+                pushLog('Lokasi tidak tersedia atau izin ditolak: ' + (e.message||e), 'warn');
+            }
+
+            // server used / relay: best-effort using public IP raw info
+            if(lastRun.public && lastRun.public.raw){
+                const raw = lastRun.public.raw;
+                // ipapi / ipinfo fields
+                const city = raw.city || raw.region || raw.region_name || '';
+                const country = raw.country || raw.country_name || '';
+                const org = raw.org || raw.isp || raw.org_name || '';
+                pushLog('Lokasi IP publik: ' + [city, country].filter(Boolean).join(', '), 'info');
+                if(org) pushLog('Info server/provider: ' + org, 'info');
+            }
+
+            // detect Free Fire installed
+            try{
+                pushLog('Mendeteksi presence aplikasi Free Fire (best-effort)...', 'info');
+                const ff = await detectFFinstalled(1200);
+                if(ff && ff.found){
+                    pushLog('Aplikasi terdeteksi terpasang • metode: ' + (ff.method || 'unknown') + (ff.info?(' • '+(ff.info.label||ff.info)):''), 'success');
+                    lastRun.ff = ff;
+                } else {
+                    pushLog('Aplikasi Free Fire / Max tidak terdeteksi', 'warn');
+                }
+            }catch(e){
+                pushLog('Deteksi aplikasi gagal: ' + e.message, 'warn');
+            }
+
+            pushLog('Deteksi selesai', 'success');
+            if(typeof showNotif === 'function') showNotif('Bypass diagnostics selesai', 'success', 2600);
+        }catch(e){
+            pushLog('Error saat diagnostics: ' + (e.message || e), 'danger');
+            if(typeof showNotif === 'function') showNotif('Diagnostics error', 'danger', 2400);
+        }
+    }
+
+    // keep last run results for export
+    const lastRun = {};
+    runBtn.addEventListener('click', async function(){
+        // require tier check consistent with bypass button
+        const price = parseInt(bypassCard.getAttribute('data-price')||0,10);
+        if(window.state && (window.state.tier || 0) < price){
+            pushLog('Bypass diagnostics terkunci • Minimal ' + price + 'rb', 'danger');
+            if(typeof showNotif === 'function') showNotif('🔒 Bypass terkunci • Upgrade', 'danger', 3200);
+            return;
+        }
+        // show loader behavior similar to existing bypassBtn
+        const loader = document.getElementById('bypassLoader');
+        if(loader) loader.style.display = 'inline-block';
+        pushLog('Memulai deteksi lengkap. Permintaan izin lokasi bila diperlukan...', 'info');
+        await runDiagnostics();
+        if(loader) loader.style.display = 'none';
+    });
+
+    clearBtn.addEventListener('click', function(){
+        list.innerHTML = '';
+    });
+
+    exportBtn.addEventListener('click', function(){
+        // build text output
+        const lines = [];
+        if(lastRun.public) lines.push('IP publik: ' + (lastRun.public.ip || JSON.stringify(lastRun.public.raw || lastRun.public)));
+        if(lastRun.network) lines.push('Koneksi: ' + JSON.stringify(lastRun.network));
+        if(lastRun.location) {
+            const rev = lastRun.location;
+            lines.push('Lokasi perkiraan: ' + (rev.display_name || JSON.stringify(rev)));
+        }
+        if(lastRun.ff) lines.push('FreeFire presence: ' + JSON.stringify(lastRun.ff));
+        lines.push('UserAgent: ' + navigator.userAgent);
+        const txt = lines.join('\n\n');
+        const blob = new Blob([txt], {type:'text/plain;charset=utf-8'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'bypass-diagnostics.txt';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=> URL.revokeObjectURL(url), 2000);
+    });
+
+    // Expose a function to run diagnostics programmatically
+    window.runBypassDiagnostics = runDiagnostics;
+    window._lastBypassRun = lastRun;
+
+    // Small initial hint
+    pushLog('Bypass diagnostics siap • tekan "Jalankan Deteksi Lengkap" untuk mulai', 'info');
+
+})();
+</script>
+
+
+
+<!-- Background music player (footer) -->
+<style>
+/* small stylish footer player */
+#musicFooter{
+    position:fixed;
+    left:50%;
+    bottom:12px;
+    transform:translateX(-50%);
+    z-index:999999;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    padding:8px 12px;
+    background:linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    backdrop-filter: blur(6px);
+    border-radius:999px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.02);
+    color:#fff;
+    font-weight:700;
+    font-size:13px;
+    pointer-events:auto;
+    max-width:92%;
+    min-width:220px;
+}
+#musicFooter .disc{
+    width:36px;height:36px;border-radius:50%;
+    background:linear-gradient(135deg,#ffd7a8,#ff7a7a);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.45);
+    flex:0 0 36px;
+}
+#musicFooter .disc.spin{ animation: spinDisc 4s linear infinite; }
+@keyframes spinDisc{ to{ transform:rotate(360deg);} }
+#musicFooter .meta{display:flex;flex-direction:column;min-width:120px;overflow:hidden}
+#musicFooter .meta .label{font-size:11px;color:#a8c7ff;font-weight:800;opacity:0.95}
+#musicFooter .meta .title{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+#musicFooter .controls{display:inline-flex;gap:8px;align-items:center;margin-left:auto}
+#musicFooter .ctl{
+    width:34px;height:34px;border-radius:8px;border:0;background:rgba(255,255,255,0.03);
+    color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+    font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,0.35);
+}
+#musicFooter .ctl:hover{ transform:translateY(-2px); background:rgba(255,255,255,0.05) }
+#musicFooter .smallNote{font-size:11px;color:#9fb6ff;opacity:0.9;margin-left:10px}
+#musicFooter .progress{height:4px;width:100%;background:rgba(255,255,255,0.04);border-radius:6px;margin-top:6px;overflow:hidden}
+#musicFooter .progress > i{display:block;height:100%;background:linear-gradient(90deg,#ffd600,#06a5ff);width:0%}
+@media(max-width:420px){ #musicFooter{ font-size:12px; padding:8px } .meta{min-width:88px} }
+</style>
+
+<div id="musicFooter" role="region" aria-label="Background music player">
+    <div class="disc" id="musicDisc">💿</div>
+    <div class="meta">
+        <div class="label">Garena Free Fire</div>
+        <div class="title" id="musicTitle">Muat..</div>
+        <div class="progress" aria-hidden="true"><i id="musicProgress"></i></div>
+    </div>
+
+    <div class="controls" role="group" aria-label="Player controls">
+        <button class="ctl" id="musicPrev" title="Sebelumnya">⏮</button>
+        <button class="ctl" id="musicToggle" title="Putar / Jeda">⏯</button>
+        <button class="ctl" id="musicNext" title="Lompat">⏭</button>
+    </div>
+</div>
+
+<script>
+(function(){
+    // playlist (files expected in same folder as HTML)
+    const tracks = [
+        'Free-Fire-Original.mp3',
+        'Free-Fire-SpookyNight.mp3',
+        'Free-Fire-3rdAnniversary.mp3',
+        'Free-Fire-Winterlands2019.mp3',
+        'Free-Fire-Winther2018.mp3',
+        'Free-Fire-XAttackOnTitan.mp3',
+        'Free-FireWorldCup2019.mp3'
+    ];
+
+    // helpers
+    function niceName(fn){
+        return fn.replace(/\.[^.]+$/,'').replace(/[_\-]+/g,' ').replace(/\b(mp3|wav|ogg)\b/gi,'').trim();
+    }
+    function shuffle(a){
+        for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+        return a;
+    }
+
+    // build shuffled order and prepare audio element
+    let order = shuffle(tracks.slice());
+    let idx = 0;
+    const audio = document.createElement('audio');
+    audio.preload = 'auto';
+    audio.crossOrigin = 'anonymous';
+    audio.volume = 0.65;
+    audio.src = order[idx];
+    audio.loop = false;
+    audio.setAttribute('playsinline','');
+    document.body.appendChild(audio); // hidden element
+
+    // UI refs
+    const elTitle = document.getElementById('musicTitle');
+    const elDisc = document.getElementById('musicDisc');
+    const elToggle = document.getElementById('musicToggle');
+    const elNext = document.getElementById('musicNext');
+    const elPrev = document.getElementById('musicPrev');
+    const elProgress = document.getElementById('musicProgress');
+
+    function reflect(){
+        elTitle.textContent = niceName(order[idx]) || 'Unknown';
+        if(!audio.paused){
+            elDisc.classList.add('spin');
+            elToggle.textContent = '⏸';
+            elToggle.title = 'Jeda';
+        } else {
+            elDisc.classList.remove('spin');
+            elToggle.textContent = '▶';
+            elToggle.title = 'Putar';
+        }
+    }
+
+    // attempt autoplay; some browsers require user gesture - handle promise rejection
+    function tryPlay(){
+        audio.play().then(()=> {
+            reflect();
+        }).catch(()=> {
+            // failed to autoplay — show paused state and let user press play
+            audio.pause();
+            reflect();
+            elTitle.textContent = niceName(order[idx]) + ' • (▶ Play)';
+        });
+    }
+
+    // move to next in sequence; when playlist finished, reshuffle and continue (continuous random order)
+    function nextTrack(){
+        idx++;
+        if(idx >= order.length){
+            order = shuffle(tracks.slice());
+            idx = 0;
+        }
+        audio.src = order[idx];
+        audio.currentTime = 0;
+        tryPlay();
+    }
+
+    function prevTrack(){
+        idx = (idx - 1 + order.length) % order.length;
+        audio.src = order[idx];
+        audio.currentTime = 0;
+        tryPlay();
+    }
+
+    // events
+    audio.addEventListener('ended', nextTrack);
+    audio.addEventListener('timeupdate', ()=> {
+        if(audio.duration && !isNaN(audio.duration)){
+            const pct = Math.max(0, Math.min(100, (audio.currentTime / audio.duration) * 100));
+            elProgress.style.width = pct + '%';
+            elProgress.parentElement.querySelector('i').style.width = pct + '%';
+        }
+    });
+    audio.addEventListener('play', reflect);
+    audio.addEventListener('pause', reflect);
+    audio.addEventListener('loadedmetadata', reflect);
+
+    // control handlers
+    elToggle.addEventListener('click', function(){
+        if(audio.paused) { audio.play().catch(()=>{}); }
+        else audio.pause();
+    });
+    elNext.addEventListener('click', function(){ nextTrack(); });
+    elPrev.addEventListener('click', function(){ prevTrack(); });
+
+    // allow clicking title to jump to next (small UX)
+    elTitle.addEventListener('click', function(){ nextTrack(); });
+
+    // keyboard shortcuts: space toggles play/pause, right/left skip
+    window.addEventListener('keydown', function(e){
+        if(['INPUT','TEXTAREA'].includes((e.target && e.target.tagName)||'')) return;
+        if(e.code === 'Space'){ e.preventDefault(); elToggle.click(); }
+        if(e.code === 'ArrowRight') elNext.click();
+        if(e.code === 'ArrowLeft') elPrev.click();
+    });
+
+    // initialize UI and try to autoplay with random start
+    // start from a random index in shuffled order to ensure "mulai secara acak"
+    idx = Math.floor(Math.random() * order.length);
+    audio.src = order[idx];
+    // small delay to give the DOM a moment
+    setTimeout(tryPlay, 120);
+
+    // expose small API for debugging if needed
+    window._bgMusicPlayer = {
+        audio, tracks: tracks.slice(), order, currentIndex: () => idx,
+        next: nextTrack, prev: prevTrack, play: ()=>audio.play(), pause: ()=>audio.pause()
+    };
+})();
+</script>
+
+
+<!-- Enhanced UI/UX Section dengan tema Merah -->
+<style>
+    /* Update root colors: purple → red theme */
+    :root {
+        --bg-dark: #071129;
+        --bg-red: #6b0000;
+        --panel: #6b0000;
+        --accent-red: #e53935;
+        --accent-orange: #ff8a00;
+        --glass: rgba(255, 255, 255, 0.04);
+        --unlock-green: #2ecc71;
+    }
+
+    /* Enhanced animations & transitions */
+    * {
+        transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Glow effect untuk red theme */
+    .glow-red {
+        box-shadow: 0 0 20px rgba(229, 57, 53, 0.4), 0 6px 22px rgba(23, 2, 2, 0.6);
+    }
+
+    /* Enhanced card hover effects */
+    .card {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(229, 57, 53, 0.1),
+            transparent
+        );
+        transition: left 0.5s ease;
+        pointer-events: none;
+    }
+
+    .card:hover::before {
+        left: 100%;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(229, 57, 53, 0.25);
+    }
+
+    /* Enhanced button styles with red theme */
+    .btn-red {
+        background: linear-gradient(180deg, #e53935, #c41c1c);
+        box-shadow: 0 6px 16px rgba(229, 57, 53, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-red::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-red:active::after {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-red:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(229, 57, 53, 0.4);
+    }
+
+    /* Enhanced switch with red glow */
+    .switch {
+        background: rgba(107, 0, 0, 0.6);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .switch.on {
+        background: linear-gradient(90deg, #e53935, #c41c1c);
+        box-shadow: 0 0 15px rgba(229, 57, 53, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .switch.on .knob {
+        box-shadow: 0 2px 8px rgba(229, 57, 53, 0.6);
+    }
+
+    /* Enhanced panel background */
+    .panel {
+        background: linear-gradient(180deg, rgba(107, 0, 0, 0.15), rgba(0, 0, 0, 0.4));
+        box-shadow: 0 8px 24px rgba(229, 57, 53, 0.15), inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    /* Enhanced section styling */
+    .section {
+        background: linear-gradient(
+            180deg,
+            rgba(107, 0, 0, 0.08),
+            rgba(0, 0, 0, 0.3)
+        );
+        border-left: 4px solid rgba(229, 57, 53, 0.5);
+        transition: all 0.3s ease;
+    }
+
+    .section:hover {
+        border-left: 4px solid #e53935;
+        background: linear-gradient(180deg, rgba(107, 0, 0, 0.12), rgba(0, 0, 0, 0.35));
+    }
+
+    .section h3 {
+        color: #ff9f9f;
+        text-shadow: 0 2px 4px rgba(229, 57, 53, 0.3);
+        font-weight: 800;
+    }
+
+    /* Enhanced header gradient */
+    header.site {
+        background: linear-gradient(135deg, rgba(107, 0, 0, 0.2), rgba(11, 59, 139, 0.04));
+        border-bottom: 2px solid rgba(229, 57, 53, 0.3);
+    }
+
+    /* Floating label effect */
+    .input:focus {
+        background: rgba(107, 0, 0, 0.08);
+        border-color: rgba(229, 57, 53, 0.5);
+        box-shadow: 0 0 12px rgba(229, 57, 53, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    /* Enhanced lock badge */
+    .badge {
+        background: linear-gradient(135deg, rgba(229, 57, 53, 0.2), rgba(107, 0, 0, 0.3));
+        border: 1px solid rgba(229, 57, 53, 0.3);
+        animation: badgePulse 2s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+        0%, 100% {
+            opacity: 0.7;
+        }
+        50% {
+            opacity: 1;
+        }
+    }
+
+    /* Enhanced fancy buttons */
+    .fancy {
+        background: linear-gradient(90deg, #8b0000, #6b0000);
+        border: 1px solid rgba(229, 57, 53, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .fancy::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.4s ease;
+    }
+
+    .fancy:hover::before {
+        left: 100%;
+    }
+
+    .fancy:hover {
+        box-shadow: 0 6px 20px rgba(229, 57, 53, 0.3);
+        transform: translateY(-2px);
+    }
+
+    /* Hologram buttons enhanced */
+    .h-red {
+        background: linear-gradient(135deg, #ff4d4d, #e53935);
+        box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+    }
+
+    .h-red:hover {
+        box-shadow: 0 6px 16px rgba(229, 57, 53, 0.5);
+        transform: translateY(-2px);
+    }
+
+    /* Content smooth fade in */
+    .content {
+        animation: fadeInUp 0.6s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Enhanced status messages */
+    .status {
+        background: linear-gradient(
+            90deg,
+            rgba(107, 0, 0, 0.1),
+            rgba(229, 57, 53, 0.08)
+        );
+        border-left: 3px solid rgba(229, 57, 53, 0.4);
+        color: #ff9f9f;
+        font-weight: 700;
+    }
+
+    /* Ripple effect on click */
+    .ripple {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ripple::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(229, 57, 53, 0.3);
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+    }
+
+    /* Smooth color transitions */
+    .logo img:hover {
+        box-shadow: 0 6px 16px rgba(229, 57, 53, 0.25);
+    }
+
+    /* Enhanced avatar */
+    .avatar {
+        background: linear-gradient(135deg, rgba(229, 57, 53, 0.2), #6b0000);
+        box-shadow: 0 4px 12px rgba(229, 57, 53, 0.2);
+        border: 2px solid rgba(229, 57, 53, 0.3);
+    }
+
+    .avatar:hover {
+        box-shadow: 0 6px 16px rgba(229, 57, 53, 0.3);
+    }
+
+    /* Red theme price styling */
+    .price {
+        color: #ff9999;
+        font-weight: 700;
+    }
+
+    /* Enhanced slider thumb */
+    input[type="range"]::-webkit-slider-thumb {
+        box-shadow: 0 2px 8px rgba(229, 57, 53, 0.5), 0 0 12px rgba(229, 57, 53, 0.3);
+    }
+
+    /* Title effects */
+    .title {
+        text-shadow: 0 2px 8px rgba(229, 57, 53, 0.2);
+    }
+
+    /* Note styling */
+    .note {
+        color: #ffb3b3;
+    }
+
+    /* Smooth scrollbar for webkit browsers */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #e53935, #c41c1c);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #ff5252, #e53935);
+    }
+
+    /* Enhanced price card styling */
+    .card[data-price] {
+        border-top: 3px solid rgba(229, 57, 53, 0.3);
+    }
+
+    .card[data-price]:hover {
+        border-top: 3px solid #e53935;
+    }
+
+    /* Loading animation enhancement */
+    .loader:before {
+        border-top-color: #e53935;
+        border-right-color: #ff8a00;
+    }
+
+    /* Enhanced flex gap */
+    .flex {
+        gap: 14px;
+    }
+</style>
+
+<!-- Koleksi animasi tambahan -->
+<script>
+    (function () {
+        // Tambahkan hover glow effect pada cards
+        document.querySelectorAll(".card").forEach((card) => {
+            card.addEventListener("mouseenter", function () {
+                this.classList.add("glow-red");
+            });
+            card.addEventListener("mouseleave", function () {
+                this.classList.remove("glow-red");
+            });
+        });
+
+        // Tambahkan ripple effect pada tombol
+        document.querySelectorAll(".btn, .holo-btn").forEach((btn) => {
+            btn.addEventListener("click", function (e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const ripple = document.createElement("span");
+                ripple.style.position = "absolute";
+                ripple.style.left = x + "px";
+                ripple.style.top = y + "px";
+                ripple.style.width = "0";
+                ripple.style.height = "0";
+                ripple.style.borderRadius = "50%";
+                ripple.style.background = "rgba(255,255,255,0.5)";
+                ripple.style.pointerEvents = "none";
+                ripple.style.animation = "rippleEffect 0.6s ease-out";
+
+                this.style.position = "relative";
+                this.style.overflow = "hidden";
+                this.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Inject ripple keyframes
+        if (!document.getElementById("rippleStyles")) {
+            const style = document.createElement("style");
+            style.id = "rippleStyles";
+            style.textContent = `
+                @keyframes rippleEffect {
+                    to {
+                        width: 300px;
+                        height: 300px;
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Smooth scroll on notification show
+        document.addEventListener("showNotif", function (e) {
+            const elem = e.detail;
+            if (elem) {
+                elem.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+        });
+
+        // Enhanced tooltip support
+        document.querySelectorAll("[title]").forEach((el) => {
+            el.addEventListener("mouseenter", function () {
+                this.style.cursor = "help";
+            });
+        });
+    })();
+</script>
+
+<!-- Background gradient animation -->
+<style>
+    @keyframes gradientShift {
+        0%, 100% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+    }
+
+    body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(
+            -45deg,
+            rgba(229, 57, 53, 0.05),
+            rgba(107, 0, 0, 0.05),
+            rgba(229, 57, 53, 0.05)
+        );
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        pointer-events: none;
+        z-index: 0;
+    }
+</style>
+
+
+<style>
+/* Modern minimalist notification system */
+.notif-modern-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.notif-modern {
+    pointer-events: auto;
+    min-width: 280px;
+    max-width: 320px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    animation: slideInRight 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+    position: relative;
+}
+
+.notif-modern::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+}
+
+.notif-modern.success {
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.15), rgba(46, 204, 113, 0.08));
+    border-color: rgba(46, 204, 113, 0.3);
+}
+
+.notif-modern.success::before {
+    background: #2ecc71;
+}
+
+.notif-modern.info {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.08));
+    border-color: rgba(52, 152, 219, 0.3);
+}
+
+.notif-modern.info::before {
+    background: #3498db;
+}
+
+.notif-modern.warn {
+    background: linear-gradient(135deg, rgba(241, 196, 15, 0.15), rgba(241, 196, 15, 0.08));
+    border-color: rgba(241, 196, 15, 0.3);
+}
+
+.notif-modern.warn::before {
+    background: #f1c40f;
+}
+
+.notif-modern.danger {
+    background: linear-gradient(135deg, rgba(229, 57, 53, 0.15), rgba(229, 57, 53, 0.08));
+    border-color: rgba(229, 57, 53, 0.3);
+}
+
+.notif-modern.danger::before {
+    background: #e53935;
+}
+
+.notif-modern .emoji {
+    font-size: 16px;
+    min-width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.notif-modern .text {
+    flex: 1;
+    line-height: 1.3;
+    word-break: break-word;
+}
+
+.notif-modern .close {
+    background: transparent;
+    border: 0;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 0;
+    min-width: 16px;
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+}
+
+.notif-modern .close:hover {
+    color: #fff;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(340px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(340px);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .notif-modern-container {
+        top: 12px;
+        right: 12px;
+        left: 12px;
+    }
+
+    .notif-modern {
+        min-width: unset;
+        max-width: unset;
+    }
+}
+</style>
+
+<script>
+(function() {
+    let container = document.querySelector('.notif-modern-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'notif-modern-container';
+        document.body.appendChild(container);
+    }
+
+    const EMOJI_MAP = {
+        success: '✓',
+        info: '○',
+        warn: '⚠',
+        danger: '✕',
+        start: '⚙',
+        stop: '●'
+    };
+
+    function showNotif(message, type = 'info', timeout = 3000) {
+        const n = document.createElement('div');
+        const typeClass = ['success', 'info', 'warn', 'danger'].includes(type) ? type : 'info';
+        n.className = 'notif-modern ' + typeClass;
+
+        n.innerHTML = `
+            <div class="emoji">${EMOJI_MAP[type] || EMOJI_MAP.info}</div>
+            <div class="text">${message}</div>
+            <button class="close" aria-label="tutup">×</button>
+        `;
+
+        container.appendChild(n);
+
+        const closeBtn = n.querySelector('.close');
+        let hiding = false;
+
+        function dismiss() {
+            if (hiding) return;
+            hiding = true;
+            n.style.animation = 'slideOutRight 0.25s ease forwards';
+            setTimeout(() => n.remove(), 250);
+        }
+
+        closeBtn.addEventListener('click', dismiss);
+
+        if (timeout > 0) {
+            setTimeout(dismiss, timeout);
+        }
+
+        return n;
+    }
+
+    // Disable old notif system by overwriting
+    window.showNotif = showNotif;
+
+    // Update switch notifications (non-intrusive)
+    document.addEventListener('click', function(e) {
+        const sw = e.target.closest('.switch');
+        if (!sw) return;
+
+        setTimeout(() => {
+            const card = sw.closest('.card');
+            if (!card) return;
+
+            const label = card.querySelector('strong')?.textContent.trim() || 'Fitur';
+            const locked = card.querySelector('.locked-overlay');
+
+            if (locked) {
+                showNotif('Fitur terkunci', 'danger', 2500);
+                return;
+            }
+
+            const isOn = sw.classList.contains('on');
+            if (isOn) {
+                showNotif('✓ ' + label + ' aktif', 'success', 2000);
+            } else {
+                showNotif('✕ ' + label + ' nonaktif', 'warn', 1800);
+            }
+        }, 40);
+    });
+
+    // Hologram buttons
+    document.querySelectorAll('.holo-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tier = (window.state && window.state.tier) || 0;
+            const color = this.getAttribute('data-holo') || 'warna';
+
+            if (tier < 30) {
+                showNotif('Hologram tersedia 30rb+', 'danger', 2500);
+                return;
+            }
+
+            showNotif('Hologram ' + color.toUpperCase(), 'info', 2000);
+        });
+    });
+
+    // Login/Logout notifications
+    const btnLogin = document.getElementById('btnLogin');
+    const btnLogout = document.getElementById('btnLogout');
+
+    if (btnLogin) {
+        btnLogin.addEventListener('click', function() {
+            setTimeout(() => {
+                if (window.state && window.state.username) {
+                    const tier = window.state.tier || 0;
+                    if (tier > 0) {
+                        showNotif('✓ Login: ' + window.state.username, 'success', 2500);
+                    } else {
+                        showNotif('Akses terbatas', 'warn', 2000);
+                    }
+                }
+            }, 60);
+        });
+    }
+
+    if (btnLogout) {
+        btnLogout.addEventListener('click', function() {
+            showNotif('Logout berhasil', 'info', 1800);
+        });
+    }
+
+    // Bypass button
+    const bypassBtn = document.getElementById('bypassBtn');
+    if (bypassBtn) {
+        bypassBtn.addEventListener('click', function() {
+            const card = document.getElementById('bypassCard');
+            const price = parseInt(card?.getAttribute('data-price') || 0, 10);
+            const tier = (window.state && window.state.tier) || 0;
+
+            if (tier < price) {
+                showNotif('Minimal ' + price + 'rb', 'danger', 2500);
+                return;
+            }
+
+            showNotif('Bypass berjalan...', 'info', 2000);
+            setTimeout(() => {
+                showNotif('Bypass selesai', 'success', 1800);
+            }, 2400);
+        });
+    }
+})();
+</script>
+
+
+
+<!-- Profile Menu Overlay -->
+<style>
+.profile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 999998;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.profile-overlay.show {
+    display: flex;
+}
+
+.profile-modal {
+    background: linear-gradient(180deg, rgba(107, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 420px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(229, 57, 53, 0.3);
+    border: 1px solid rgba(229, 57, 53, 0.2);
+    animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(229, 57, 53, 0.2);
+}
+
+.profile-header h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.profile-close {
+    background: transparent;
+    border: 0;
+    color: #fff;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.profile-close:hover {
+    transform: rotate(90deg);
+}
+
+.profile-avatar-section {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.profile-avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(229, 57, 53, 0.2), #6b0000);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    border: 4px solid rgba(229, 57, 53, 0.4);
+    box-shadow: 0 8px 24px rgba(229, 57, 53, 0.2);
+    object-fit: cover;
+}
+
+.profile-avatar-upload {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #e53935, #c41c1c);
+    border: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-avatar-upload:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 16px rgba(229, 57, 53, 0.4);
+}
+
+#profilePhotoInput {
+    display: none;
+}
+
+.profile-name {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.profile-tier {
+    color: #ff9f9f;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.profile-purchases {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.profile-purchases h3 {
+    margin: 0 0 12px 0;
+    color: #ff9f9f;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.purchase-item {
+    background: linear-gradient(90deg, rgba(229, 57, 53, 0.08), rgba(107, 0, 0, 0.08));
+    border-left: 3px solid rgba(229, 57, 53, 0.4);
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #cfe0ff;
+    transition: all 0.2s ease;
+}
+
+.purchase-item:last-child {
+    margin-bottom: 0;
+}
+
+.purchase-item:hover {
+    background: linear-gradient(90deg, rgba(229, 57, 53, 0.12), rgba(107, 0, 0, 0.12));
+    border-left-color: #e53935;
+}
+
+.purchase-name {
+    font-weight: 600;
+    color: #fff;
+}
+
+.purchase-price {
+    background: rgba(229, 57, 53, 0.3);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+    color: #ff9f9f;
+    font-size: 11px;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.stat-box {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(229, 57, 53, 0.2);
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #9fb6ff;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ff9f9f;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.profile-actions .btn {
+    flex: 1;
+    padding: 10px;
+    font-size: 12px;
+}
+
+.profile-empty {
+    text-align: center;
+    padding: 20px;
+    color: #9fb6ff;
+    font-size: 13px;
+}
+
+@media (max-width: 480px) {
+    .profile-modal {
+        max-width: 90vw;
+        padding: 16px;
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 40px;
+    }
+
+    .profile-name {
+        font-size: 14px;
+    }
+
+    .profile-stats {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<div class="profile-overlay" id="profileOverlay">
+    <div class="profile-modal">
+        <div class="profile-header">
+            <h2>Profil Saya</h2>
+            <button class="profile-close" id="profileCloseBtn">✕</button>
+        </div>
+
+        <div class="profile-avatar-section">
+            <div class="profile-avatar-wrapper">
+                <div class="profile-avatar" id="profileAvatarDisplay"></div>
+                <button class="profile-avatar-upload" id="profileUploadBtn" title="Ubah foto">📷</button>
+                <input type="file" id="profilePhotoInput" accept="image/*" />
+            </div>
+            <div class="profile-name" id="profileNameDisplay">Tamu</div>
+            <div class="profile-tier" id="profileTierDisplay">Belum login</div>
+        </div>
+
+        <div class="profile-stats">
+            <div class="stat-box">
+                <div class="stat-label">Status</div>
+                <div class="stat-value" id="profileStatusBadge">—</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Total Pembelian</div>
+                <div class="stat-value" id="profileTotalPurchase">0</div>
+            </div>
+        </div>
+
+        <div class="profile-purchases">
+            <h3>Fitur Aktif</h3>
+            <div id="profilePurchaseList">
+                <div class="profile-empty">Belum ada pembelian</div>
+            </div>
+        </div>
+
+        <div class="profile-actions">
+            <button class="btn btn-red" id="profileResetBtn">Reset Profil</button>
+            <button class="btn btn-outline" id="profileExportBtn">Ekspor Data</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const overlay = document.getElementById('profileOverlay');
+    const closeBtn = document.getElementById('profileCloseBtn');
+    const uploadBtn = document.getElementById('profileUploadBtn');
+    const fileInput = document.getElementById('profilePhotoInput');
+    const avatarDisplay = document.getElementById('profileAvatarDisplay');
+    const nameDisplay = document.getElementById('profileNameDisplay');
+    const tierDisplay = document.getElementById('profileTierDisplay');
+    const statusBadge = document.getElementById('profileStatusBadge');
+    const totalPurchaseDisplay = document.getElementById('profileTotalPurchase');
+    const purchaseList = document.getElementById('profilePurchaseList');
+    const resetBtn = document.getElementById('profileResetBtn');
+    const exportBtn = document.getElementById('profileExportBtn');
+
+    // Menyimpan foto profil di localStorage
+    function saveProfilePhoto(dataUrl) {
+        localStorage.setItem('profilePhoto', dataUrl);
+    }
+
+    function getProfilePhoto() {
+        return localStorage.getItem('profilePhoto');
+    }
+
+    function savePurchaseHistory(purchases) {
+        localStorage.setItem('purchaseHistory', JSON.stringify(purchases));
+    }
+
+    function getPurchaseHistory() {
+        const data = localStorage.getItem('purchaseHistory');
+        return data ? JSON.parse(data) : [];
+    }
+
+    function updateProfilePhoto(dataUrl) {
+        avatarDisplay.style.backgroundImage = `url(${dataUrl})`;
+        avatarDisplay.style.backgroundSize = 'cover';
+        avatarDisplay.style.backgroundPosition = 'center';
+        avatarDisplay.textContent = '';
+        saveProfilePhoto(dataUrl);
+    }
+
+    function loadProfilePhoto() {
+        const photo = getProfilePhoto();
+        if (photo) {
+            updateProfilePhoto(photo);
+        }
+    }
+
+    function updatePurchaseDisplay() {
+        const purchases = getPurchaseHistory();
+        const tier = (window.state && window.state.tier) || 0;
+
+        if (purchases.length === 0) {
+            purchaseList.innerHTML = '<div class="profile-empty">Belum ada pembelian</div>';
+        } else {
+            purchaseList.innerHTML = purchases.map(p => `
+                <div class="purchase-item">
+                    <span class="purchase-name">${p.name}</span>
+                    <span class="purchase-price">${p.price}rb</span>
+                </div>
+            `).join('');
+        }
+
+        totalPurchaseDisplay.textContent = purchases.length;
+        
+        // Update status
+        if (tier === 0) {
+            statusBadge.textContent = '👤';
+            statusBadge.title = 'Tamu';
+        } else if (tier < 30) {
+            statusBadge.textContent = '⭐';
+            statusBadge.title = 'Member Biasa';
+        } else if (tier < 70) {
+            statusBadge.textContent = '⭐⭐';
+            statusBadge.title = 'VIP';
+        } else {
+            statusBadge.textContent = '👑';
+            statusBadge.title = 'Premium VIP';
+        }
+    }
+
+    function updateProfileDisplay() {
+        const username = (window.state && window.state.username) || 'Tamu';
+        const tier = (window.state && window.state.tier) || 0;
+
+        nameDisplay.textContent = username;
+        if (tier > 0) {
+            tierDisplay.textContent = 'Tier: ' + tier + 'rb';
+        } else {
+            tierDisplay.textContent = 'Belum login';
+        }
+
+        updatePurchaseDisplay();
+        loadProfilePhoto();
+    }
+
+    // Photo upload handler
+    uploadBtn.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const dataUrl = event.target.result;
+                updateProfilePhoto(dataUrl);
+                showNotif('✓ Foto profil diubah', 'success', 2000);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Track purchases (dipanggil ketika switch aktif)
+    function trackPurchase(featureName, priceRb) {
+        const purchases = getPurchaseHistory();
+        const exists = purchases.find(p => p.name === featureName);
+        if (!exists) {
+            purchases.push({ name: featureName, price: priceRb, date: new Date().toLocaleDateString('id-ID') });
+            savePurchaseHistory(purchases);
+            updatePurchaseDisplay();
+        }
+    }
+
+    // Hook ke switch clicks untuk tracking
+    document.addEventListener('click', function(e) {
+        const sw = e.target.closest('.switch');
+        if (!sw) return;
+        
+        setTimeout(() => {
+            const card = sw.closest('.card');
+            if (!card) return;
+            
+            const locked = card.querySelector('.locked-overlay');
+            if (!locked && sw.classList.contains('on')) {
+                const name = card.querySelector('strong')?.textContent.trim() || 'Fitur';
+                const price = parseInt(card.getAttribute('data-price') || 0, 10);
+                if (price > 0) {
+                    trackPurchase(name, price);
+                }
+            }
+        }, 100);
+    });
+
+    // Reset profil
+    resetBtn.addEventListener('click', function() {
+        if (confirm('Yakin ingin reset profil? Data foto dan pembelian akan dihapus.')) {
+            localStorage.removeItem('profilePhoto');
+            localStorage.removeItem('purchaseHistory');
+            avatarDisplay.style.backgroundImage = '';
+            avatarDisplay.textContent = '?';
+            updatePurchaseDisplay();
+            showNotif('Profil direset', 'info', 2000);
+        }
+    });
+
+    // Export data
+    exportBtn.addEventListener('click', function() {
+        const username = (window.state && window.state.username) || 'Tamu';
+        const tier = (window.state && window.state.tier) || 0;
+        const purchases = getPurchaseHistory();
+        
+        const data = {
+            username,
+            tier,
+            totalPurchase: purchases.length,
+            purchases,
+            exportDate: new Date().toLocaleString('id-ID'),
+            ua: navigator.userAgent
+        };
+        
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `profile-${username}-${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+        
+        showNotif('✓ Data diekspor', 'success', 2000);
+    });
+
+    // Toggle overlay
+    closeBtn.addEventListener('click', () => overlay.classList.remove('show'));
+    
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) overlay.classList.remove('show');
+    });
+
+    // Expose profile opener (panggil dari tombol di sidebar)
+    window.openProfileMenu = function() {
+        updateProfileDisplay();
+        overlay.classList.add('show');
+    };
+
+    // Init
+    updateProfileDisplay();
+})();
+</script>
+
+<!-- Profile menu button di sidebar -->
+<script>
+(function() {
+    const openGamesSection = document.querySelector('.open-games');
+    if (!openGamesSection) return;
+
+    const profileBtn = document.createElement('button');
+    profileBtn.className = 'btn fancy';
+    profileBtn.style.marginBottom = '8px';
+    profileBtn.textContent = '👤 Profil Saya';
+    profileBtn.addEventListener('click', () => window.openProfileMenu());
+
+    openGamesSection.insertBefore(profileBtn, openGamesSection.firstChild);
+})();
+</script>
+<script>
+// Sync profile photo to sidebar avatar when photo changes
+(function() {
+    const profilePhotoInput = document.getElementById('profilePhotoInput');
+    const sidebarAvatar = document.getElementById('avatar');
+    
+    if (!profilePhotoInput || !sidebarAvatar) return;
+    
+    function syncPhotoToSidebar() {
+        const photo = localStorage.getItem('profilePhoto');
+        if (photo) {
+            sidebarAvatar.style.backgroundImage = `url(${photo})`;
+            sidebarAvatar.style.backgroundSize = 'cover';
+            sidebarAvatar.style.backgroundPosition = 'center';
+            sidebarAvatar.textContent = '';
+        } else {
+            // Reset ke default jika tidak ada foto
+            sidebarAvatar.style.backgroundImage = '';
+            const username = (window.state && window.state.username) || '?';
+            sidebarAvatar.textContent = username.slice(0, 2).toUpperCase();
+        }
+    }
+    
+    // Sync ketika halaman load
+    syncPhotoToSidebar();
+    
+    // Sync ketika foto profile diubah di modal
+    const originalUpdateProfilePhoto = window.updateProfilePhoto;
+    window.updateProfilePhoto = function(dataUrl) {
+        if (originalUpdateProfilePhoto) originalUpdateProfilePhoto.call(this, dataUrl);
+        syncPhotoToSidebar();
+    };
+    
+    // Sync ketika login/logout
+    const btnLogin = document.getElementById('btnLogin');
+    const btnLogout = document.getElementById('btnLogout');
+    
+    if (btnLogin) {
+        btnLogin.addEventListener('click', () => {
+            setTimeout(syncPhotoToSidebar, 100);
+        });
+    }
+    
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            setTimeout(syncPhotoToSidebar, 100);
+        });
+    }
+    
+    // Listen untuk perubahan localStorage dari tab lain
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'profilePhoto') {
+            syncPhotoToSidebar();
+        }
+    });
+})();
+</script>
+
+
+
+
+
+
+<!-- Large Popup Notification Modal -->
+<style>
+.info-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 9999999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInOverlay 0.3s ease;
+}
+
+.info-popup-overlay.show {
+    display: flex;
+}
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.info-popup-container {
+    background: linear-gradient(135deg, rgba(107, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 80px rgba(229, 57, 53, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(229, 57, 53, 0.4);
+    animation: slideUpPopup 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+}
+
+@keyframes slideUpPopup {
+    from {
+        transform: translateY(60px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.info-popup-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: linear-gradient(135deg, #e53935, #c41c1c);
+    border: 0;
+    color: #fff;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 28px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px rgba(229, 57, 53, 0.4);
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.info-popup-close:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(229, 57, 53, 0.5);
+}
+
+.info-popup-close:active {
+    transform: scale(0.95);
+}
+
+.info-popup-icon {
+    font-size: 80px;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: bounceIcon 2s ease-in-out infinite;
+}
+
+@keyframes bounceIcon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.info-popup-title {
+    color: #fff;
+    font-size: 32px;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 16px;
+    text-shadow: 0 2px 8px rgba(229, 57, 53, 0.3);
+}
+
+.info-popup-subtitle {
+    color: #ff9f9f;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 24px;
+    letter-spacing: 0.5px;
+}
+
+.info-popup-content {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(229, 57, 53, 0.2);
+    color: #cfe0ff;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.info-popup-content h4 {
+    color: #ff9f9f;
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-popup-content p {
+    margin: 0 0 12px 0;
+}
+
+.info-popup-content p:last-child {
+    margin-bottom: 0;
+}
+
+.info-popup-content ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #e8f0ff;
+}
+
+.info-popup-content li {
+    margin-bottom: 8px;
+}
+
+.info-popup-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #e53935, #c41c1c);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.info-popup-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.info-popup-btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 0;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.info-popup-btn-primary {
+    background: linear-gradient(135deg, #e53935, #c41c1c);
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(229, 57, 53, 0.3);
+}
+
+.info-popup-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(229, 57, 53, 0.4);
+}
+
+.info-popup-btn-secondary {
+    background: transparent;
+    color: #ff9f9f;
+    border: 2px solid rgba(229, 57, 53, 0.4);
+}
+
+.info-popup-btn-secondary:hover {
+    background: rgba(229, 57, 53, 0.1);
+    border-color: #e53935;
+}
+
+.info-popup-timer {
+    text-align: center;
+    font-size: 12px;
+    color: #9fb6ff;
+    margin-top: 16px;
+    font-weight: 600;
+}
+
+.info-popup-progress {
+    width: 100%;
+    height: 4px;
+    background: rgba(229, 57, 53, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.info-popup-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #e53935, #ff8a00);
+    width: 100%;
+    animation: countdown 30s linear forwards;
+}
+
+@keyframes countdown {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+.info-popup-badge-status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+}
+
+.info-popup-badge-status.maintenance {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ffb020;
+    border: 1px solid rgba(255, 152, 0, 0.4);
+}
+
+.info-popup-badge-status.update {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.4);
+}
+
+.info-popup-badge-status.alert {
+    background: rgba(229, 57, 53, 0.2);
+    color: #ff6b6b;
+    border: 1px solid rgba(229, 57, 53, 0.4);
+}
+
+@media (max-width: 600px) {
+    .info-popup-container {
+        padding: 24px;
+        margin: 20px;
+    }
+
+    .info-popup-title {
+        font-size: 24px;
+    }
+
+    .info-popup-icon {
+        font-size: 60px;
+        margin-bottom: 16px;
+    }
+
+    .info-popup-content {
+        padding: 16px;
+        font-size: 13px;
+    }
+
+    .info-popup-actions {
+        flex-direction: column;
+    }
+
+    .info-popup-btn {
+        width: 100%;
+    }
+}
+</style>
+
+<div class="info-popup-overlay" id="infoPopupOverlay">
+    <div class="info-popup-container" id="infoPopupContainer">
+        <button class="info-popup-close" id="infoPopupClose">✕</button>
+        
+        <div class="info-popup-icon" id="infoPopupIcon">🔧</div>
+        
+        <div class="info-popup-title" id="infoPopupTitle">Website Sedang Maintenance</div>
+        
+        <div class="info-popup-subtitle" id="infoPopupSubtitle">Kami melakukan perbaikan sistem</div>
+        
+        <div class="info-popup-badge-status maintenance" id="infoPopupStatus">
+            STATUS: MAINTENANCE
+        </div>
+        
+        <div class="info-popup-content" id="infoPopupContent">
+            <h4>📢 Informasi Penting</h4>
+            <p>Kami sedang melakukan perbaikan dan peningkatan fitur untuk memberikan pengalaman yang lebih baik.</p>
+            
+            <h4>🔨 Fitur yang Diperbaiki</h4>
+            <ul>
+                <li>Auto Headshot - Optimalisasi akurasi</li>
+                <li>ESP System - Peningkatan performa</li>
+                <li>Bypass Anti-cheat - Update kompatibilitas</li>
+            </ul>
+            
+            <h4>⏱️ Estimasi Waktu</h4>
+            <p>Maintenance diperkirakan selesai dalam <strong>2-3 jam</strong>. Terima kasih atas kesabarannya!</p>
+        </div>
+        
+        <div class="info-popup-timer" id="infoPopupTimer">
+            Popup akan menutup dalam <span id="timerCount">30</span> detik
+            <div class="info-popup-progress" id="infoPopupProgress">
+                <div class="info-popup-progress-bar"></div>
+            </div>
+        </div>
+        
+        <div class="info-popup-actions">
+            <button class="info-popup-btn info-popup-btn-secondary" id="infoPopupOK">Mengerti</button>
+            <button class="info-popup-btn info-popup-btn-primary" id="infoPopupNotif">🔔 Notifikasi Update</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const overlay = document.getElementById('infoPopupOverlay');
+    const closeBtn = document.getElementById('infoPopupClose');
+    const okBtn = document.getElementById('infoPopupOK');
+    const notifBtn = document.getElementById('infoPopupNotif');
+    const timerEl = document.getElementById('timerCount');
+    const timerContainer = document.getElementById('infoPopupTimer');
+    const progressBar = document.getElementById('infoPopupProgress');
+    
+    // Tipe popup: 'maintenance', 'update', 'alert'
+    const POPUP_TYPE = 'update';
+    
+    // Data template untuk berbagai tipe
+    const TEMPLATES = {
+        maintenance: {
+            icon: '🔧',
+            title: 'Website Sedang Maintenance',
+            subtitle: 'Kami melakukan perbaikan sistem',
+            status: 'maintenance',
+            statusText: 'STATUS: MAINTENANCE',
+            content: `
+                <h4>📢 Informasi Penting</h4>
+                <p>Kami sedang melakukan perbaikan dan peningkatan fitur untuk memberikan pengalaman yang lebih baik.</p>
+                
+                <h4>🔨 Fitur yang Diperbaiki</h4>
+                <ul>
+                    <li>Auto Headshot - Optimalisasi akurasi</li>
+                    <li>ESP System - Peningkatan performa</li>
+                    <li>Bypass Anti-cheat - Update kompatibilitas</li>
+                </ul>
+                
+                <h4>⏱️ Estimasi Waktu</h4>
+                <p>Maintenance diperkirakan selesai dalam <strong>2-3 jam</strong>. Terima kasih atas kesabarannya!</p>
+            `
+        },
+        update: {
+            icon: '⭐',
+            title: 'Fitur Baru Akan Hadir!',
+            subtitle: 'Persiapkan dirimu untuk yang terbaik',
+            status: 'update',
+            statusText: 'STATUS: SOON AVAILABLE',
+            content: `
+                <h4>✨ Fitur Eksklusif</h4>
+                <p>Fitur-fitur revolusioner akan segera diluncurkan!</p>
+                
+                <h4>🚀 Yang Akan Datang</h4>
+                <ul>
+                    <li>Auto Aim Pro - Targeting presisi tinggi</li>
+                    <li>Predict System - AI prediksi musuh</li>
+                    <li>Silent Mode - Bypass maksimal</li>
+                </ul>
+                
+                <h4>📅 Rilis</h4>
+                <p>Semua fitur akan dirilis <strong>12 Desember</strong>. Jangan lewatkan!</p>
+            `
+        },
+        alert: {
+            icon: '⚠️',
+            title: 'Peringatan Penting!',
+            subtitle: 'Perhatikan informasi berikut',
+            status: 'alert',
+            statusText: 'STATUS: ALERT',
+            content: `
+                <h4>⚠️ Perhatian Pengguna</h4>
+                <p>Terdapat pembaruan keamanan yang penting untuk dilakukan.</p>
+                
+                <h4>🛡️ Untuk Keamanan Akun</h4>
+                <ul>
+                    <li>Update kode VIP Anda secara berkala</li>
+                    <li>Jangan bagikan kode dengan orang lain</li>
+                    <li>Aktifkan notifikasi untuk update penting</li>
+                </ul>
+                
+                <h4>📌 Aksi Diperlukan</h4>
+                <p>Silakan log in kembali untuk keamanan maksimal.</p>
+            `
+        }
+    };
+    
+    function setupPopup(type = 'update') {
+        const template = TEMPLATES[type] || TEMPLATES.maintenance;
+        
+        document.getElementById('infoPopupIcon').textContent = template.icon;
+        document.getElementById('infoPopupTitle').textContent = template.title;
+        document.getElementById('infoPopupSubtitle').textContent = template.subtitle;
+        document.getElementById('infoPopupContent').innerHTML = template.content;
+        
+        const statusBadge = document.getElementById('infoPopupStatus');
+        statusBadge.textContent = template.statusText;
+        statusBadge.className = 'info-popup-badge-status ' + template.status;
+    }
+    
+    let countdown = 30;
+    function startCountdown() {
+        const interval = setInterval(() => {
+            countdown--;
+            timerEl.textContent = countdown;
+            
+            if (countdown <= 0) {
+                clearInterval(interval);
+                closePopup();
+            }
+        }, 1000);
+    }
+    
+    function closePopup() {
+        overlay.classList.remove('show');
+    }
+    
+    function showPopup(type = 'update') {
+        setupPopup(type);
+        overlay.classList.add('show');
+        countdown = 30;
+        startCountdown();
+    }
+    
+    // Event listeners
+    closeBtn.addEventListener('click', closePopup);
+    okBtn.addEventListener('click', closePopup);
+    
+    notifBtn.addEventListener('click', function() {
+        showNotif('✓ Anda akan menerima notifikasi update', 'success', 2500);
+        setTimeout(closePopup, 600);
+    });
+    
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closePopup();
+    });
+    
+    // Expose functions globally
+    window.showInfoPopup = showPopup;
+    window.closeInfoPopup = closePopup;
+    
+    // Show popup on page load (remove setTimeout jika ingin tampil langsung)
+    setTimeout(() => showPopup('update'), 800);
+})();
+</script>
