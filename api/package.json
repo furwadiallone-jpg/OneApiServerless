@@ -1,0 +1,17 @@
+{
+  "name": "cloudflare-web",
+  "version": "1.0.0",
+  "main": "antarmuka.js",
+  "scripts": {
+    "start": "node antarmuka.js"
+  },
+  "keywords": [],
+  "author": "iwan",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2",
+    "pm2": "^6.0.8"
+  }
+}
