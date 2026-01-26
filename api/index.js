@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
-require('./cloudflared.js')
+//require('./cloudflared.js')
 const app = express();
 const PORT = 80
 
