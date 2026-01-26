@@ -18,7 +18,7 @@
     body::before{
         content:"";
         position:fixed;inset:0;
-        background:url("animeillustration.jpg") center/cover no-repeat;
+        background:url("https://dl.dir.freefiremobile.com/common/web_event/official2.ff.garena.all/20261/8c9c3f8af279f4fb2b743e948592c1cd.jpg") center/cover no-repeat;
         opacity:0.07;filter:blur(1px);
         z-index:0;
     }
@@ -140,6 +140,663 @@
         <main class="content">
             <section class="section">
                 <h3>Fitur Utama</h3>
+                <div class="flex">
+                    <div class="membership-card premium" data-tier="gold">
+                        <div class="membership-header">
+                            <div class="membership-badge gold">⭐ GOLD</div>
+                            <div class="membership-price">30rb</div>
+                        </div>
+                        <div class="membership-duration">
+                            <strong>7 Hari</strong>
+                            <small>Akses Premium</small>
+                        </div>
+                        <div class="membership-features">
+                            <div class="feature-item">✓ Semua fitur 10-50rb</div>
+                            <div class="feature-item">✓ Headshot hingga 200%</div>
+                            <div class="feature-item">✓ Shotgun Damage 300%</div>
+                            <div class="feature-item">✓ Aim Lock & Aimbot</div>
+                            <div class="feature-item">✓ Hologram Body</div>
+                            <div class="feature-item">✓ Support Ranked</div>
+                        </div>
+                        <button class="btn btn-membership gold" data-membership="gold" data-price="30">
+                            Beli Sekarang
+                        </button>
+                    </div>
+
+                    <div class="membership-card premium" data-tier="silver">
+                        <div class="membership-header">
+                            <div class="membership-badge silver">💎 SILVER</div>
+                            <div class="membership-price">40rb</div>
+                        </div>
+                        <div class="membership-duration">
+                            <strong>7 Hari</strong>
+                            <small>Akses Premium+</small>
+                        </div>
+                        <div class="membership-features">
+                            <div class="feature-item">✓ Semua fitur 10-70rb</div>
+                            <div class="feature-item">✓ Headshot hingga 500%</div>
+                            <div class="feature-item">✓ Shotgun Damage 400%</div>
+                            <div class="feature-item">✓ Body Lock & Aim Good</div>
+                            <div class="feature-item">✓ ESP Line & ESP Name</div>
+                            <div class="feature-item">✓ High Damage 500%</div>
+                        </div>
+                        <button class="btn btn-membership silver" data-membership="silver" data-price="40">
+                            Beli Sekarang
+                        </button>
+                    </div>
+
+                    <div class="membership-card premium" data-tier="diamond">
+                        <div class="membership-header special">
+                            <div class="membership-badge diamond">👑 DIAMOND</div>
+                            <div class="membership-price">50rb</div>
+                        </div>
+                        <div class="membership-duration">
+                            <strong>1 Bulan</strong>
+                            <small>Akses Premium Ultra</small>
+                        </div>
+                        <div class="membership-features">
+                            <div class="feature-item">✓ Semua fitur 10-100rb</div>
+                            <div class="feature-item">✓ Unlimited Headshot</div>
+                            <div class="feature-item">✓ Shotgun Damage 500%</div>
+                            <div class="feature-item">✓ Semua Aim Features</div>
+                            <div class="feature-item">✓ Semua ESP Features</div>
+                            <div class="feature-item">✓ Anti Banned 100%</div>
+                        </div>
+                        <button class="btn btn-membership diamond" data-membership="diamond" data-price="50">
+                            Beli Sekarang
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Membership Payment Modal -->
+                <div class="membership-overlay" id="membershipOverlay">
+                    <div class="membership-modal">
+                        <div class="membership-modal-header">
+                            <h2 id="membershipModalTitle">Membership Premium</h2>
+                            <button class="modal-close" id="membershipModalClose">✕</button>
+                        </div>
+
+                        <div class="membership-modal-content">
+                            <div class="payment-info">
+                                <div class="info-item">
+                                    <span class="label">Tier:</span>
+                                    <span class="value" id="paymentTier">—</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Harga:</span>
+                                    <span class="value price" id="paymentPrice">—</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Durasi:</span>
+                                    <span class="value" id="paymentDuration">—</span>
+                                </div>
+                            </div>
+
+                            <div class="payment-method">
+                                <h3>Pilih Metode Pembayaran</h3>
+                                <div class="payment-options">
+                                    <button class="payment-btn qr-btn" id="qrPaymentBtn" data-method="qr">
+                                        <div class="payment-icon">📱</div>
+                                        <div class="payment-label">QR Code</div>
+                                        <small>Dana / GCash / GoPay</small>
+                                    </button>
+                                    <button class="payment-btn wa-btn" id="waPaymentBtn" data-method="whatsapp">
+                                        <div class="payment-icon">💬</div>
+                                        <div class="payment-label">WhatsApp</div>
+                                        <small>Hubungi Admin</small>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- QR Code Section -->
+                            <div class="qr-section" id="qrSection" style="display:none;">
+                                <h3>Scan QR Code untuk Membayar</h3>
+                                <div class="qr-container">
+                                    <img id="qrImage" src="" alt="QR Code" class="qr-image" />
+                                </div>
+                                <div class="qr-info">
+                                    <p id="qrInfo">Scan dengan aplikasi pembayaran digital Anda</p>
+                                    <div class="qr-timer">
+                                        <small id="qrTimer">Konfirmasi pembayaran dalam: <span id="timerCount">5:00</span></small>
+                                    </div>
+                                </div>
+                                <div class="qr-actions">
+                                    <button class="btn btn-red" id="qrConfirmBtn" style="display:none">✓ Pembayaran Selesai</button>
+                                    <button class="btn btn-red" id="qrCancelBtn">✕ Batal</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                /* Membership Cards */
+                .membership-card {
+                    flex: 1 1 240px;
+                    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.008));
+                    padding: 18px;
+                    border-radius: 14px;
+                    border: 2px solid rgba(255,255,255,0.06);
+                    position: relative;
+                    overflow: hidden;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+
+                .membership-card.premium {
+                    background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+                }
+
+                .membership-card:hover {
+                    transform: translateY(-6px);
+                    box-shadow: 0 12px 32px rgba(229, 57, 53, 0.2);
+                    border-color: rgba(229, 57, 53, 0.4);
+                }
+
+                .membership-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 8px;
+                    padding-bottom: 12px;
+                    border-bottom: 2px solid rgba(255,255,255,0.06);
+                }
+
+                .membership-header.special {
+                    background: linear-gradient(90deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
+                    border-radius: 8px;
+                    padding: 12px;
+                    border: 1px solid rgba(255, 193, 7, 0.2);
+                }
+
+                .membership-badge {
+                    font-weight: 800;
+                    font-size: 12px;
+                    padding: 6px 10px;
+                    border-radius: 8px;
+                    letter-spacing: 0.5px;
+                }
+
+                .membership-badge.gold {
+                    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 140, 0, 0.2));
+                    color: #ffd700;
+                    border: 1px solid rgba(255, 215, 0, 0.4);
+                }
+
+                .membership-badge.silver {
+                    background: linear-gradient(135deg, rgba(192, 192, 192, 0.3), rgba(169, 169, 169, 0.2));
+                    color: #e8e8e8;
+                    border: 1px solid rgba(192, 192, 192, 0.4);
+                }
+
+                .membership-badge.diamond {
+                    background: linear-gradient(135deg, rgba(100, 149, 237, 0.3), rgba(65, 105, 225, 0.2));
+                    color: #87ceeb;
+                    border: 1px solid rgba(100, 149, 237, 0.4);
+                    animation: diamondGlow 2s ease-in-out infinite;
+                }
+
+                @keyframes diamondGlow {
+                    0%, 100% { text-shadow: 0 0 8px rgba(135, 206, 235, 0.4); }
+                    50% { text-shadow: 0 0 16px rgba(135, 206, 235, 0.8); }
+                }
+
+                .membership-price {
+                    font-size: 18px;
+                    font-weight: 900;
+                    color: #ff9f9f;
+                }
+
+                .membership-duration {
+                    text-align: center;
+                    padding: 8px;
+                    background: rgba(229, 57, 53, 0.1);
+                    border-radius: 8px;
+                    border-left: 3px solid #e53935;
+                }
+
+                .membership-duration strong {
+                    display: block;
+                    color: #fff;
+                    font-size: 14px;
+                    margin-bottom: 2px;
+                }
+
+                .membership-duration small {
+                    color: #ffb3b3;
+                    font-size: 11px;
+                }
+
+                .membership-features {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                }
+
+                .feature-item {
+                    font-size: 12px;
+                    color: #cfe0ff;
+                    padding: 6px 8px;
+                    background: rgba(255,255,255,0.02);
+                    border-radius: 6px;
+                    border-left: 2px solid rgba(46, 204, 113, 0.4);
+                    transition: all 0.2s ease;
+                }
+
+                .feature-item:hover {
+                    background: rgba(46, 204, 113, 0.08);
+                    border-left-color: #2ecc71;
+                    color: #fff;
+                }
+
+                .btn-membership {
+                    margin-top: 8px;
+                    width: 100%;
+                    font-weight: 800;
+                    border: 0;
+                    border-radius: 10px;
+                    padding: 11px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                }
+
+                .btn-membership.gold {
+                    background: linear-gradient(135deg, #ffd700, #ff8c00);
+                    color: #071129;
+                    box-shadow: 0 6px 16px rgba(255, 215, 0, 0.3);
+                }
+
+                .btn-membership.gold:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.4);
+                }
+
+                .btn-membership.silver {
+                    background: linear-gradient(135deg, #c0c0c0, #808080);
+                    color: #071129;
+                    box-shadow: 0 6px 16px rgba(192, 192, 192, 0.3);
+                }
+
+                .btn-membership.silver:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 24px rgba(192, 192, 192, 0.4);
+                }
+
+                .btn-membership.diamond {
+                    background: linear-gradient(135deg, #6495ed, #4169e1);
+                    color: #fff;
+                    box-shadow: 0 6px 16px rgba(100, 149, 237, 0.3);
+                }
+
+                .btn-membership.diamond:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 24px rgba(100, 149, 237, 0.5);
+                }
+
+                /* Membership Modal */
+                .membership-overlay {
+                    position: fixed;
+                    inset: 0;
+                    background: rgba(0, 0, 0, 0.8);
+                    backdrop-filter: blur(8px);
+                    z-index: 999997;
+                    display: none;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .membership-overlay.show {
+                    display: flex;
+                    animation: fadeIn 0.3s ease;
+                }
+
+                .membership-modal {
+                    background: linear-gradient(180deg, rgba(107, 0, 0, 0.25), rgba(0, 0, 0, 0.6));
+                    border-radius: 18px;
+                    padding: 28px;
+                    max-width: 480px;
+                    width: 90%;
+                    max-height: 85vh;
+                    overflow-y: auto;
+                    box-shadow: 0 20px 60px rgba(229, 57, 53, 0.4);
+                    border: 2px solid rgba(229, 57, 53, 0.3);
+                    animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+                }
+
+                .membership-modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 24px;
+                    padding-bottom: 14px;
+                    border-bottom: 2px solid rgba(229, 57, 53, 0.3);
+                }
+
+                .membership-modal-header h2 {
+                    margin: 0;
+                    color: #fff;
+                    font-size: 20px;
+                    font-weight: 800;
+                }
+
+                .modal-close {
+                    background: transparent;
+                    border: 0;
+                    color: #fff;
+                    font-size: 28px;
+                    cursor: pointer;
+                    padding: 0;
+                    transition: transform 0.2s ease;
+                }
+
+                .modal-close:hover {
+                    transform: rotate(90deg);
+                }
+
+                .membership-modal-content {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                }
+
+                .payment-info {
+                    background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.1));
+                    padding: 16px;
+                    border-radius: 12px;
+                    border-left: 4px solid rgba(229, 57, 53, 0.5);
+                }
+
+                .info-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px 0;
+                    font-size: 13px;
+                }
+
+                .info-item .label {
+                    color: #9fb6ff;
+                    font-weight: 700;
+                }
+
+                .info-item .value {
+                    color: #fff;
+                    font-weight: 800;
+                }
+
+                .info-item .value.price {
+                    color: #ff9f9f;
+                    font-size: 16px;
+                }
+
+                .payment-method h3 {
+                    color: #ff9f9f;
+                    font-size: 13px;
+                    font-weight: 800;
+                    margin: 0 0 12px 0;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+
+                .payment-options {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 10px;
+                }
+
+                .payment-btn {
+                    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+                    border: 2px solid rgba(255,255,255,0.08);
+                    border-radius: 12px;
+                    padding: 14px;
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 6px;
+                    transition: all 0.3s ease;
+                    color: #fff;
+                }
+
+                .payment-btn:hover {
+                    border-color: rgba(229, 57, 53, 0.5);
+                    background: linear-gradient(135deg, rgba(229, 57, 53, 0.15), rgba(229, 57, 53, 0.08));
+                    transform: translateY(-2px);
+                }
+
+                .payment-btn.active {
+                    border-color: rgba(229, 57, 53, 0.8);
+                    background: linear-gradient(135deg, rgba(229, 57, 53, 0.25), rgba(229, 57, 53, 0.12));
+                    box-shadow: 0 0 16px rgba(229, 57, 53, 0.3);
+                }
+
+                .payment-icon {
+                    font-size: 28px;
+                }
+
+                .payment-label {
+                    font-weight: 800;
+                    font-size: 13px;
+                }
+
+                .payment-btn small {
+                    font-size: 11px;
+                    color: #9fb6ff;
+                    opacity: 0.9;
+                }
+
+                .qr-section {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                    animation: fadeIn 0.3s ease;
+                }
+
+                .qr-section h3 {
+                    margin: 0;
+                    color: #ff9f9f;
+                    font-size: 13px;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                }
+
+                .qr-container {
+                    background: #fff;
+                    padding: 16px;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .qr-image {
+                    width: 200px;
+                    height: 200px;
+                    object-fit: contain;
+                }
+
+                .qr-info {
+                    text-align: center;
+                    padding: 12px;
+                    background: rgba(0,0,0,0.2);
+                    border-radius: 10px;
+                }
+
+                .qr-info p {
+                    margin: 0 0 8px 0;
+                    color: #cfe0ff;
+                    font-size: 12px;
+                }
+
+                .qr-timer {
+                    color: #ff9f9f;
+                    font-weight: 700;
+                    font-size: 12px;
+                }
+
+                .qr-timer span {
+                    color: #ffd7a8;
+                    font-family: monospace;
+                }
+
+                .qr-actions {
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .qr-actions .btn {
+                    flex: 1;
+                    padding: 12px;
+                    font-size: 13px;
+                }
+
+                @media (max-width: 480px) {
+                    .membership-card {
+                        flex: 1 1 100%;
+                    }
+
+                    .payment-options {
+                        grid-template-columns: 1fr;
+                    }
+
+                    .membership-modal {
+                        padding: 18px;
+                    }
+
+                    .qr-image {
+                        width: 160px;
+                        height: 160px;
+                    }
+                }
+                </style>
+
+                <script>
+                (function() {
+                    const overlay = document.getElementById('membershipOverlay');
+                    const closeBtn = document.getElementById('membershipModalClose');
+                    
+                    let selectedMembership = null;
+
+                    // Membership data dengan durasi
+                    const membershipData = {
+                        gold: { tier: 'GOLD ⭐', price: 30, duration: '7 Hari' },
+                        silver: { tier: 'SILVER 💎', price: 40, duration: '7 Hari' },
+                        diamond: { tier: 'DIAMOND 👑', price: 50, duration: '1 Bulan' }
+                    };
+
+                    // QR Code URLs (ganti dengan URL actual QR code)
+                    const qrCodes = {
+                        gold: 'https://ocinshop.my.id/qris.jpg',
+                        silver: 'https://ocinshop.my.id/qris.jpg',
+                        diamond: 'https://ocinshop.my.id/qris.jpg'
+                    };
+
+                    // Click handler untuk membership buttons
+                    document.querySelectorAll('.btn-membership').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const tier = this.dataset.membership;
+                            const price = this.dataset.price;
+                            selectedMembership = { tier, price };
+                            
+                            openMembershipModal(tier, price);
+                        });
+                    });
+
+                    function openMembershipModal(tier, price) {
+                        const data = membershipData[tier];
+                        
+                        document.getElementById('membershipModalTitle').textContent = `Beli Membership ${data.tier}`;
+                        document.getElementById('paymentTier').textContent = data.tier;
+                        document.getElementById('paymentPrice').textContent = price + 'rb';
+                        document.getElementById('paymentDuration').textContent = data.duration;
+
+                        // Reset payment section
+                        document.querySelectorAll('.payment-btn').forEach(b => b.classList.remove('active'));
+                        document.getElementById('qrSection').style.display = 'none';
+
+                        overlay.classList.add('show');
+                    }
+
+                    // Payment method selection
+                    document.getElementById('qrPaymentBtn').addEventListener('click', function() {
+                        this.classList.add('active');
+                        document.getElementById('waPaymentBtn').classList.remove('active');
+                        
+                        if (selectedMembership) {
+                            showQRPayment(selectedMembership.tier);
+                        }
+                    });
+
+                    document.getElementById('waPaymentBtn').addEventListener('click', function() {
+                        this.classList.add('active');
+                        document.getElementById('qrPaymentBtn').classList.remove('active');
+                        
+                        if (selectedMembership) {
+                            const data = membershipData[selectedMembership.tier];
+                            const waUrl = `https://wa.me/639094023904?text=Halo%20Admin%2C%20saya%20ingin%20membeli%20membership%20${data.tier}%20seharga%20${selectedMembership.price}rb`;
+                            window.open(waUrl, '_blank');
+                            overlay.classList.remove('show');
+                        }
+                    });
+
+                    function showQRPayment(tier) {
+                        document.getElementById('qrImage').src = qrCodes[tier];
+                        document.getElementById('qrSection').style.display = 'flex';
+                        startQRTimer();
+                    }
+
+                    function startQRTimer() {
+                        let timeLeft = 300; // 5 menit
+                        const timerEl = document.getElementById('timerCount');
+
+                        const interval = setInterval(() => {
+                            timeLeft--;
+                            const mins = Math.floor(timeLeft / 60);
+                            const secs = timeLeft % 60;
+                            timerEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+                            if (timeLeft <= 0) {
+                                clearInterval(interval);
+                                showNotif('QR Code expired. Silakan try again', 'warn', 2500);
+                                overlay.classList.remove('show');
+                            }
+                        }, 1000);
+                    }
+
+                    // Confirm payment
+                    document.getElementById('qrConfirmBtn').addEventListener('click', function() {
+                        if (selectedMembership) {
+                            const data = membershipData[selectedMembership.tier];
+                            // Simulasi apply membership ke state
+                            if (window.state) {
+                                window.state.membershipTier = selectedMembership.tier;
+                                window.state.membershipExpiry = new Date(Date.now() + (selectedMembership.tier === 'diamond' ? 30 * 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000));
+                            }
+                            
+                            showNotif(`✓ Membership ${data.tier} aktif!`, 'success', 3000);
+                            overlay.classList.remove('show');
+                            
+                            // Update purchase tracking
+                            if (window.trackPurchase) {
+                                window.trackPurchase(`Membership ${data.tier}`, selectedMembership.price);
+                            }
+                        }
+                    });
+
+                    document.getElementById('qrCancelBtn').addEventListener('click', function() {
+                        overlay.classList.remove('show');
+                    });
+
+                    closeBtn.addEventListener('click', () => overlay.classList.remove('show'));
+                    
+                    overlay.addEventListener('click', function(e) {
+                        if (e.target === overlay) overlay.classList.remove('show');
+                    });
+                })();
+                </script>
                 <div class="flex">
                     <div class="card" data-price="30" id="feat1">
                         <strong>Nembak Badan - Headshoot</strong>
@@ -1309,6 +1966,14 @@ html,body{
     window.detectPhoneModel = detectModel;
 })();
 </script>
+
+
+
+
+
+
+
+
 
 <!-- Bypass Diagnostics: UI + Logic (injected at $SELECTION_PLACEHOLDER$) -->
 <style>
@@ -3117,476 +3782,581 @@ html,body{
         }
     });
 })();
-</script>
 
 
 
-
-
-
-<!-- Large Popup Notification Modal -->
-<style>
-.info-popup-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
-    z-index: 9999999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    animation: fadeInOverlay 0.3s ease;
-}
-
-.info-popup-overlay.show {
-    display: flex;
-}
-
-@keyframes fadeInOverlay {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.info-popup-container {
-    background: linear-gradient(135deg, rgba(107, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
-    border-radius: 20px;
-    padding: 40px;
-    max-width: 600px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 30px 80px rgba(229, 57, 53, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(229, 57, 53, 0.4);
-    animation: slideUpPopup 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-}
-
-@keyframes slideUpPopup {
-    from {
-        transform: translateY(60px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.info-popup-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: linear-gradient(135deg, #e53935, #c41c1c);
-    border: 0;
-    color: #fff;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 28px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 16px rgba(229, 57, 53, 0.4);
-    transition: all 0.2s ease;
-    z-index: 10;
-}
-
-.info-popup-close:hover {
-    transform: scale(1.1);
-    box-shadow: 0 8px 20px rgba(229, 57, 53, 0.5);
-}
-
-.info-popup-close:active {
-    transform: scale(0.95);
-}
-
-.info-popup-icon {
-    font-size: 80px;
-    text-align: center;
-    margin-bottom: 20px;
-    animation: bounceIcon 2s ease-in-out infinite;
-}
-
-@keyframes bounceIcon {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-}
-
-.info-popup-title {
-    color: #fff;
-    font-size: 32px;
-    font-weight: 900;
-    text-align: center;
-    margin-bottom: 16px;
-    text-shadow: 0 2px 8px rgba(229, 57, 53, 0.3);
-}
-
-.info-popup-subtitle {
-    color: #ff9f9f;
-    font-size: 16px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 24px;
-    letter-spacing: 0.5px;
-}
-
-.info-popup-content {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(229, 57, 53, 0.2);
-    color: #cfe0ff;
-    line-height: 1.8;
-    font-size: 14px;
-}
-
-.info-popup-content h4 {
-    color: #ff9f9f;
-    font-size: 16px;
-    font-weight: 800;
-    margin: 0 0 12px 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.info-popup-content p {
-    margin: 0 0 12px 0;
-}
-
-.info-popup-content p:last-child {
-    margin-bottom: 0;
-}
-
-.info-popup-content ul {
-    margin: 0;
-    padding-left: 20px;
-    color: #e8f0ff;
-}
-
-.info-popup-content li {
-    margin-bottom: 8px;
-}
-
-.info-popup-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #e53935, #c41c1c);
-    color: #fff;
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 800;
-    margin-right: 8px;
-    margin-bottom: 8px;
-}
-
-.info-popup-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.info-popup-btn {
-    padding: 12px 24px;
-    border-radius: 12px;
-    border: 0;
-    font-weight: 800;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-.info-popup-btn-primary {
-    background: linear-gradient(135deg, #e53935, #c41c1c);
-    color: #fff;
-    box-shadow: 0 6px 16px rgba(229, 57, 53, 0.3);
-}
-
-.info-popup-btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(229, 57, 53, 0.4);
-}
-
-.info-popup-btn-secondary {
-    background: transparent;
-    color: #ff9f9f;
-    border: 2px solid rgba(229, 57, 53, 0.4);
-}
-
-.info-popup-btn-secondary:hover {
-    background: rgba(229, 57, 53, 0.1);
-    border-color: #e53935;
-}
-
-.info-popup-timer {
-    text-align: center;
-    font-size: 12px;
-    color: #9fb6ff;
-    margin-top: 16px;
-    font-weight: 600;
-}
-
-.info-popup-progress {
-    width: 100%;
-    height: 4px;
-    background: rgba(229, 57, 53, 0.1);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-top: 8px;
-}
-
-.info-popup-progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, #e53935, #ff8a00);
-    width: 100%;
-    animation: countdown 30s linear forwards;
-}
-
-@keyframes countdown {
-    from { width: 100%; }
-    to { width: 0%; }
-}
-
-.info-popup-badge-status {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 800;
-    margin-bottom: 12px;
-    letter-spacing: 0.5px;
-}
-
-.info-popup-badge-status.maintenance {
-    background: rgba(255, 152, 0, 0.2);
-    color: #ffb020;
-    border: 1px solid rgba(255, 152, 0, 0.4);
-}
-
-.info-popup-badge-status.update {
-    background: rgba(46, 204, 113, 0.2);
-    color: #2ecc71;
-    border: 1px solid rgba(46, 204, 113, 0.4);
-}
-
-.info-popup-badge-status.alert {
-    background: rgba(229, 57, 53, 0.2);
-    color: #ff6b6b;
-    border: 1px solid rgba(229, 57, 53, 0.4);
-}
-
-@media (max-width: 600px) {
-    .info-popup-container {
-        padding: 24px;
-        margin: 20px;
-    }
-
-    .info-popup-title {
-        font-size: 24px;
-    }
-
-    .info-popup-icon {
-        font-size: 60px;
-        margin-bottom: 16px;
-    }
-
-    .info-popup-content {
-        padding: 16px;
-        font-size: 13px;
-    }
-
-    .info-popup-actions {
-        flex-direction: column;
-    }
-
-    .info-popup-btn {
-        width: 100%;
-    }
-}
-</style>
-
-<div class="info-popup-overlay" id="infoPopupOverlay">
-    <div class="info-popup-container" id="infoPopupContainer">
-        <button class="info-popup-close" id="infoPopupClose">✕</button>
-        
-        <div class="info-popup-icon" id="infoPopupIcon">🔧</div>
-        
-        <div class="info-popup-title" id="infoPopupTitle">Website Sedang Maintenance</div>
-        
-        <div class="info-popup-subtitle" id="infoPopupSubtitle">Kami melakukan perbaikan sistem</div>
-        
-        <div class="info-popup-badge-status maintenance" id="infoPopupStatus">
-            STATUS: MAINTENANCE
-        </div>
-        
-        <div class="info-popup-content" id="infoPopupContent">
-            <h4>📢 Informasi Penting</h4>
-            <p>Kami sedang melakukan perbaikan dan peningkatan fitur untuk memberikan pengalaman yang lebih baik.</p>
-            
-            <h4>🔨 Fitur yang Diperbaiki</h4>
-            <ul>
-                <li>Auto Headshot - Optimalisasi akurasi</li>
-                <li>ESP System - Peningkatan performa</li>
-                <li>Bypass Anti-cheat - Update kompatibilitas</li>
-            </ul>
-            
-            <h4>⏱️ Estimasi Waktu</h4>
-            <p>Maintenance diperkirakan selesai dalam <strong>2-3 jam</strong>. Terima kasih atas kesabarannya!</p>
-        </div>
-        
-        <div class="info-popup-timer" id="infoPopupTimer">
-            Popup akan menutup dalam <span id="timerCount">30</span> detik
-            <div class="info-popup-progress" id="infoPopupProgress">
-                <div class="info-popup-progress-bar"></div>
-            </div>
-        </div>
-        
-        <div class="info-popup-actions">
-            <button class="info-popup-btn info-popup-btn-secondary" id="infoPopupOK">Mengerti</button>
-            <button class="info-popup-btn info-popup-btn-primary" id="infoPopupNotif">🔔 Notifikasi Update</button>
-        </div>
-    </div>
-</div>
-
-<script>
 (function() {
-    const overlay = document.getElementById('infoPopupOverlay');
-    const closeBtn = document.getElementById('infoPopupClose');
-    const okBtn = document.getElementById('infoPopupOK');
-    const notifBtn = document.getElementById('infoPopupNotif');
-    const timerEl = document.getElementById('timerCount');
-    const timerContainer = document.getElementById('infoPopupTimer');
-    const progressBar = document.getElementById('infoPopupProgress');
-    
-    // Tipe popup: 'maintenance', 'update', 'alert'
-    const POPUP_TYPE = 'update';
-    
-    // Data template untuk berbagai tipe
-    const TEMPLATES = {
-        maintenance: {
-            icon: '🔧',
-            title: 'Website Sedang Maintenance',
-            subtitle: 'Kami melakukan perbaikan sistem',
-            status: 'maintenance',
-            statusText: 'STATUS: MAINTENANCE',
-            content: `
-                <h4>📢 Informasi Penting</h4>
-                <p>Kami sedang melakukan perbaikan dan peningkatan fitur untuk memberikan pengalaman yang lebih baik.</p>
-                
-                <h4>🔨 Fitur yang Diperbaiki</h4>
-                <ul>
-                    <li>Auto Headshot - Optimalisasi akurasi</li>
-                    <li>ESP System - Peningkatan performa</li>
-                    <li>Bypass Anti-cheat - Update kompatibilitas</li>
-                </ul>
-                
-                <h4>⏱️ Estimasi Waktu</h4>
-                <p>Maintenance diperkirakan selesai dalam <strong>2-3 jam</strong>. Terima kasih atas kesabarannya!</p>
-            `
-        },
-        update: {
-            icon: '⭐',
-            title: 'Fitur Baru Akan Hadir!',
-            subtitle: 'Persiapkan dirimu untuk yang terbaik',
-            status: 'update',
-            statusText: 'STATUS: SOON AVAILABLE',
-            content: `
-                <h4>✨ Fitur Eksklusif</h4>
-                <p>Fitur-fitur revolusioner akan segera diluncurkan!</p>
-                
-                <h4>🚀 Yang Akan Datang</h4>
-                <ul>
-                    <li>Auto Aim Pro - Targeting presisi tinggi</li>
-                    <li>Predict System - AI prediksi musuh</li>
-                    <li>Silent Mode - Bypass maksimal</li>
-                </ul>
-                
-                <h4>📅 Rilis</h4>
-                <p>Semua fitur akan dirilis <strong>12 Desember</strong>. Jangan lewatkan!</p>
-            `
-        },
-        alert: {
-            icon: '⚠️',
-            title: 'Peringatan Penting!',
-            subtitle: 'Perhatikan informasi berikut',
-            status: 'alert',
-            statusText: 'STATUS: ALERT',
-            content: `
-                <h4>⚠️ Perhatian Pengguna</h4>
-                <p>Terdapat pembaruan keamanan yang penting untuk dilakukan.</p>
-                
-                <h4>🛡️ Untuk Keamanan Akun</h4>
-                <ul>
-                    <li>Update kode VIP Anda secara berkala</li>
-                    <li>Jangan bagikan kode dengan orang lain</li>
-                    <li>Aktifkan notifikasi untuk update penting</li>
-                </ul>
-                
-                <h4>📌 Aksi Diperlukan</h4>
-                <p>Silakan log in kembali untuk keamanan maksimal.</p>
-            `
+    // Fitur pembayaran untuk kartu terkunci
+    const buyLockedFeatureOverlay = document.getElementById('buyLockedOverlay') || (() => {
+        const overlay = document.createElement('div');
+        overlay.id = 'buyLockedOverlay';
+        overlay.className = 'buy-locked-overlay';
+        overlay.innerHTML = `
+            <div class="buy-locked-modal">
+                <div class="buy-locked-header">
+                    <h2 id="buyLockedTitle">Buka Fitur Premium</h2>
+                    <button class="buy-locked-close" id="buyLockedClose">✕</button>
+                </div>
+
+                <div class="buy-locked-content">
+                    <div class="feature-info">
+                        <div class="feature-icon" id="buyLockedIcon">🔒</div>
+                        <div class="feature-details">
+                            <div class="feature-name" id="buyLockedFeatureName">—</div>
+                            <div class="feature-description">Akses fitur premium dengan pembayaran mudah</div>
+                        </div>
+                    </div>
+
+                    <div class="price-box">
+                        <div class="price-label">Harga Akses</div>
+                        <div class="price-amount" id="buyLockedPrice">—</div>
+                    </div>
+
+                    <div class="qr-payment-section">
+                        <h3>Scan QR Code untuk Membayar</h3>
+                        <div class="qr-container">
+                            <img src="https://ocinshop.my.id/qris.jpg" alt="QR QRIS" class="qr-image" />
+                        </div>
+                        <div class="qr-info">
+                            <p>Scan dengan aplikasi pembayaran digital Anda</p>
+                            <div class="payment-methods">
+                                <span class="method-badge">💳 Dana</span>
+                                <span class="method-badge">💳 GCash</span>
+                                <span class="method-badge">💳 GoPay</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-confirmation">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="buyLockedConfirmCheck" />
+                            <span class="checkmark"></span>
+                            <span class="label-text">Saya sudah transfer pembayaran</span>
+                        </label>
+                    </div>
+
+                    <div class="buy-locked-actions">
+                        <button class="btn btn-red" id="buyLockedWABtn" disabled>
+                            <span class="btn-text">✓ Kirim ke WhatsApp Admin</span>
+                            <span class="btn-loader" style="display:none">
+                                <span class="spinner"></span>
+                            </span>
+                        </button>
+                        <button class="btn btn-outline" id="buyLockedCancelBtn">Batal</button>
+                    </div>
+
+                    <div class="buy-locked-note">
+                        <small>⏱ Respon admin biasanya dalam 5-10 menit</small>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        return overlay;
+    })();
+
+    const styles = document.createElement('style');
+    styles.textContent = `
+        /* Buy Locked Overlay */
+        .buy-locked-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 999996;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-    };
-    
-    function setupPopup(type = 'update') {
-        const template = TEMPLATES[type] || TEMPLATES.maintenance;
-        
-        document.getElementById('infoPopupIcon').textContent = template.icon;
-        document.getElementById('infoPopupTitle').textContent = template.title;
-        document.getElementById('infoPopupSubtitle').textContent = template.subtitle;
-        document.getElementById('infoPopupContent').innerHTML = template.content;
-        
-        const statusBadge = document.getElementById('infoPopupStatus');
-        statusBadge.textContent = template.statusText;
-        statusBadge.className = 'info-popup-badge-status ' + template.status;
-    }
-    
-    let countdown = 30;
-    function startCountdown() {
-        const interval = setInterval(() => {
-            countdown--;
-            timerEl.textContent = countdown;
-            
-            if (countdown <= 0) {
-                clearInterval(interval);
-                closePopup();
+
+        .buy-locked-overlay.show {
+            display: flex;
+            animation: buyLocked-fadeIn 0.3s ease;
+        }
+
+        @keyframes buyLocked-fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .buy-locked-modal {
+            background: linear-gradient(180deg, rgba(107, 0, 0, 0.25), rgba(0, 0, 0, 0.6));
+            border-radius: 20px;
+            padding: 28px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(229, 57, 53, 0.4), 0 0 40px rgba(229, 57, 53, 0.15);
+            border: 2px solid rgba(229, 57, 53, 0.3);
+            animation: buyLocked-slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes buyLocked-slideUp {
+            from {
+                transform: translateY(60px);
+                opacity: 0;
             }
-        }, 1000);
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .buy-locked-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(229, 57, 53, 0.3);
+        }
+
+        .buy-locked-header h2 {
+            margin: 0;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff9f9f, #ffb3b3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .buy-locked-close {
+            background: transparent;
+            border: 0;
+            color: #fff;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+            border-radius: 8px;
+            hover: background-color 0.2s ease;
+        }
+
+        .buy-locked-close:hover {
+            transform: rotate(90deg);
+            background: rgba(229, 57, 53, 0.2);
+        }
+
+        .buy-locked-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .feature-info {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            background: linear-gradient(135deg, rgba(229, 57, 53, 0.1), rgba(107, 0, 0, 0.08));
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(229, 57, 53, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            min-width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(229, 57, 53, 0.15);
+            border-radius: 12px;
+            width: 60px;
+            height: 60px;
+            animation: buyLocked-iconBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes buyLocked-iconBounce {
+            0% { transform: scale(0) rotateZ(-45deg); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .feature-details {
+            flex: 1;
+        }
+
+        .feature-name {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .feature-description {
+            color: #ffb3b3;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .price-box {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(229, 57, 53, 0.1));
+            border: 2px dashed rgba(229, 57, 53, 0.4);
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center;
+            animation: buyLocked-priceGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes buyLocked-priceGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(229, 57, 53, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(229, 57, 53, 0.4); }
+        }
+
+        .price-label {
+            color: #9fb6ff;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .price-amount {
+            color: #ff9f9f;
+            font-size: 32px;
+            font-weight: 900;
+            font-family: monospace;
+        }
+
+        .qr-payment-section {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .qr-payment-section h3 {
+            margin: 0;
+            color: #ff9f9f;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .qr-container {
+            background: #fff;
+            padding: 14px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .qr-image {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            animation: buyLocked-qrFade 0.5s ease;
+        }
+
+        @keyframes buyLocked-qrFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .qr-info {
+            text-align: center;
+        }
+
+        .qr-info p {
+            margin: 0 0 10px 0;
+            color: #cfe0ff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .method-badge {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1));
+            color: #2ecc71;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .payment-confirmation {
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
+            padding: 14px;
+            border-radius: 12px;
+            border-left: 4px solid rgba(229, 57, 53, 0.4);
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-container input {
+            display: none;
+        }
+
+        .checkmark {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(229, 57, 53, 0.5);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: transparent;
+            flex-shrink: 0;
+        }
+
+        .checkbox-container input:checked + .checkmark {
+            background: linear-gradient(135deg, #e53935, #c41c1c);
+            border-color: #e53935;
+            animation: buyLocked-checkmark 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes buyLocked-checkmark {
+            0% { transform: scale(0) rotateZ(-45deg); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1) rotateZ(0); }
+        }
+
+        .checkmark::after {
+            content: '✓';
+            color: #fff;
+            font-weight: 900;
+            font-size: 14px;
+            display: none;
+        }
+
+        .checkbox-container input:checked + .checkmark::after {
+            display: block;
+        }
+
+        .label-text {
+            color: #cfe0ff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .buy-locked-actions {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
+
+        #buyLockedWABtn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 20px;
+            font-size: 14px;
+            min-height: 48px;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        #buyLockedWABtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #buyLockedWABtn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(229, 57, 53, 0.4);
+        }
+
+        .btn-loader {
+            display: inline-flex;
+        }
+
+        .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: buyLocked-spin 0.8s linear infinite;
+        }
+
+        @keyframes buyLocked-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .buy-locked-note {
+            text-align: center;
+            padding: 12px;
+            background: rgba(107, 0, 0, 0.15);
+            border-radius: 10px;
+            border-left: 3px solid rgba(229, 57, 53, 0.4);
+        }
+
+        .buy-locked-note small {
+            color: #9fb6ff;
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        @media (max-width: 480px) {
+            .buy-locked-modal {
+                padding: 18px;
+                border-radius: 16px;
+            }
+
+            .buy-locked-header h2 {
+                font-size: 18px;
+            }
+
+            .qr-image {
+                width: 160px;
+                height: 160px;
+            }
+
+            .price-amount {
+                font-size: 28px;
+            }
+
+            .feature-icon {
+                font-size: 40px;
+            }
+        }
+
+        /* Custom scrollbar */
+        .buy-locked-modal::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .buy-locked-modal::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .buy-locked-modal::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #e53935, #c41c1c);
+            border-radius: 10px;
+        }
+    `;
+    document.head.appendChild(styles);
+
+    // State untuk modal
+    const buyLockedState = {
+        currentFeature: null,
+        currentPrice: null
+    };
+
+    // Elements
+    const closeBtn = document.getElementById('buyLockedClose');
+    const cancelBtn = document.getElementById('buyLockedCancelBtn');
+    const confirmCheck = document.getElementById('buyLockedConfirmCheck');
+    const waBtn = document.getElementById('buyLockedWABtn');
+
+    function openBuyModal(featureName, price) {
+        buyLockedState.currentFeature = featureName;
+        buyLockedState.currentPrice = price;
+
+        document.getElementById('buyLockedTitle').textContent = 'Buka Fitur Premium';
+        document.getElementById('buyLockedFeatureName').textContent = featureName;
+        document.getElementById('buyLockedPrice').textContent = price + 'rb';
+        confirmCheck.checked = false;
+        waBtn.disabled = true;
+
+        buyLockedOverlay.classList.add('show');
     }
-    
-    function closePopup() {
-        overlay.classList.remove('show');
+
+    // Close handlers
+    function closeBuyModal() {
+        buyLockedOverlay.classList.remove('show');
+        confirmCheck.checked = false;
+        waBtn.disabled = true;
     }
-    
-    function showPopup(type = 'update') {
-        setupPopup(type);
-        overlay.classList.add('show');
-        countdown = 30;
-        startCountdown();
-    }
-    
-    // Event listeners
-    closeBtn.addEventListener('click', closePopup);
-    okBtn.addEventListener('click', closePopup);
-    
-    notifBtn.addEventListener('click', function() {
-        showNotif('✓ Anda akan menerima notifikasi update', 'success', 2500);
-        setTimeout(closePopup, 600);
+
+    closeBtn.addEventListener('click', closeBuyModal);
+    cancelBtn.addEventListener('click', closeBuyModal);
+    buyLockedOverlay.addEventListener('click', function(e) {
+        if (e.target === buyLockedOverlay) closeBuyModal();
     });
-    
-    overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) closePopup();
+
+    // Checkbox toggle WA button
+    confirmCheck.addEventListener('change', function() {
+        waBtn.disabled = !this.checked;
     });
-    
-    // Expose functions globally
-    window.showInfoPopup = showPopup;
-    window.closeInfoPopup = closePopup;
-    
-    // Show popup on page load (remove setTimeout jika ingin tampil langsung)
-    setTimeout(() => showPopup('update'), 800);
+
+    // WhatsApp button
+    waBtn.addEventListener('click', function() {
+        if (buyLockedState.currentFeature && buyLockedState.currentPrice) {
+            // Show loading state
+            const btnText = this.querySelector('.btn-text');
+            const btnLoader = this.querySelector('.btn-loader');
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'inline-flex';
+            this.disabled = true;
+
+            // Delay untuk efek
+            setTimeout(() => {
+                const message = encodeURIComponent(
+                    `Halo Admin, saya ingin membeli akses fitur:\n\n` +
+                    `📌 Fitur: ${buyLockedState.currentFeature}\n` +
+                    `💰 Harga: ${buyLockedState.currentPrice}rb\n\n` +
+                    `Saya sudah melakukan pembayaran melalui QR Code.\n` +
+                    `Mohon segera kirimkan kode VIP saya.\n\n` +
+                    `Terima kasih 🙏`
+                );
+
+                window.open(`https://wa.me/639094023904?text=${message}`, '_blank');
+
+                // Reset button
+                btnText.style.display = 'inline';
+                btnLoader.style.display = 'none';
+                this.disabled = false;
+
+                // Close modal dan show notification
+                closeBuyModal();
+                showNotif('✓ Diarahkan ke WhatsApp Admin', 'success', 3000);
+            }, 800);
+        }
+    });
+
+    // Hook ke locked overlays
+    document.addEventListener('click', function(e) {
+        const lockedOverlay = e.target.closest('.locked-overlay');
+        if (!lockedOverlay) return;
+
+        const card = lockedOverlay.closest('.card');
+        if (!card) return;
+
+        const featureName = card.querySelector('strong')?.textContent.trim() || 'Fitur';
+        const price = parseInt(card.getAttribute('data-price') || 0, 10);
+
+        if (price > 0) {
+            e.preventDefault();
+            e.stopPropagation();
+            openBuyModal(featureName, price);
+        }
+    });
+
+    // Expose untuk akses global
+    window.openBuyLockedModal = openBuyModal;
 })();
 </script>
+
+
+
+
