@@ -1,0 +1,4016 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ocin Shop</title>
+
+    <style>
+        /* Page wallpaper (uses Imgur image) */
+        html, body {
+            background-image:
+                linear-gradient(180deg, rgba(2,6,23,0.65) 0%, rgba(5,12,30,0.65) 100%),
+                url("/animeillustration.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            /* ensure text remains readable over the image */
+            color-scheme: dark;
+        }
+
+        /* Slightly increase contrast for cards and header over the wallpaper */
+        header, .card, .site-footer, .modal .modal-card, .zoom-card {
+            background-color: rgba(3,7,18,0.55);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        :root{
+            --accent: #696FC7;
+            --dark:#0f1724;
+            --muted:#718096;
+            --card:#ffffff;
+            --glass: rgba(255,255,255,0.06);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;
+            background:linear-gradient(180deg,#07102700 0%, #0b143000 100%);
+            color:#e6eef8;
+            min-height:100vh;
+        }
+
+        /* Loading */
+        #loading{
+            position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+            background:linear-gradient(90deg, rgba(2,6,23,0.96), rgba(5,12,30,0.95));
+            z-index:99999;flex-direction:column;
+            transition:opacity 320ms ease, visibility 320ms ease;
+            visibility:visible;opacity:1;
+        }
+        #loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
+        .spinner{
+            width:72px;height:72px;border-radius:50%;
+            border:8px solid rgba(255,255,255,0.06);
+            border-top-color:var(--accent);
+            animation:spin 1s linear infinite;
+            margin-bottom:18px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 0 12px rgba(255,107,53,0.06) inset;
+        }
+        .loading-logo{
+            width:56px;height:56px;border-radius:8px;margin-bottom:12px;object-fit:cover;border:2px solid rgba(255,255,255,0.04)
+        }
+        .loading-text{font-weight:700;margin-top:6px}
+        @keyframes spin{to{transform:rotate(360deg)}}
+
+        /* Header */
+        header{
+            display:flex;align-items:center;gap:14px;padding:18px 20px;
+            border-bottom:1px solid rgba(255,255,255,0.04);
+            position:sticky;top:0;background:linear-gradient(180deg, rgba(3,7,18,0.6), rgba(3,7,18,0.3));
+            backdrop-filter: blur(6px);z-index:10;
+        }
+        .logo{display:flex;align-items:center;gap:12px}
+        .logo img{width:48px;height:48px;object-fit:cover;border-radius:8px;border:2px solid rgba(255,255,255,0.06)}
+        .brand{font-weight:700;font-size:18px}
+        .search{flex:1;display:flex;justify-content:center}
+        .search input{
+            width:100%;max-width:600px;padding:10px 14px;border-radius:10px;border:0;background:rgba(255,255,255,0.03);color:inherit;
+        }
+        .cart-btn{position:relative;background:var(--accent);border:none;color:#071027;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer}
+        .cart-count{position:absolute;top:-6px;right:-6px;background:#071027;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:12px;border:2px solid rgba(255,255,255,0.06)}
+
+        /* Layout */
+        .container{max-width:1140px;margin:26px auto;padding:0 18px;display:grid;grid-template-columns:1fr 360px;gap:22px}
+        @media (max-width:980px){.container{grid-template-columns:1fr}}
+        .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.03)}
+
+        /* Products */
+        .products{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+        @media (max-width:720px){.products{grid-template-columns:1fr}}
+        .product{display:flex;gap:12px;align-items:center}
+        .product img{width:110px;height:72px;border-radius:8px;object-fit:cover;border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+        .prod-info{flex:1}
+        .prod-title{font-weight:700}
+        .prod-price{color:var(--accent);font-weight:700;margin-top:6px}
+        .prod-actions{display:flex;gap:8px;margin-top:8px}
+        .btn{padding:8px 10px;border-radius:8px;border:0;background:var(--accent);color:#071027;cursor:pointer;font-weight:700}
+        .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:inherit}
+
+        /* Sidebar Cart */
+        .sidebar h3{margin:0 0 10px 0}
+        .cart-list{max-height:420px;overflow:auto;margin-bottom:12px}
+        .cart-item{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+        .cart-item img{width:58px;height:44px;border-radius:6px;object-fit:cover}
+        .cart-item .ci-info{flex:1}
+        .cart-item .ci-actions{display:flex;gap:8px;align-items:center}
+        .qty{display:inline-flex;align-items:center;background:rgba(255,255,255,0.03);padding:6px;border-radius:8px}
+        .qty button{background:transparent;border:0;color:inherit;padding:4px 8px;cursor:pointer}
+
+        .total-row{display:flex;justify-content:space-between;align-items:center;font-weight:800;margin-top:6px}
+        .pay-btn{width:100%;margin-top:12px;padding:10px;border-radius:10px;border:0;background:#696FC7;color:#072022;font-weight:800;cursor:pointer}
+
+        /* Modal Payment */
+        .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);z-index:999}
+        .modal.show{display:flex}
+        .modal .modal-card{width:100%;max-width:520px;background:#071428;border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.04)}
+        .methods{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+        .method{flex:1;min-width:120px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);text-align:center;cursor:pointer;border:2px solid transparent}
+        .method.active{border-color:var(--accent)}
+        .qris-img{max-width:260px;border-radius:10px;margin-top:8px}
+
+        /* Image Zoom Modal / Lightbox */
+        .zoom-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.85);z-index:2000}
+        .zoom-modal.show{display:flex}
+        .zoom-card{position:relative;max-width:90%;max-height:90%;overflow:hidden;border-radius:12px;background:#000}
+        .zoom-card img{display:block;max-width:100%;max-height:100%;transform-origin:center center;transition:transform 120ms ease}
+        .zoom-close{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.5);color:#fff;border:0;padding:8px;border-radius:8px;cursor:pointer;z-index:3}
+        .zoom-hint{position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,0.35);color:#fff;padding:6px 8px;border-radius:8px;font-size:12px;z-index:3}
+        .zoom-toolbar{position:absolute;top:8px;left:8px;display:flex;gap:8px;z-index:3}
+        .zoom-toolbar button{background:rgba(0,0,0,0.5);color:#fff;border:0;padding:6px 8px;border-radius:8px;cursor:pointer}
+        @media (max-width:480px){ .zoom-hint{display:none} }
+    </style>
+</head>
+<body>
+    <!-- Loading -->
+    <div id="loading" role="status" aria-live="polite" aria-busy="true">
+        <img class="loading-logo" src="logobaru.jpg" alt="Ocin Shop" onerror="this.style.display='none'">
+        <div class="spinner" aria-hidden="true"></div>
+        <div class="loading-text">sabar cuy...</div>
+        <div style="margin-top:8px;font-size:13px;color:var(--muted)">Menyiapkan Toko terpercaya</div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <img src="logobaru.jpg" alt="Ocin Shop Logo" onerror="this.style.display='none'">
+            <div>
+                <div class="brand">Ocin Shop</div>
+                <div style="font-size:12px;color:var(--muted)"> </div>
+            </div>
+        </div>
+        <div class="search">
+            <input id="searchInput" placeholder="Cari produk..." />
+        </div>
+        <button class="cart-btn" id="openCartBtn">🛍️ <span class="cart-count" id="cartCount">0</span></button>
+    </header>
+
+    <main class="container" id="mainContent" aria-hidden="true">
+        <section>
+            <div class="card">
+                <h2 style="margin-top:0">File dan Bot WA</h2>
+                <div id="productsFile" class="products"></div>
+            </div>
+
+            <div style="height:16px"></div>
+
+            <div class="card">
+                <h2 style="margin-top:0">Cheat</h2>
+                <div id="productsCheat" class="products"></div>
+            </div>
+
+        </section>
+
+        <aside class="sidebar">
+            <div class="card">
+                <h3>Keranjang</h3>
+                <div class="cart-list" id="cartList">
+                    <!-- items -->
+                </div>
+                <div class="total-row">
+                    <div>Total</div>
+                    <div id="cartTotal">Rp0</div>
+                </div>
+                <button class="pay-btn" id="checkoutBtn">Menu Pembayaran</button>
+            </div>
+
+            <div style="height:14px"></div>
+
+            <div class="card" style="position:relative">
+                <h4>Info Pembayaran</h4>
+                <div style="font-size:13px;color:var(--muted)">QRIS, Gopay, Dana, OVO tersedia di menu pembayaran.</div>
+                <div style="height:10px"></div>
+                <div style="font-size:13px"><strong>Ayo buruan order sekarang</strong></div>
+            </div>
+        </aside>
+    </main>
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal" aria-hidden="true">
+        <div class="modal-card">
+            <h3>Pilih Metode Pembayaran</h3>
+            <div style="font-size:13px;color:var(--muted)">Pilih lalu konfirmasi pembayaran. Setelah transfer, Anda akan diarahkan ke WhatsApp untuk verifikasi.</div>
+            <div class="methods" id="methods">
+                <div class="method" data-method="qris">
+                    <strong>QRIS</strong><br><small>Scan</small>
+                </div>
+                <div class="method" data-method="gopay">
+                    <strong>Gopay</strong><br><small>085849542691</small>
+                </div>
+                <div class="method" data-method="dana">
+                    <strong>Dana</strong><br><small>085849542691</small>
+                </div>
+                <div class="method" data-method="ovo">
+                    <strong>OVO</strong><br><small>085849542691</small>
+                </div>
+            </div>
+
+            <div id="qrisBlock" style="display:none;margin-top:10px">
+                <img src="qrispay.jpg" alt="QRIS" class="qris-img" onerror="this.style.display='none'">
+            </div>
+
+            <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+                <button class="btn ghost" id="closeModal">Batal</button>
+                <button class="btn" id="confirmPay">Konfirmasi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zoom Modal -->
+    <div id="zoomModal" class="zoom-modal" aria-hidden="true" role="dialog" tabindex="-1">
+        <div class="zoom-card" id="zoomCard">
+            <div class="zoom-toolbar">
+                <button id="zoomOutBtn" title="Zoom Out">-</button>
+                <button id="zoomResetBtn" title="Reset">1x</button>
+                <button id="zoomInBtn" title="Zoom In">+</button>
+            </div>
+            <button class="zoom-close" id="zoomClose">Tutup</button>
+            <img id="zoomImg" src="" alt="">
+            <div class="zoom-hint">Scroll / Pinch untuk memperbesar. Drag untuk memindah saat diperbesar.</div>
+        </div>
+    </div>
+
+    <script>
+        // Products data
+        const productsFile = [
+            {id:'file1',name:'RGX VIP V10',price:10000,img:'p10k.jpg'},
+            {id:'file2',name:'RGX VIP V11',price:20000,img:'p20k.jpg'},
+            {id:'file3',name:'RGX VIP V12',price:30000,img:'p30k.jpg'},
+            {id:'file4',name:'RGX ULTIMATE LITE',price:35000,img:'p35k.jpg'},
+            {id:'file5',name:'RGX ULTIMATE ORI',price:40000,img:'p40k.jpg'},
+            {id:'file6',name:'RGX ULTIMATE PRO',price:50000,img:'p50k.jpg'},
+            {id:'file7',name:'RGX ULTIMATE GOLD EDITION',price:70000,img:'p70k.jpg'},
+            {id:'file8',name:'RGX ULTIMATE LEGEND EDITION',price:100000,img:'p100k.jpg'},
+            {id:'file9',name:'File Pack To Apk',price:20000,img:'filepack.jpg'}
+        ];
+        const productsCheat = [
+            {id:'cheat1',name:'Cheat Ultimate Medium',price:30000,img:'c30k.jpg'},
+            {id:'cheat2',name:'Cheat Ultimate High',price:50000,img:'c50k.jpg'},
+            {id:'cheat3',name:'Cheat Ultimate Ultra',price:120000,img:'c120k.jpg'}
+        ];
+
+        // Cart persistence
+        const CART_KEY = 'ocin_cart_v1';
+        let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+
+        // Util
+        const fmt = n => 'Rp' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+        // Render products
+        function renderList(list, containerId){
+            const el = document.getElementById(containerId);
+            el.innerHTML = '';
+            list.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'product card';
+                div.innerHTML = `
+                    <img src="${p.img}" alt="${p.name}" loading="lazy" data-id="${p.id}" />
+                    <div class="prod-info">
+                        <div class="prod-title">${p.name}</div>
+                        <div class="prod-price">${fmt(p.price)}</div>
+                        <div class="prod-actions">
+                            <button class="btn add-btn" data-id="${p.id}">Tambah</button>
+                            <button class="btn ghost" data-id="${p.id}" data-view="detail">Detail</button>
+                        </div>
+                    </div>
+                `;
+                el.appendChild(div);
+            });
+        }
+
+        // Add to cart
+        function addToCart(productId){
+            const all = [...productsFile, ...productsCheat];
+            const prod = all.find(p => p.id === productId);
+            if(!prod) return;
+            const existing = cart.find(i => i.id === prod.id);
+            if(existing) existing.qty++;
+            else cart.push({id:prod.id,name:prod.name,price:prod.price,img:prod.img,qty:1});
+            saveCart();
+            renderCart();
+        }
+
+        function saveCart(){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+
+        function renderCart(){
+            const list = document.getElementById('cartList');
+            list.innerHTML = '';
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price * item.qty;
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <img src="${item.img}" alt="${item.name}" onerror="this.style.display='none'"/>
+                    <div class="ci-info">
+                        <div style="font-weight:700">${item.name}</div>
+                        <div style="font-size:13px;color:var(--muted)">${fmt(item.price)} x ${item.qty}</div>
+                    </div>
+                    <div class="ci-actions">
+                        <div class="qty">
+                            <button data-action="dec" data-id="${item.id}">-</button>
+                            <div style="padding:0 8px">${item.qty}</div>
+                            <button data-action="inc" data-id="${item.id}">+</button>
+                        </div>
+                        <button class="btn ghost" data-action="remove" data-id="${item.id}">Hapus</button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+            document.getElementById('cartTotal').textContent = fmt(total);
+            document.getElementById('cartCount').textContent = cart.reduce((s,i)=>s+i.qty,0);
+        }
+
+        // Delegated click handlers
+        document.addEventListener('click', e=>{
+            const t = e.target;
+
+            // Add to cart (buttons with .add-btn)
+            if(t.matches('.add-btn')){
+                addToCart(t.dataset.id);
+                return;
+            }
+
+            // Quantity / remove
+            if(t.matches('[data-action]')){
+                const id = t.dataset.id;
+                const action = t.dataset.action;
+                const idx = cart.findIndex(i=>i.id===id);
+                if(idx<0) return;
+                if(action==='inc') cart[idx].qty++;
+                if(action==='dec'){ cart[idx].qty = Math.max(1, cart[idx].qty-1); }
+                if(action==='remove') cart.splice(idx,1);
+                saveCart(); renderCart();
+                return;
+            }
+
+            // Open product image zoom
+            const img = t.closest('.product img');
+            if(img){
+                openZoom(img.src, img.alt || '');
+                return;
+            }
+
+            // Detail buttons handled below via separate listener to stop propagation
+        });
+
+        // Search
+        document.getElementById('searchInput').addEventListener('input', e=>{
+            const q = e.target.value.toLowerCase();
+            const f = productsFile.filter(p => p.name.toLowerCase().includes(q));
+            const c = productsCheat.filter(p => p.name.toLowerCase().includes(q));
+            renderList(f,'productsFile');
+            renderList(c,'productsCheat');
+        });
+
+        // Checkout / Payment Modal
+        const paymentModal = document.getElementById('paymentModal');
+        const methodsEl = document.getElementById('methods');
+        let selectedMethod = null;
+        document.getElementById('checkoutBtn').addEventListener('click', ()=>{
+            if(cart.length===0){ alert('Keranjang kosong'); return; }
+            paymentModal.classList.add('show');
+            paymentModal.setAttribute('aria-hidden','false');
+        });
+        document.getElementById('closeModal').addEventListener('click', ()=> {
+            paymentModal.classList.remove('show');
+            paymentModal.setAttribute('aria-hidden','true');
+        });
+
+        methodsEl.addEventListener('click', e=>{
+            const m = e.target.closest('.method');
+            if(!m) return;
+            methodsEl.querySelectorAll('.method').forEach(x=>x.classList.remove('active'));
+            m.classList.add('active');
+            selectedMethod = m.dataset.method;
+            document.getElementById('qrisBlock').style.display = selectedMethod === 'qris' ? 'block' : 'none';
+        });
+
+        // Confirm payment -> open WhatsApp with message
+        document.getElementById('confirmPay').addEventListener('click', ()=>{
+            if(!selectedMethod){
+                alert('Pilih metode pembayaran terlebih dahulu.');
+                return;
+            }
+            const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+            const productLines = cart.map(i=>`${i.name} x${i.qty}`).join(', ');
+            const code = randomCode(12);
+            const amount = total;
+            const msg = `Halo min Saya akan membayar Sebesar RP ${amount}\nKode Pesanan : ${code}\nNama Produk : ${productLines}\nOcin Shop`;
+            const waNumber = '639094023904';
+            const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
+            localStorage.removeItem(CART_KEY);
+            cart = [];
+            renderCart();
+            window.open(url, '_blank');
+            paymentModal.classList.remove('show');
+            paymentModal.setAttribute('aria-hidden','true');
+        });
+
+        function randomCode(len){
+            const chars = '0123456789';
+            let s='';
+            for(let i=0;i<len;i++) s+=chars.charAt(Math.floor(Math.random()*chars.length));
+            return s;
+        }
+
+        // Open cart button (scroll to sidebar)
+        document.getElementById('openCartBtn').addEventListener('click', ()=>{
+            window.scrollTo({top: document.querySelector('.sidebar').offsetTop - 20, behavior:'smooth'});
+        });
+
+        // Expose products globally
+        window.productsFile = productsFile;
+        window.productsCheat = productsCheat;
+
+        /* Descriptions */
+        const descriptions = {
+            file1: "RGX VIP V10 >   konfigurasi ringan untuk meningkatkan akurasi dan stabilitas. Cocok untuk pemula, termasuk panduan instalasi dan pengaturan default.",
+            file2: "RGX VIP V11 >   fokus pada optimasi performa dan pengurangan lag. Disarankan untuk perangkat dengan spesifikasi menengah ke bawah.",
+            file3: "RGX VIP V12 >   preset agresif untuk hasil cepat. Mengutamakan responsivitas; gunakan dengan pengaturan sensitivitas yang disarankan.",
+            file4: "RGX ULTIMATE LITE > kombinasi stabilitas dan keakuratan, ideal untuk permainan kompetitif. Termasuk tweak anti-detect sederhana.",
+            file5: "RGX ULTIMATE ORI >  paket lengkap dengan beberapa mode (agresif/normal). Termasuk instruksi cara beralih antar mode.",
+            file6: "RGX ULTIMATE PRO >  versi premium dengan filter lanjutan untuk memperbaiki recoil dan spread. Dianjurkan untuk pengguna yang paham modifikasi.",
+            file7: "RGX ULTIMATE GOLD EDITION > tuning high-end untuk pemain pro. Memerlukan sedikit penyesuaian manual sesuai gaya permainan.",
+            file8: "RGX ULTIMATE LEGEND EDITION >   paket eksperimental dengan algoritma adaptif. Gunakan sebagai opsi cadangan dan uji pada akun non-utama.",
+            file9: "FILE  > kumpulan file dan utilitas untuk pengguna PC, berisi beberapa preset ringan dan tool instalasi cepat.",
+            cheat1: "Cheat Ultimate Medium  >   modul cheat dasar dengan auto-aim dan perbaikan target. Lebih mudah dikonfigurasi untuk pemula.",
+            cheat2: "Cheat Ultimate High    >   cheat tingkat menengah dengan fitur tambahan seperti visibility check dan smoothing yang lebih rapi.",
+            cheat3: "Cheat Ultimate Ultra   >   paket cheat lengkap dengan fitur lanjutan. Dilengkapi panduan pengamanan dan rekomendasi pengaturan."
+        };
+
+        /* Detail modal */
+        function ensureDetailModal() {
+            let modal = document.getElementById('detailModal');
+            if (modal) return modal;
+            modal = document.createElement('div');
+            modal.id = 'detailModal';
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-card" style="max-width:600px;">
+                    <h3 id="detailTitle">Detail Produk</h3>
+                    <div id="detailBody" style="font-size:13px;color:var(--muted);white-space:pre-wrap;margin-top:8px;"></div>
+                    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+                        <button class="btn ghost" id="closeDetail">Tutup</button>
+                        <button class="btn" id="copyDetail">Salin Deskripsi</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.querySelector('#closeDetail').addEventListener('click', function () {
+                modal.classList.remove('show');
+            });
+            modal.querySelector('#copyDetail').addEventListener('click', function () {
+                const txt = document.getElementById('detailBody').innerText;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(txt).then(() => alert('Deskripsi disalin ke clipboard'), () => alert('Gagal menyalin deskripsi'));
+                } else {
+                    const ta = document.createElement('textarea');
+                    ta.value = txt;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    try { document.execCommand('copy'); alert('Deskripsi disalin ke clipboard'); } catch(e){ alert('Gagal menyalin deskripsi'); }
+                    ta.remove();
+                }
+            });
+            return modal;
+        }
+
+        // Detail button handler (stop propagation to avoid other click handlers)
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('button[data-view="detail"]');
+            if (!btn) return;
+            e.stopImmediatePropagation();
+            const id = btn.dataset.id;
+            const prod = ([... (window.productsFile || []), ... (window.productsCheat || [])]).find(p => p.id === id);
+            const title = prod ? prod.name : 'Detail Produk';
+            const body = descriptions[id] || 'Deskripsi tidak tersedia untuk produk ini.';
+            const modal = ensureDetailModal();
+            modal.querySelector('#detailTitle').textContent = title;
+            modal.querySelector('#detailBody').textContent = body;
+            modal.classList.add('show');
+        });
+
+        // Mutation observer to add short description under each product
+        const observer = new MutationObserver(() => {
+            document.querySelectorAll('.product').forEach(prodEl => {
+                if (prodEl.dataset.descAdded) return;
+                const btn = prodEl.querySelector('button[data-view="detail"]');
+                const id = btn ? btn.dataset.id : null;
+                if (!id) return;
+                const short = (descriptions[id] || '').split('. ')[0];
+                if (short) {
+                    const info = prodEl.querySelector('.prod-info');
+                    const el = document.createElement('div');
+                    el.style.fontSize = '12px';
+                    el.style.color = 'var(--muted)';
+                    el.style.marginTop = '6px';
+                    el.textContent = short + (short.endsWith('.') ? '' : '...');
+                    info.appendChild(el);
+                }
+                prodEl.dataset.descAdded = '1';
+            });
+        });
+        // Observe containers
+        observer.observe(document.getElementById('productsFile'), { childList: true, subtree: true });
+        observer.observe(document.getElementById('productsCheat'), { childList: true, subtree: true });
+
+        /* IMAGE ZOOM FEATURE */
+        (function(){
+            const zoomModal = document.getElementById('zoomModal');
+            const zoomImg = document.getElementById('zoomImg');
+            const zoomCard = document.getElementById('zoomCard');
+            const zoomClose = document.getElementById('zoomClose');
+            const zoomInBtn = document.getElementById('zoomInBtn');
+            const zoomOutBtn = document.getElementById('zoomOutBtn');
+            const zoomResetBtn = document.getElementById('zoomResetBtn');
+
+            let scale = 1;
+            let minScale = 1;
+            let maxScale = 4;
+            let translateX = 0, translateY = 0;
+            let isDragging = false;
+            let dragStart = {x:0,y:0};
+            let lastTouchDistance = null;
+
+            function applyTransform(){
+                zoomImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+            }
+
+            window.openZoom = function(src, alt){
+                zoomImg.src = src;
+                zoomImg.alt = alt || '';
+                scale = 1; translateX = 0; translateY = 0; lastTouchDistance = null;
+                applyTransform();
+                zoomModal.classList.add('show');
+                zoomModal.setAttribute('aria-hidden','false');
+                zoomClose.focus();
+            }
+
+            function closeZoom(){
+                zoomModal.classList.remove('show');
+                zoomModal.setAttribute('aria-hidden','true');
+                zoomImg.src = '';
+            }
+
+            zoomClose.addEventListener('click', closeZoom);
+            zoomModal.addEventListener('click', (e)=>{ if(e.target === zoomModal) closeZoom(); });
+            document.addEventListener('keydown', (e)=>{
+                if(e.key === 'Escape') closeZoom();
+                if(!zoomModal.classList.contains('show')) return;
+                if(e.key === '+' || e.key === '=') { setScale(Math.min(maxScale, scale + 0.25)); }
+                if(e.key === '-') { setScale(Math.max(minScale, scale - 0.25)); }
+            });
+
+            zoomInBtn.addEventListener('click', ()=> setScale(Math.min(maxScale, scale + 0.25)));
+            zoomOutBtn.addEventListener('click', ()=> setScale(Math.max(minScale, scale - 0.25)));
+            zoomResetBtn.addEventListener('click', ()=> setScale(1, true));
+
+            function setScale(to, resetPosition){
+                const previous = scale;
+                scale = to;
+                if(resetPosition){ translateX = 0; translateY = 0; }
+                else clampTranslate();
+                applyTransform();
+            }
+
+            // wheel zoom
+            zoomCard.addEventListener('wheel', (e)=>{
+                if(!zoomModal.classList.contains('show')) return;
+                e.preventDefault();
+                const delta = -e.deltaY || e.wheelDelta;
+                const rect = zoomImg.getBoundingClientRect();
+                const mx = e.clientX - rect.left;
+                const my = e.clientY - rect.top;
+                const previousScale = scale;
+                if(delta > 0) scale = Math.min(maxScale, scale * 1.12);
+                else scale = Math.max(minScale, scale / 1.12);
+                const ratio = scale / previousScale;
+                translateX = (translateX - (mx - rect.width/2)) * ratio + (mx - rect.width/2);
+                translateY = (translateY - (my - rect.height/2)) * ratio + (my - rect.height/2);
+                clampTranslate();
+                applyTransform();
+            }, { passive:false });
+
+            // mouse drag
+            zoomImg.addEventListener('mousedown', (e)=>{
+                if(scale <= 1) return;
+                isDragging = true;
+                dragStart = {x: e.clientX - translateX, y: e.clientY - translateY};
+                document.body.style.cursor = 'grabbing';
+                e.preventDefault();
+            });
+            document.addEventListener('mousemove', (e)=>{
+                if(!isDragging) return;
+                translateX = e.clientX - dragStart.x;
+                translateY = e.clientY - dragStart.y;
+                applyTransform();
+            });
+            document.addEventListener('mouseup', ()=>{
+                if(isDragging){ isDragging = false; document.body.style.cursor = ''; clampTranslate(); applyTransform(); }
+            });
+
+            // touch support
+            zoomImg.addEventListener('touchstart', (e)=>{
+                if(e.touches.length === 1){
+                    if(scale <= 1) return;
+                    isDragging = true;
+                    dragStart = {x: e.touches[0].clientX - translateX, y: e.touches[0].clientY - translateY};
+                } else if(e.touches.length === 2){
+                    lastTouchDistance = getTouchDist(e.touches[0], e.touches[1]);
+                }
+            }, {passive:false});
+            zoomImg.addEventListener('touchmove', (e)=>{
+                if(e.touches.length === 1 && isDragging){
+                    translateX = e.touches[0].clientX - dragStart.x;
+                    translateY = e.touches[0].clientY - dragStart.y;
+                    applyTransform();
+                } else if(e.touches.length === 2){
+                    const d = getTouchDist(e.touches[0], e.touches[1]);
+                    if(lastTouchDistance){
+                        const factor = d / lastTouchDistance;
+                        const newScale = Math.min(maxScale, Math.max(minScale, scale * factor));
+                        const rect = zoomImg.getBoundingClientRect();
+                        const mx = (e.touches[0].clientX + e.touches[1].clientX)/2 - rect.left;
+                        const my = (e.touches[0].clientY + e.touches[1].clientY)/2 - rect.top;
+                        const previousScale = scale;
+                        scale = newScale;
+                        const ratio = scale / previousScale;
+                        translateX = (translateX - (mx - rect.width/2)) * ratio + (mx - rect.width/2);
+                        translateY = (translateY - (my - rect.height/2)) * ratio + (my - rect.height/2);
+                        clampTranslate();
+                        applyTransform();
+                    }
+                    lastTouchDistance = d;
+                }
+                e.preventDefault();
+            }, {passive:false});
+            zoomImg.addEventListener('touchend', (e)=>{ isDragging = false; lastTouchDistance = null; });
+
+            function getTouchDist(a,b){ return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); }
+
+            function clampTranslate(){
+                const parentRect = zoomCard.getBoundingClientRect();
+                const imgRect = zoomImg.getBoundingClientRect();
+                const imgW = imgRect.width * scale;
+                const imgH = imgRect.height * scale;
+                const maxX = Math.max(0, (imgW - parentRect.width)/2 + 40);
+                const maxY = Math.max(0, (imgH - parentRect.height)/2 + 40);
+                translateX = Math.max(-maxX, Math.min(maxX, translateX));
+                translateY = Math.max(-maxY, Math.min(maxY, translateY));
+            }
+
+        })();
+
+        // Loading / init utilities
+        const loadingEl = document.getElementById('loading');
+        const mainContent = document.getElementById('mainContent');
+        function hideLoading(immediate){
+            if(!loadingEl) return;
+            // show main content for accessibility
+            if(mainContent) mainContent.removeAttribute('aria-hidden');
+            if(immediate){
+                loadingEl.remove();
+            } else {
+                loadingEl.classList.add('hidden');
+                // remove from DOM after animation to free z-index
+                setTimeout(()=>{ try{ loadingEl.remove(); }catch(e){} }, 400);
+            }
+        }
+
+        // Init render & loading hide
+        document.addEventListener('DOMContentLoaded', ()=>{
+            // render UI
+            renderList(productsFile,'productsFile');
+            renderList(productsCheat,'productsCheat');
+            renderCart();
+
+            // ensure loading is removed after render; keep a tiny delay for smooth UX
+            setTimeout(()=> hideLoading(false), 400);
+        });
+
+        // Also hide on full load if not already hidden (fallback)
+        window.addEventListener('load', ()=> {
+            // if still present, hide immediately
+            if(document.body.contains(loadingEl)) hideLoading(false);
+        });
+    </script>
+<style>
+/* Improved footer styles */
+.site-footer{
+    margin-top:28px;
+    padding:18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-top:1px solid rgba(255,255,255,0.03);
+    color:var(--muted);
+    backdrop-filter: blur(4px);
+}
+.site-footer .inner{
+    max-width:1140px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+}
+.footer-left, .footer-center, .footer-right{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+.footer-left .brand-compact{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+.brand-compact img{ width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,0.04); object-fit:cover }
+.footer-center a, .footer-right a{
+    color:var(--muted);
+    text-decoration:none;
+    font-size:13px;
+    padding:6px 8px;
+    border-radius:8px;
+}
+.footer-center a:hover, .footer-right a:hover{ color:var(--accent); background:rgba(255,255,255,0.02) }
+
+.footer-right{ gap:10px; font-size:13px; color:var(--muted) }
+.footer-right .copyright{ font-weight:700; color:#e6eef8 }
+
+@media (max-width:720px){
+    .site-footer .inner{ flex-direction:column; align-items:center; text-align:center }
+    .footer-center{ order:3; width:100%; justify-content:center }
+}
+.small-link { font-size:12px; color:var(--muted); text-decoration:underline; cursor:pointer }
+</style>
+
+<script>
+  // set current year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // safe clearStorage binding (will not throw if element not present)
+  (function(){
+    const el = document.getElementById('clearStorage');
+    if(!el) return;
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      if(confirm('Hapus semua data lokal?')) {
+        try { localStorage.removeItem('ocin_cart_v1'); } catch(e){}
+        if(typeof renderCart === 'function'){ window.cart = []; try{ renderCart(); }catch(e){} }
+        alert('Data dihapus');
+      }
+    });
+  })();
+</script>
+<script>
+(function(){
+    const MIN_MS = 2000;
+    const navStart = (performance && (performance.timeOrigin || (performance.timing && performance.timing.navigationStart))) || Date.now();
+    const originalHide = window.hideLoading;
+    if (typeof originalHide !== 'function') return;
+    window.hideLoading = function(immediate){
+        const elapsed = Date.now() - navStart;
+        const wait = Math.max(0, MIN_MS - elapsed);
+        if (wait === 0) return originalHide(immediate);
+        setTimeout(() => originalHide(immediate), wait);
+    };
+})();
+
+// Tambah produk baru "Banned Whatsapp"
+(function(){
+    const newProd = {
+        id: 'file10',
+        name: 'Banned Whatsapp',
+        price: 5000,
+        img: 'banwa.png'
+    };
+
+    // Pastikan tidak duplikat, lalu tambahkan
+    if(Array.isArray(window.productsFile) && !window.productsFile.some(p=>p.id===newProd.id)){
+        window.productsFile.push(newProd);
+
+        // Tambah deskripsi singkat untuk fitur detail
+        if(typeof descriptions !== 'undefined'){
+            descriptions[newProd.id] = "Banned Whatsapp > Paket utilitas dan panduan untuk manajemen akun WhatsApp. Termasuk langkah mitigasi risiko banned dan rekomendasi pengamanan.";
+        }
+
+        // Render ulang daftar produk jika fungsi tersedia
+        try { if(typeof renderList === 'function') renderList(window.productsFile, 'productsFile'); } catch(e){}
+    }
+})();
+
+// Lightweight handler for "Banned Whatsapp" add-button: defer to the (redesigned) phone modal if present and keep short order codes.
+(function(){
+    // Intercept add-btn for product "file10" and open the phone modal (defer to later modal implementation)
+    document.addEventListener('click', function(e){
+        const btn = e.target.closest('.add-btn');
+        if(!btn) return;
+        const pid = btn.dataset.id;
+        if(pid !== 'file10') return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        function openModalWhenReady(){
+            if(typeof window.openPhoneModal === 'function'){
+                try { window.openPhoneModal(''); } catch(e){}
+            } else if(typeof window.ensurePhoneModal === 'function'){
+                try {
+                    const m = window.ensurePhoneModal();
+                    if(m && m.classList) { m.classList.add('show'); m.setAttribute('aria-hidden','false'); }
+                } catch(e){}
+            } else {
+                // retry shortly if modal helper not yet defined
+                setTimeout(openModalWhenReady, 80);
+            }
+        }
+        openModalWhenReady();
+    }, true);
+
+    // Keep a short, readable order code generator (4 chars)
+    window.randomCode = function() {
+        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let s = '';
+        for (let i = 0; i < 4; i++) s += chars.charAt(Math.floor(Math.random()*chars.length));
+        return s;
+    };
+})();
+</script>
+</body>
+</html>
+<!-- Floating WhatsApp button -->
+<style>
+    .wa-float {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 4000;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.02);
+        transition: transform .12s ease, box-shadow .12s ease;
+        cursor: pointer;
+        border: 2px solid rgba(255,255,255,0.04);
+    }
+    .wa-float:active { transform: scale(.96); }
+    .wa-float img { width: 56px; height: 56px; border-radius: 50%; object-fit:cover; display:block; }
+    .wa-float .wa-badge {
+        position: absolute;
+        right: -6px;
+        top: -6px;
+        color: #072022;
+        font-weight: 800;
+        font-size: 11px;
+        padding: 3px 6px;
+        border-radius: 12px;
+        border: 1px solid rgba(0,0,0,0.12);
+    }
+    @media (max-width:480px){ .wa-float{ right:12px; bottom:12px; width:56px; height:56px } .wa-float img{width:48px;height:48px} }
+</style>
+
+<a id="waFloatBtn" class="wa-float" role="button" aria-label="Chat admin via WhatsApp" title="Chat Admin via WhatsApp" tabindex="0">
+    <img src="https://i.imgur.com/LrsnnJg.jpg" alt="WhatsApp">
+</a>
+
+
+
+
+
+<script>
+(function(){
+    const WA_NUMBER = '639094023904'; // international format without +
+    const DEFAULT_TEXT = 'Halo admin, saya ingin menghubungi mengenai situs Ocin Shop.'; // editable
+    const btn = document.getElementById('waFloatBtn');
+
+    function openWhatsApp() {
+        const text = encodeURIComponent(DEFAULT_TEXT);
+        const ua = navigator.userAgent || '';
+        const isAndroid = /Android/i.test(ua);
+        const isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+        // Try to open native app directly.
+        if (isAndroid) {
+            // intent will try to open app; if not installed, Play Store is offered
+            const intentUrl = `intent://send?phone=${WA_NUMBER}&text=${text}#Intent;package=com.whatsapp;scheme=whatsapp;end`;
+            window.location.href = intentUrl;
+            return;
+        }
+
+        if (isIOS) {
+            // iOS supports whatsapp://
+            window.location.href = `whatsapp://send?phone=${WA_NUMBER}&text=${text}`;
+            return;
+        }
+
+        // Desktop / other: attempt whatsapp:// and detect failure
+        const scheme = `whatsapp://send?phone=${WA_NUMBER}&text=${text}`;
+        const start = Date.now();
+        // attempt open
+        window.location.href = scheme;
+
+        // if app not installed, after timeout show an informative message (no automatic wa web fallback)
+        setTimeout(() => {
+            const elapsed = Date.now() - start;
+            // very small elapsed means navigation was blocked/failed
+            if (elapsed < 2000) {
+                alert('WhatsApp tidak terdeteksi pada perangkat ini. Silakan buka WhatsApp di perangkat Anda untuk menghubungi admin.');
+            }
+        }, 1200);
+    }
+
+    btn.addEventListener('click', function(e){
+        e.preventDefault();
+        openWhatsApp();
+    });
+
+    // keyboard accessibility
+    btn.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openWhatsApp();
+        }
+    });
+})();
+</script>
+<!-- Pac-Man proper clone (map + gameplay) -->
+<style>
+/* Floating button & panel (kept similar positions) */
+.pac-float {
+    position: fixed;
+    right: 18px;
+    bottom: 92px;
+    z-index: 6000;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.04);
+}
+.pac-float img { width: 56px; height: 56px; border-radius: 50%; object-fit:cover; display:block; }
+
+.pac-panel {
+    position: fixed;
+    right: 18px;
+    bottom: 170px;
+    z-index: 6001;
+    width: 420px;
+    max-width: calc(100vw - 40px);
+    height: 420px;
+    background: rgba(3,7,18,0.95);
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(2,6,23,0.6);
+    border: 1px solid rgba(255,255,255,0.04);
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    color: #e6eef8;
+    font-family: Inter, sans-serif;
+}
+.pac-panel.show { display:flex; }
+.pac-panel .head {
+    display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.03);
+    color:#e6eef8;font-weight:700;
+}
+.pac-canvas-wrap { flex:1; display:flex; align-items:center; justify-content:center; padding:8px; }
+canvas#pacCanvas { background: #071428; border-radius:8px; width:100%; height:100%; display:block; touch-action: none; outline: none; }
+.pac-controls { padding:8px 10px; display:flex; gap:8px; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.03); color:var(--muted); }
+.pac-controls .btn { padding:6px 10px;border-radius:8px;border:0;background:#696FC7;color:#071027;font-weight:800;cursor:pointer }
+.pac-info { color:var(--muted); font-size:13px }
+@media (max-width:420px){ .pac-panel{ right:10px; bottom:120px; width:360px; height:360px } .pac-float{ right:12px; bottom:82px } }
+</style>
+
+<a id="pacBtn" class="pac-float" role="button" aria-label="Open Pac-Man" title="Pac-Man">
+    <img src="https://i.imgur.com/FJeTb3h.jpg" alt="Pac Logo" />
+</a>
+
+<div id="pacPanel" class="pac-panel" role="dialog" aria-hidden="true" aria-label="Pac-Man mini game">
+    <div class="head">
+        <img src="https://i.imgur.com/FJeTb3h.jpg" alt="" style="width:28px;height:28px;border-radius:6px" />
+        <div>Pac-Man</div>
+        <div style="margin-left:auto;font-weight:600;color:var(--muted);font-size:13px" id="pacStat">Score: 0 • Lives: 3</div>
+        <button id="closePac" style="margin-left:8px;background:transparent;border:0;color:var(--muted);cursor:pointer">✕</button>
+    </div>
+    <div class="pac-canvas-wrap">
+        <canvas id="pacCanvas" width="384" height="384" tabindex="0" aria-label="Game canvas"></canvas>
+    </div>
+    <div class="pac-controls">
+        <div class="pac-info">Use Arrow keys or WASD. Eat all pellets. Power pellets make ghosts vulnerable.</div>
+        <div>
+            <button id="resetPac" class="btn">Reset</button>
+            <button id="pausePac" class="btn" style="background:#1f2937;color:#e6eef8;margin-left:6px">Pause</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    const pacBtn = document.getElementById('pacBtn');
+    const pacPanel = document.getElementById('pacPanel');
+    const closePac = document.getElementById('closePac');
+    const canvas = document.getElementById('pacCanvas');
+    const ctx = canvas.getContext('2d');
+    const resetBtn = document.getElementById('resetPac');
+    const pauseBtn = document.getElementById('pausePac');
+    const statEl = document.getElementById('pacStat');
+
+    // Grid-based classic-like map (0 = empty pellet, 1 = wall, 2 = power pellet, 3 = empty (tunnel))
+    // 21x21 simplified map (must be odd for symmetry). Use small layout reminiscent of Pac-Man corridors.
+    const MAP = [
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,2,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,2,1],
+        [1,0,1,1,0,1,0,1,1,1,1,1,1,0,1,0,1,1,0,0,1],
+        [1,0,1,1,0,1,0,1,1,1,1,1,1,0,1,0,1,1,0,0,1],
+        [1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,1,1,0,1,0,1,0,0,0,0,1,0,1,0,1,1,0,0,1],
+        [1,0,0,0,0,1,0,1,0,1,1,0,1,0,1,0,0,0,0,0,1],
+        [1,1,1,1,0,1,0,1,0,1,1,0,1,0,1,0,1,1,1,1,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,1,1,0,1,1,1,1,3,3,1,1,1,1,0,1,1,0,0,1],
+        [1,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,0,1],
+        [1,0,1,1,0,1,1,1,1,3,3,1,1,1,1,0,1,1,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,1,1,1,0,1,0,1,0,1,1,0,1,0,1,0,1,1,1,1,1],
+        [1,0,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,1],
+        [1,0,1,1,0,1,0,1,1,1,1,1,1,0,1,0,1,1,0,0,1],
+        [1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,2,1],
+        [1,0,1,1,0,1,0,1,1,1,1,1,1,0,1,0,1,1,0,0,1],
+        [1,2,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,2,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    ];
+
+    const ROWS = MAP.length;
+    const COLS = MAP[0].length;
+    let tileSize = 18; // will be scaled to fit canvas
+    let offsetX = 0, offsetY = 0;
+
+    // Game state
+    let pellets = []; // {r,c,type} type 0 pellet,2 power pellet
+    let walls = new Set();
+    let pac = { r: 15, c: 10, x:0, y:0, dir:0, nextDir:0, speed:5, mouth:0, radius:0.4 };
+    // dir: 0 right,1 down,2 left,3 up
+    let ghosts = [];
+    let score = 0;
+    let lives = 3;
+    let running = true;
+    let lastTime = 0;
+    let pelletsRemaining = 0;
+    let vulnerableTimer = 0;
+
+    function resize(){
+        const pad = 24;
+        // keep canvas square
+        const size = Math.min(canvas.parentElement.clientWidth - pad, canvas.parentElement.clientHeight - pad);
+        canvas.width = size;
+        canvas.height = size;
+        tileSize = Math.floor(size / Math.max(ROWS, COLS));
+        offsetX = (canvas.width - COLS*tileSize)/2;
+        offsetY = (canvas.height - ROWS*tileSize)/2;
+        // place pac in pixel coords
+        pac.x = offsetX + (pac.c + 0.5) * tileSize;
+        pac.y = offsetY + (pac.r + 0.5) * tileSize;
+    }
+
+    function mapKeyToDir(k){
+        if(k === 'ArrowRight' || k === 'd' || k === 'D') return 0;
+        if(k === 'ArrowDown' || k === 's' || k === 'S') return 1;
+        if(k === 'ArrowLeft' || k === 'a' || k === 'A') return 2;
+        if(k === 'ArrowUp' || k === 'w' || k === 'W') return 3;
+        return null;
+    }
+
+    function gridToPixel(r,c){ return { x: offsetX + (c+0.5)*tileSize, y: offsetY + (r+0.5)*tileSize }; }
+
+    function initMap(){
+        pellets = [];
+        walls = new Set();
+        for(let r=0;r<ROWS;r++){
+            for(let c=0;c<COLS;c++){
+                const v = MAP[r][c];
+                if(v === 1) walls.add(r+','+c);
+                else if(v === 0) pellets.push({r,c,type:0});
+                else if(v === 2) pellets.push({r,c,type:2});
+                // 3 is tunnel (empty)
+            }
+        }
+        pelletsRemaining = pellets.length;
+    }
+
+    function initEntities(){
+        // Pac starting cell (row,col) adjust if wall
+        pac.r = 15; pac.c = 10; pac.dir = 0; pac.nextDir = 0;
+        const ppos = gridToPixel(pac.r,pac.c);
+        pac.x = ppos.x; pac.y = ppos.y;
+        // pac.speed in pixels per second for smooth dt-based movement
+        pac.speed = tileSize * 6;
+
+        // set ghost speeds in pixels per second (slower than pac)
+        ghosts = [
+            {name:'Blinky', color:'#ff6666', r:9,c:10, x:0,y:0, dir:0, speed:tileSize*3.0, state:'chase'},
+            {name:'Pinky', color:'#ffb6c1', r:9,c:9, x:0,y:0, dir:0, speed:tileSize*2.6, state:'chase'},
+            {name:'Inky',  color:'#66ffff', r:9,c:11, x:0,y:0, dir:0, speed:tileSize*2.4, state:'chase'}
+        ];
+        ghosts.forEach(g => {
+            const p = gridToPixel(g.r,g.c);
+            g.x = p.x; g.y = p.y;
+        });
+        vulnerableTimer = 0;
+    }
+
+    function resetGame(){
+        initMap();
+        initEntities();
+        score = 0;
+        lives = 3;
+        running = true;
+        updateStat();
+    }
+
+    function updateStat(){
+        statEl.textContent = `Score: ${score} • Lives: ${lives}`;
+    }
+
+    function cellIsWall(r,c){ return walls.has(r+','+c); }
+    function cellIsInside(r,c){ return r>=0 && r<ROWS && c>=0 && c<COLS; }
+
+    // Try move from r,c in dir; returns {r,c} if possible else null
+    function nextCell(r,c,dir){
+        const dr = [0,1,0,-1][dir], dc = [1,0,-1,0][dir];
+        const nr = r + dr, nc = c + dc;
+        if(!cellIsInside(nr,nc)) return null;
+        if(cellIsWall(nr,nc)) return null;
+        return {r:nr,c:nc};
+    }
+
+    // Simple pathing for ghosts: pick direction reducing distance to pac; avoid reversing if possible
+    function chooseGhostDir(g){
+        const dirs = [0,1,2,3];
+        const reverse = (g.dir + 2) % 4;
+        let best = null;
+        let bestDist = Infinity;
+        for(const d of dirs){
+            if(d === reverse) continue; // discourage reversing
+            const cand = nextCell(g.r, g.c, d);
+            if(!cand) continue;
+            const p = gridToPixel(cand.r,cand.c);
+            const dist = Math.hypot(p.x - pac.x, p.y - pac.y);
+            if(dist < bestDist){ bestDist = dist; best = d; }
+        }
+        if(best === null) return reverse; // stuck: reverse
+        return best;
+    }
+
+    // Win modal helper
+    function ensureWinModal(){
+        let modal = document.getElementById('pacWinModal');
+        if(modal) return modal;
+        modal = document.createElement('div');
+        modal.id = 'pacWinModal';
+        modal.setAttribute('role','dialog');
+        modal.setAttribute('aria-hidden','true');
+        Object.assign(modal.style, {
+            position: 'fixed',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%,-50%)',
+            background: 'rgba(3,7,18,0.98)',
+            color: '#e6eef8',
+            padding: '20px',
+            borderRadius: '12px',
+            zIndex: 7000,
+            minWidth: '260px',
+            textAlign: 'center',
+            boxShadow: '0 12px 40px rgba(0,0,0,0.6)',
+            border: '1px solid rgba(255,255,255,0.04)'
+        });
+        modal.innerHTML = `
+            <div style="font-weight:800;font-size:18px;margin-bottom:8px">You Win!</div>
+            <div id="pacWinScore" style="margin-bottom:12px;color:var(--muted)"></div>
+            <div style="display:flex;gap:8px;justify-content:center">
+                <button id="pacWinRestart" class="btn">Main Lagi</button>
+                <button id="pacWinClose" class="btn ghost">Tutup</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        modal.querySelector('#pacWinRestart').addEventListener('click', ()=>{
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden','true');
+            resetGame();
+        });
+        modal.querySelector('#pacWinClose').addEventListener('click', ()=>{
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden','true');
+        });
+        modal.style.display = 'none';
+        return modal;
+    }
+
+    function showWinModal(scoreValue){
+        const modal = ensureWinModal();
+        modal.querySelector('#pacWinScore').textContent = `Score: ${scoreValue}`;
+        modal.style.display = 'block';
+        modal.setAttribute('aria-hidden','false');
+    }
+
+    // precise movements per frame
+    function updateEntities(dt){
+        // Pac movement: handle queued direction, move toward center of next cell
+        const targetDir = pac.nextDir;
+        if(targetDir != null){
+            // if aligned to grid (close enough), check ability to turn
+            const center = gridToPixel(pac.r,pac.c);
+            const distToCenter = Math.hypot(pac.x - center.x, pac.y - center.y);
+            if(distToCenter < tileSize*0.3){
+                const cand = nextCell(pac.r,pac.c,targetDir);
+                if(cand){
+                    // snap to center (avoid jitter) but do NOT instantly advance to next cell
+                    pac.x = center.x; pac.y = center.y;
+                    pac.dir = targetDir;
+                    pac.nextDir = null;
+                }
+            }
+        }
+        // move pac continuously based on dir if possible (use dt for smoothness)
+        if(pac.dir != null){
+            const vel = [{x:1,y:0},{x:0,y:1},{x:-1,y:0},{x:0,y:-1}][pac.dir];
+            pac.x += vel.x * pac.speed * dt;
+            pac.y += vel.y * pac.speed * dt;
+            // update logical cell if passed center
+            const center = gridToPixel(pac.r,pac.c);
+            const dx = pac.x - center.x, dy = pac.y - center.y;
+            const passed = Math.hypot(dx,dy) > tileSize*0.5;
+            if(passed){
+                const cand = nextCell(pac.r,pac.c,pac.dir);
+                if(cand){
+                    pac.r = cand.r; pac.c = cand.c;
+                } else {
+                    // hit wall: snap back to center
+                    pac.x = center.x; pac.y = center.y;
+                    pac.dir = null;
+                }
+            }
+        }
+
+        // Eat pellets when near center of a tile
+        for(let i=pellets.length-1;i>=0;i--){
+            const p = pellets[i];
+            const pos = gridToPixel(p.r,p.c);
+            const d = Math.hypot(pos.x - pac.x, pos.y - pac.y);
+            if(d < tileSize * 0.6){
+                // eat
+                pellets.splice(i,1);
+                pelletsRemaining--;
+                if(p.type === 2){
+                    vulnerableTimer = 8.0; // seconds ghosts vulnerable
+                    score += 50;
+                } else {
+                    score += 10;
+                }
+                updateStat();
+            }
+        }
+
+        // ghosts
+        ghosts.forEach(g=>{
+            // if vulnerable timer active, ghost state = 'vulnerable'
+            g.vulnerable = vulnerableTimer > 0;
+            // pick new direction occasionally if aligned
+            const center = gridToPixel(g.r,g.c);
+            const distToCenter = Math.hypot(g.x - center.x, g.y - center.y);
+            if(distToCenter < tileSize*0.3){
+                // update grid cell
+                g.x = center.x; g.y = center.y;
+                // choose direction
+                const best = chooseGhostDir(g);
+                g.dir = best;
+                // set next target logical cell
+                const cand = nextCell(g.r,g.c,g.dir);
+                if(cand){
+                    g.r = cand.r; g.c = cand.c;
+                } else {
+                    // reverse
+                    g.dir = (g.dir + 2) % 4;
+                }
+            }
+            // move visually toward current grid center (use dt)
+            const target = gridToPixel(g.r,g.c);
+            const dx = target.x - g.x, dy = target.y - g.y;
+            const dist = Math.hypot(dx,dy);
+            if(dist > 0.5){
+                const mv = Math.min(g.speed * dt, dist);
+                g.x += (dx/dist) * mv;
+                g.y += (dy/dist) * mv;
+            }
+            // collision with pac
+            const dpc = Math.hypot(g.x - pac.x, g.y - pac.y);
+            if(dpc < tileSize * 0.6){
+                if(g.vulnerable){
+                    // "eat" ghost: send back to ghost box center and award points
+                    score += 200;
+                    const home = gridToPixel(9,10);
+                    g.x = home.x; g.y = home.y; g.r = 9; g.c = 10;
+                    g.vulnerable = false;
+                    updateStat();
+                } else {
+                    // pac dies
+                    lives--;
+                    updateStat();
+                    if(lives <= 0){
+                        // game over: reset everything
+                        alert('Game Over');
+                        resetGame();
+                    } else {
+                        // respawn pac and ghosts briefly
+                        const ppos = gridToPixel(15,10);
+                        pac.x = ppos.x; pac.y = ppos.y; pac.r=15; pac.c=10; pac.dir = null; pac.nextDir = null;
+                        ghosts.forEach(g2 => {
+                            const p = gridToPixel(9,10);
+                            g2.x = p.x; g2.y = p.y; g2.r=9; g2.c=10;
+                        });
+                    }
+                }
+            }
+        });
+
+        if(vulnerableTimer > 0) vulnerableTimer = Math.max(0, vulnerableTimer - dt);
+        // win check
+        if(pelletsRemaining <= 0){
+            // show win modal with score and allow restart
+            showWinModal(score);
+        }
+    }
+
+    function draw(){
+        // clear
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // draw walls (blue)
+        ctx.fillStyle = '#001f4d';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        for(let r=0;r<ROWS;r++){
+            for(let c=0;c<COLS;c++){
+                const v = MAP[r][c];
+                const x = offsetX + c*tileSize, y = offsetY + r*tileSize;
+                if(v === 1){
+                    ctx.fillStyle = '#002b66';
+                    // draw rounded rect wall
+                    const pad = Math.max(2, Math.floor(tileSize*0.06));
+                    ctx.fillRect(x+pad, y+pad, tileSize-pad*2, tileSize-pad*2);
+                } else {
+                    // background tile
+                    ctx.fillStyle = '#071428';
+                    ctx.fillRect(x, y, tileSize, tileSize);
+                }
+            }
+        }
+
+        // draw pellets
+        pellets.forEach(p=>{
+            const pos = gridToPixel(p.r,p.c);
+            if(p.type === 2){
+                ctx.fillStyle = '#fff';
+                const r = Math.max(2, tileSize*0.15);
+                ctx.beginPath(); ctx.arc(pos.x,pos.y,r,0,Math.PI*2); ctx.fill();
+            } else {
+                ctx.fillStyle = '#ffd';
+                const r = Math.max(1, tileSize*0.06);
+                ctx.beginPath(); ctx.arc(pos.x,pos.y,r,0,Math.PI*2); ctx.fill();
+            }
+        });
+
+        // draw ghosts behind pac optionally
+        ghosts.forEach(g=>{
+            ctx.save();
+            const r = tileSize*0.4;
+            ctx.beginPath();
+            if(g.vulnerable){
+                ctx.fillStyle = '#4d86ff';
+            } else ctx.fillStyle = g.color || '#ff6666';
+            ctx.arc(g.x, g.y, r, Math.PI, 0);
+            ctx.fill();
+            // body rectangle
+            ctx.fillRect(g.x - r, g.y - r/4, r*2, r*1.1);
+            // eyes
+            ctx.fillStyle = '#fff';
+            ctx.beginPath(); ctx.arc(g.x - r*0.25, g.y - r*0.15, r*0.22, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(g.x + r*0.25, g.y - r*0.15, r*0.22, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#000';
+            ctx.beginPath(); ctx.arc(g.x - r*0.25, g.y - r*0.15, r*0.09, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(g.x + r*0.25, g.y - r*0.15, r*0.09, 0, Math.PI*2); ctx.fill();
+            ctx.restore();
+        });
+
+        // draw pac (on top)
+        ctx.save();
+        const angle = Math.abs(Math.sin(pac.mouth)) * Math.PI * 0.22;
+        // compute facing angle
+        const face = [0, Math.PI/2, Math.PI, -Math.PI/2][pac.dir || 0] || 0;
+        ctx.translate(pac.x, pac.y);
+        ctx.rotate(face);
+        ctx.fillStyle = '#FFD300';
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        ctx.arc(0,0, tileSize * pac.radius, angle, Math.PI*2 - angle);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+
+        // draw HUD small (optional)
+        // done via head stats
+    }
+
+    function loop(ts){
+        if(!lastTime) lastTime = ts;
+        const dt = (ts - lastTime) / 1000;
+        lastTime = ts;
+        if(running){
+            pac.mouth += dt * 10;
+            updateEntities(dt);
+        }
+        draw();
+        requestAnimationFrame(loop);
+    }
+
+    // keyboard control
+    const keys = {};
+    window.addEventListener('keydown', function(e){
+        if(!pacPanel.classList.contains('show')) return;
+        const d = mapKeyToDir(e.key);
+        if(d !== null){
+            pac.nextDir = d;
+            e.preventDefault();
+        }
+        if(e.key === 'p'){
+            running = !running;
+            pauseBtn.textContent = running ? 'Pause' : 'Resume';
+        }
+    });
+    window.addEventListener('keyup', function(e){});
+
+    // interaction handlers
+    pacBtn.addEventListener('click', function(){
+        const show = !pacPanel.classList.contains('show');
+        pacPanel.classList.toggle('show', show);
+        pacPanel.setAttribute('aria-hidden', show ? 'false' : 'true');
+        if(show){
+            setTimeout(()=>{ resize(); canvas.focus(); }, 40);
+        }
+    });
+    pacBtn.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pacBtn.click(); }
+    });
+    closePac.addEventListener('click', function(){ pacPanel.classList.remove('show'); pacPanel.setAttribute('aria-hidden','true'); });
+    pauseBtn.addEventListener('click', function(){
+        running = !running;
+        pauseBtn.textContent = running ? 'Pause' : 'Resume';
+    });
+    resetBtn.addEventListener('click', function(){ resetGame(); });
+    window.addEventListener('resize', resize);
+
+    // initialize everything
+    resetGame();
+    requestAnimationFrame(loop);
+})();
+</script>
+<style>
+/* Perkecil tombol bundar mengambang (WhatsApp + Pac-Man) */
+.wa-float, .pac-float {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 50% !important;
+    right: 14px !important;
+    /* keep pac-float slightly above wa-float via its own rule below */
+    bottom: 14px !important;
+}
+.wa-float img, .pac-float img {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+}
+
+/* sesuaikan badge dan spacing kecil */
+.wa-float .wa-badge {
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+    right: -6px !important;
+    top: -6px !important;
+}
+
+/* Pastikan panel game (Pac) dan posisi tombol game menyesuaikan ukuran baru */
+.pac-float { bottom: 78px !important; right: 14px !important; width:48px !important; height:48px !important; }
+.pac-panel { right: 14px !important; bottom: 150px !important; width: 380px !important; height: 380px !important; }
+
+/* Responsif: perangkat kecil sedikit lebih kecil */
+@media (max-width:480px){
+    .wa-float, .pac-float { width: 44px !important; height: 44px !important; right: 12px !important; bottom: 12px !important; }
+    .wa-float img, .pac-float img { width: 36px !important; height: 36px !important; }
+    .pac-float { bottom: 72px !important; }
+    .pac-panel { right: 10px !important; bottom: 120px !important; width: 340px !important; height: 340px !important; }
+}
+</style>
+<!-- Redesigned input modal (styled, accessible, mobile-friendly) -->
+<style>
+    /* Improved phone modal styles */
+    #phoneModal { display:none; align-items:center; justify-content:center; z-index:8000; }
+    #phoneModal.show { display:flex; }
+    #phoneModal .modal-card {
+        width:100%; max-width:520px; border-radius:12px; padding:18px;
+        background: linear-gradient(180deg, rgba(8,12,24,0.96), rgba(3,7,18,0.98));
+        box-shadow: 0 12px 40px rgba(2,6,23,0.6); border:1px solid rgba(255,255,255,0.04);
+        color: #e6eef8;
+    }
+    #phoneModal .modal-head { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+    #phoneModal .modal-head h3 { margin:0; font-size:18px; font-weight:800; }
+    #phoneModal .modal-desc { font-size:13px; color:var(--muted); margin-bottom:14px; }
+
+    .form-row { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+    .form-row label { font-size:13px; color:var(--muted); font-weight:700; }
+    .form-row input[type="tel"],
+    .form-row input[type="text"],
+    .form-row textarea {
+        width:100%; padding:10px 12px; border-radius:10px; border:0;
+        background: rgba(255,255,255,0.03); color:inherit; font-size:14px;
+        outline: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+    .form-row input::placeholder, .form-row textarea::placeholder { color: rgba(255,255,255,0.35); }
+
+    .helper { font-size:12px; color:var(--muted); }
+    .row-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:4px; }
+    .btn-ghost { background:transparent; border:1px solid rgba(255,255,255,0.06); color:inherit; padding:8px 12px; border-radius:8px; cursor:pointer; }
+    .btn-primary { background:var(--accent); color:#071027; padding:8px 14px; border-radius:8px; border:0; cursor:pointer; font-weight:800; }
+
+    .error { color:#ff7b7b; font-size:13px; margin-top:6px; display:none; }
+    @media (max-width:480px){
+        #phoneModal .modal-card { padding:14px; margin:12px; }
+    }
+</style>
+
+<div id="phoneModal" class="modal" role="dialog" aria-hidden="true" aria-labelledby="phoneModalTitle" aria-modal="true">
+    <div class="modal-card" role="document">
+        <div class="modal-head">
+            <h3 id="phoneModalTitle">Nomor Tujuan untuk "Banned Whatsapp"</h3>
+            <div style="margin-left:auto;">
+                <button id="phoneClose" class="btn-ghost" aria-label="Tutup">✕</button>
+            </div>
+        </div>
+
+        <div class="modal-desc">Masukkan nomor tujuan yang akan ditautkan ke produk. Format boleh memakai + atau 0. Contoh: 085212345678 atau +6285212345678</div>
+
+        <div class="form-row">
+            <label for="phoneInput">Nomor Tujuan</label>
+            <input id="phoneInput" type="tel" inputmode="tel" pattern="\+?\d*" placeholder="Contoh: 0852xxxxxxx" aria-describedby="phoneHelp" autocomplete="tel">
+            <div id="phoneHelp" class="helper">Hapus spasi/karakter khusus. Minimal 6 digit.</div>
+            <div id="phoneError" class="error" role="alert">Nomor tidak valid. Gunakan minimal 6 digit angka.</div>
+        </div>
+
+        <div class="form-row">
+            <label for="buyerName">Nama (opsional)</label>
+            <input id="buyerName" type="text" placeholder="Nama penerima / keterangan singkat">
+        </div>
+
+        <div class="form-row">
+            <label for="phoneNote">Catatan (opsional)</label>
+            <textarea id="phoneNote" rows="3" placeholder="Pesan singkat untuk admin / instruksi tambahan"></textarea>
+        </div>
+
+        <div class="row-actions">
+            <button id="phoneCancel" class="btn-ghost">Batal</button>
+            <button id="phoneAdd" class="btn-primary">Tambah ke Keranjang</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function(){
+        const modal = document.getElementById('phoneModal');
+        const input = document.getElementById('phoneInput');
+        const nameInput = document.getElementById('buyerName');
+        const noteInput = document.getElementById('phoneNote');
+        const addBtn = document.getElementById('phoneAdd');
+        const cancelBtn = document.getElementById('phoneCancel');
+        const closeBtn = document.getElementById('phoneClose');
+        const errorEl = document.getElementById('phoneError');
+
+        // Utility: normalize and validate number
+        function normalizePhone(raw){
+            if(!raw) return '';
+            const n = raw.replace(/[\s.\-()]/g, '');
+            return n;
+        }
+        function validPhone(n){
+            return /^\+?\d{6,}$/.test(n);
+        }
+
+        // Open modal helper (used by other scripts that call ensurePhoneModal)
+        window.openPhoneModal = function(prefill){
+            errorEl.style.display = 'none';
+            input.value = prefill || '';
+            nameInput.value = '';
+            noteInput.value = '';
+            modal.classList.add('show');
+            modal.setAttribute('aria-hidden','false');
+            setTimeout(()=> input.focus(),50);
+            trapFocus(modal);
+        };
+
+        // Close helper
+        function close(){
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden','true');
+            releaseFocusTrap();
+        }
+
+        // Focus trap (basic)
+        let lastFocused = null;
+        function trapFocus(el){
+            lastFocused = document.activeElement;
+            const focusable = el.querySelectorAll('button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])');
+            const first = focusable[0], last = focusable[focusable.length-1];
+            function keyHandler(e){
+                if(e.key === 'Tab'){
+                    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+                    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+                } else if(e.key === 'Escape'){ close(); }
+            }
+            el._ftHandler = keyHandler;
+            document.addEventListener('keydown', keyHandler);
+        }
+        function releaseFocusTrap(){
+            if(modal._ftHandler) document.removeEventListener('keydown', modal._ftHandler);
+            if(lastFocused) lastFocused.focus();
+        }
+
+        // Event bindings
+        cancelBtn.addEventListener('click', function(){ close(); });
+        closeBtn.addEventListener('click', function(){ close(); });
+
+        // Allow Enter on phone input to submit
+        input.addEventListener('keydown', function(e){
+            if(e.key === 'Enter'){ e.preventDefault(); addBtn.click(); }
+        });
+
+        addBtn.addEventListener('click', function(){
+            errorEl.style.display = 'none';
+            const raw = input.value.trim();
+            const normalized = normalizePhone(raw);
+            if(!validPhone(normalized)){
+                errorEl.style.display = 'block';
+                input.focus();
+                return;
+            }
+
+            // Build unique id and push to global cart (compatible with existing cart format)
+            const pid = 'file10';
+            const prod = (window.productsFile || []).find(p=>p.id === pid) || null;
+            if(!prod){
+                alert('Produk tidak ditemukan.');
+                close();
+                return;
+            }
+
+            // Compose unique id per destination number
+            const uid = `${pid}::${normalized}`;
+
+            // ensure global cart & helpers exist
+            window.cart = window.cart || JSON.parse(localStorage.getItem('ocin_cart_v1') || '[]');
+            const existing = window.cart.find(i => i.id === uid);
+            if(existing) existing.qty++;
+            else {
+                const displayName = nameInput.value ? `${prod.name} (${nameInput.value})` : `${prod.name} (${normalized})`;
+                window.cart.push({
+                    id: uid,
+                    name: displayName,
+                    price: prod.price,
+                    img: prod.img,
+                    qty: 1,
+                    dest: normalized,
+                    note: noteInput.value || ''
+                });
+            }
+            try{ if(typeof saveCart === 'function') saveCart(); else localStorage.setItem('ocin_cart_v1', JSON.stringify(window.cart)); }catch(e){}
+            try{ if(typeof renderCart === 'function') renderCart(); }catch(e){}
+            close();
+        });
+
+        // Close modal on backdrop click
+        modal.addEventListener('click', function(e){
+            if(e.target === modal) close();
+        });
+
+        // Expose for compatibility: other scripts can call ensurePhoneModal() -> our modal is present
+        window.ensurePhoneModal = window.ensurePhoneModal || function(){ return modal; };
+
+        // If some code calls ensurePhoneModal() expecting show behavior, provide helper
+        // e.g. ensurePhoneModal().classList.add('show') will work because modal exists.
+
+    })();
+</script>
+
+<!-- Theme toggle + DOM fixes (inserted by script) -->
+<style>
+    /* Theme transition */
+    :root { transition: color 240ms ease, background-color 240ms ease, border-color 240ms ease, box-shadow 240ms ease; }
+    [data-theme] * { transition: inherit; }
+
+    /* Light theme variable overrides */
+    :root[data-theme="light"] {
+        --accent: #4f46e5;
+        --dark: #f8fafc;
+        --muted: #4b5563;
+        --card: #ffffff;
+        --glass: rgba(0,0,0,0.04);
+        --text: #071427;
+        --bg-grad-top: linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(250,250,252,0.88) 100%);
+        --wallpaper-filter: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.12));
+    }
+
+    /* Toggle button */
+    #themeToggleBtn {
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+        padding:8px 10px;
+        border-radius:10px;
+        border:1px solid rgba(255,255,255,0.06);
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        color:inherit;
+        font-weight:700;
+        cursor:pointer;
+    }
+    #themeToggleBtn img { width:18px; height:18px; display:block; }
+
+    /* High-specificity overrides for light theme to adjust existing hard-coded colors */
+    :root[data-theme="light"] body {
+        color: var(--text);
+    }
+
+    :root[data-theme="light"] header,
+    :root[data-theme="light"] .card,
+    :root[data-theme="light"] .site-footer,
+    :root[data-theme="light"] .modal .modal-card,
+    :root[data-theme="light"] .zoom-card {
+        background-color: rgba(255,255,255,0.92) !important;
+        color: var(--text) !important;
+        border-color: rgba(16,24,40,0.06) !important;
+        backdrop-filter: blur(4px) !important;
+    }
+
+    :root[data-theme="light"] .search input,
+    :root[data-theme="light"] .qty,
+    :root[data-theme="light"] .method,
+    :root[data-theme="light"] .modal,
+    :root[data-theme="light"] .zoom-modal {
+        background: rgba(0,0,0,0.02) !important;
+        color: var(--text) !important;
+    }
+
+    :root[data-theme="light"] .btn { color: #fff !important; }
+    :root[data-theme="light"] .btn.ghost { color: var(--text) !important; border-color: rgba(16,24,40,0.06) !important; }
+    :root[data-theme="light"] .cart-btn { color: var(--text) !important; }
+
+    :root[data-theme="light"] .prod-price { color: var(--accent) !important; }
+    :root[data-theme="light"] .price-old { color: rgba(0,0,0,0.45) !important; }
+    :root[data-theme="light"] .price-new { color: var(--accent) !important; }
+
+    /* Toggle button styles when light */
+    :root[data-theme="light"] #themeToggleBtn {
+        background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,252,0.98));
+        border:1px solid rgba(16,24,40,0.06);
+        color: var(--text);
+    }
+
+    /* Small responsive tweak for toggle */
+    @media (max-width:720px){
+        #themeToggleBtn { padding:6px 8px; font-size:13px; }
+    }
+</style>
+
+<script>
+(function(){
+    // Apply saved theme as early as possible (if script loaded near end, still set quickly)
+    const STORAGE_KEY = 'ocin_theme_v1';
+
+    function getSavedTheme(){
+        try {
+            return localStorage.getItem(STORAGE_KEY);
+        } catch(e){
+            return null;
+        }
+    }
+
+    function saveTheme(t){
+        try { localStorage.setItem(STORAGE_KEY, t); } catch(e){}
+    }
+
+    // Determine preferred theme (saved > system > dark default)
+    function detectTheme(){
+        const saved = getSavedTheme();
+        if(saved === 'light' || saved === 'dark') return saved;
+        if(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) return 'light';
+        return 'dark';
+    }
+
+    function applyTheme(theme){
+        if(!theme) theme = 'dark';
+        // put attribute on documentElement for CSS selectors
+        document.documentElement.setAttribute('data-theme', theme);
+        // update toggle aria state if present
+        const btn = document.getElementById('themeToggleBtn');
+        if(btn){
+            btn.setAttribute('aria-pressed', theme === 'dark' ? 'false' : 'true');
+            btn.title = theme === 'dark' ? 'Aktifkan mode terang' : 'Aktifkan mode gelap';
+            btn.querySelector('.label') && (btn.querySelector('.label').textContent = theme === 'dark' ? 'Terang' : 'Gelap');
+            const icon = btn.querySelector('img');
+            if(icon){
+                icon.src = theme === 'dark' ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="%23fff"><path d="M21.64 13a9 9 0 1 1-8.64-10.64 7 7 0 0 0 8.64 10.64z"/></svg>' 
+                                                                                 : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="%23072022"><path d="M6.76 4.84l-1.8-1.79L3.17 4.84 4.97 6.64 6.76 4.84zM1 13h3v-2H1v2zm10 9h2v-3h-2v3zM17.24 19.16l1.79 1.79 1.8-1.79-1.8-1.79-1.79 1.79zM20 11v2h3v-2h-3zM12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>';
+            }
+        }
+    }
+
+    // Create toggle UI in header
+    function ensureToggle(){
+        const header = document.querySelector('header');
+        if(!header) return;
+        if(document.getElementById('themeToggleBtn')) return;
+
+        const btn = document.createElement('button');
+        btn.id = 'themeToggleBtn';
+        btn.type = 'button';
+        btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('title','Toggle theme');
+        btn.innerHTML = '<img alt="" src=""><span class="label"></span>';
+        // place before cart button for consistent position
+        const cartBtn = document.getElementById('openCartBtn');
+        if(cartBtn) header.insertBefore(btn, cartBtn);
+        else header.appendChild(btn);
+
+        btn.addEventListener('click', function(){
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            saveTheme(next);
+        });
+
+        // keyboard support
+        btn.addEventListener('keydown', function(e){
+            if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
+        });
+
+        return btn;
+    }
+
+    // Fix broken sidebar DOM (wrap stray payment info into a card if needed)
+    function fixSidebarStructure(){
+        try {
+            const sidebar = document.querySelector('.sidebar');
+            if(!sidebar) return;
+
+            // Find an h4 with text "Info Pembayaran" that's not inside a card
+            const h4s = Array.from(document.querySelectorAll('h4'));
+            for(const h4 of h4s){
+                if((/Info Pembayaran/i).test(h4.textContent) && !h4.closest('.card')){
+                    // collect following siblings until next .card or end and move into a new card
+                    const newCard = document.createElement('div');
+                    newCard.className = 'card';
+                    newCard.style.position = 'relative';
+                    const nodesToMove = [];
+                    let sib = h4;
+                    // include this h4 and subsequent nodes until a .card or sidebar end
+                    while(sib && sib !== sidebar.nextSibling){
+                        nodesToMove.push(sib);
+                        sib = sib.nextElementSibling;
+                        // stop if next element is an element with class 'card' (already existing)
+                        if(sib && sib.classList && sib.classList.contains('card')) break;
+                    }
+                    nodesToMove.forEach(n => newCard.appendChild(n));
+                    // append new card to sidebar card container (after first card)
+                    const firstCard = sidebar.querySelector('.card');
+                    if(firstCard && firstCard.parentNode){
+                        firstCard.parentNode.insertBefore(newCard, firstCard.nextSibling);
+                    } else {
+                        sidebar.appendChild(newCard);
+                    }
+                    break;
+                }
+            }
+        } catch(e){}
+    }
+
+    // Initialize: create toggle, apply theme, run DOM fixes
+    document.addEventListener('DOMContentLoaded', function(){
+        // apply detected theme immediately
+        const detected = detectTheme();
+        applyTheme(detected);
+
+        // ensure toggle UI exists and shows correct state/icon
+        const btn = ensureToggle();
+        if(btn){
+            // set label text according to current theme (label shows action: Terang when dark currently?)
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            btn.querySelector('.label').textContent = current === 'dark' ? 'Terang' : 'Gelap';
+            btn.querySelector('img').src = current === 'dark'
+                ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="%23fff"><path d="M21.64 13a9 9 0 1 1-8.64-10.64 7 7 0 0 0 8.64 10.64z"/></svg>'
+                : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="%23072022"><path d="M6.76 4.84l-1.8-1.79L3.17 4.84 4.97 6.64 6.76 4.84zM1 13h3v-2H1v2zm10 9h2v-3h-2v3zM17.24 19.16l1.79 1.79 1.8-1.79-1.8-1.79-1.79 1.79zM20 11v2h3v-2h-3zM12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>';
+            btn.setAttribute('aria-pressed', current === 'light' ? 'true' : 'false');
+        }
+
+        // Run DOM repairs (sidebar card fix)
+        fixSidebarStructure();
+    });
+
+    // Also run as soon as possible in case DOMContentLoaded already fired
+    if (document.readyState === 'interactive' || document.readyState === 'complete') {
+        const detected = detectTheme();
+        applyTheme(detected);
+        ensureToggle();
+        fixSidebarStructure();
+    }
+})();
+</script>
+<!-- Move floating WhatsApp & Pac-Man into the category bar (styles + behavior) -->
+<style>
+    /* container inside category bar to host moved buttons */
+    .category-bar .extras-wrap {
+        margin-left: auto;
+        display:flex;
+        gap:8px;
+        align-items:center;
+    }
+
+    /* when buttons are placed inside the category bar, override their fixed styles */
+    .category-bar .wa-float.in-bar,
+    .category-bar .pac-float.in-bar {
+        position: relative !important;
+        right: auto !important;
+        bottom: auto !important;
+        z-index: auto !important;
+        width:40px !important;
+        height:40px !important;
+        border-radius:8px !important;
+        box-shadow: none !important;
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important;
+        border: 1px solid rgba(255,255,255,0.04) !important;
+        padding: 4px !important;
+        display:inline-flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+        cursor: pointer !important;
+    }
+    .category-bar .wa-float.in-bar img,
+    .category-bar .pac-float.in-bar img {
+        width:28px !important;
+        height:28px !important;
+        border-radius:6px !important;
+    }
+    .category-bar .wa-float.in-bar .wa-badge {
+        position: static !important;
+        margin-left:6px !important;
+        top: auto !important;
+        right: auto !important;
+        transform: none !important;
+        font-size:11px !important;
+        padding:2px 6px !important;
+    }
+
+    /* ensure pac-panel remains usable (keeps fixed panel as-is) */
+    .pac-panel { /* keep original */ }
+</style>
+
+<script>
+    (function(){
+        function moveExtrasIntoCategoryBar(){
+            const bar = document.getElementById('categoryBar');
+            if(!bar) return;
+
+            // create wrapper if needed
+            let wrap = bar.querySelector('.extras-wrap');
+            if(!wrap){
+                wrap = document.createElement('div');
+                wrap.className = 'extras-wrap';
+                wrap.setAttribute('role','toolbar');
+                wrap.setAttribute('aria-label','Menu tambahan');
+                bar.appendChild(wrap);
+            }
+
+            // move existing nodes (preserve event listeners)
+            const wa = document.getElementById('waFloatBtn');
+            const pac = document.getElementById('pacBtn');
+
+            if(wa){
+                wa.classList.add('in-bar');
+                wa.setAttribute('title','Chat Admin (WhatsApp)');
+                wa.setAttribute('aria-label','Chat Admin via WhatsApp');
+                // remove inline tabindex if floating; ensure keyboard accessible
+                wa.tabIndex = 0;
+                wrap.appendChild(wa);
+            }
+
+            if(pac){
+                pac.classList.add('in-bar');
+                pac.setAttribute('title','Buka Pac-Man mini');
+                pac.setAttribute('aria-label','Buka Pac-Man mini');
+                pac.tabIndex = 0;
+                wrap.appendChild(pac);
+            }
+        }
+
+        // run after DOM ready (category bar is inserted by earlier script)
+        if(document.readyState === 'loading'){
+            document.addEventListener('DOMContentLoaded', moveExtrasIntoCategoryBar);
+        } else {
+            moveExtrasIntoCategoryBar();
+        }
+    })();
+</script>
+
+<!-- Insert category bar above "File" products and move WA + Pac-Man buttons into it -->
+<style>
+    /* small bar above products */
+    .category-bar {
+        display:flex;
+        align-items:center;
+        gap:12px;
+        padding:10px 12px;
+        margin-bottom:12px;
+        border-radius:10px;
+        background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        border:1px solid rgba(255,255,255,0.03);
+        align-items:center;
+    }
+    .category-bar .label { font-weight:800; font-size:15px; color:inherit; }
+    .category-bar .extras-wrap { margin-left:auto; display:flex; gap:8px; align-items:center; }
+</style>
+
+<script>
+(function(){
+    // Find the productsFile container card and insert a category bar above it
+    const prodEl = document.getElementById('productsFile');
+    if(!prodEl) return;
+    const card = prodEl.closest('.card') || prodEl.parentElement;
+    if(!card) return;
+
+    // Avoid duplicate insertion
+    if(document.getElementById('categoryBar')) return;
+
+    const bar = document.createElement('div');
+    bar.id = 'categoryBar';
+    bar.className = 'category-bar';
+    bar.setAttribute('role','region');
+    bar.setAttribute('aria-label','Menu tambahan');
+    bar.innerHTML = '<div class="label"></div><div class="extras-wrap" role="toolbar" aria-label="Menu tambahan"></div>';
+
+    card.parentNode.insertBefore(bar, card);
+
+    const wrap = bar.querySelector('.extras-wrap');
+
+    // Move WA and Pac buttons into the bar if they exist
+    const wa = document.getElementById('waFloatBtn');
+    const pac = document.getElementById('pacBtn');
+
+    function moveBtn(btn, title){
+        if(!btn) return;
+        // ensure keyboard accessible and remove fixed tabIndex if any
+        btn.classList.add('in-bar');
+        btn.style.position = '';
+        btn.style.right = '';
+        btn.style.bottom = '';
+        btn.tabIndex = 0;
+        btn.setAttribute('title', title);
+        btn.setAttribute('aria-label', title);
+        wrap.appendChild(btn);
+    }
+
+    moveBtn(wa, 'Chat Admin via WhatsApp');
+    moveBtn(pac, 'Buka Pac-Man mini');
+
+    // Ensure pac button toggles panel keyboard focus when moved
+    if(pac){
+        pac.addEventListener('keydown', function(e){
+            if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pac.click(); }
+        });
+    }
+    if(wa){
+        wa.addEventListener('keydown', function(e){
+            if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); wa.click(); }
+        });
+    }
+})();
+</script>
+
+
+
+
+
+
+<!-- Added products: Xixy Bot (monthly), sc bot wa xixy, Paket Bebas (selectable price) -->
+<style>
+    /* Paket modal styles */
+    #paketModal { display:none; position:fixed; inset:0; align-items:center; justify-content:center; background:rgba(2,6,23,0.6); z-index:9999; }
+    #paketModal.show { display:flex; }
+    #paketModal .modal-card { width:100%; max-width:520px; border-radius:12px; padding:16px; background:#071428; border:1px solid rgba(255,255,255,0.04); color:var(--muted); }
+    #paketModal .options { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    #paketModal .option { padding:8px 10px; border-radius:8px; background:rgba(255,255,255,0.02); cursor:pointer; border:1px solid transparent; }
+    #paketModal .option.active { border-color:var(--accent); background:rgba(105,111,199,0.08); color:inherit; }
+    #paketModal .modal-head { display:flex; gap:12px; align-items:center; }
+    #paketModal .modal-head img { width:64px; height:48px; object-fit:cover; border-radius:8px; border:1px solid rgba(255,255,255,0.04); }
+    #paketModal .row { display:flex; justify-content:flex-end; gap:8px; margin-top:12px; }
+    #paketModal .row .btn { padding:8px 12px; border-radius:8px; cursor:pointer; }
+</style>
+
+<div id="paketModal" role="dialog" aria-hidden="true">
+    <div class="modal-card" role="document">
+        <div class="modal-head">
+            <img id="paketImg" src="https://ocinshop.my.id/xixybot.jpg" alt="Paket Bebas">
+            <div>
+                <div style="font-weight:800" id="paketTitle">Paket Bebas</div>
+                <div style="font-size:13px;color:var(--muted)" id="paketDesc">Pilih nominal paket (1k - 15k) untuk ditambahkan ke keranjang.</div>
+            </div>
+        </div>
+
+        <div style="margin-top:12px;font-size:13px;color:var(--muted)">Pilih harga:</div>
+        <div class="options" id="paketOptions" role="list">
+            <!-- options populated by JS -->
+        </div>
+
+        <div style="font-size:13px;color:var(--muted);margin-top:8px">Jumlah: <input id="paketQty" type="number" min="1" value="1" style="width:64px;margin-left:8px;padding:6px;border-radius:8px;border:0;background:rgba(255,255,255,0.03);color:inherit"></div>
+
+        <div class="row">
+            <button class="btn ghost" id="paketCancel">Batal</button>
+            <button class="btn" id="paketAdd">Tambah ke Keranjang</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    // Ensure the global products array exists
+    window.productsFile = window.productsFile || [];
+
+    const baseImg = 'xixybot.jpg';
+
+    // New products
+    const newProducts = [
+        { id: 'file11', name: 'Xixy Bot Whtsapp (perbulan)', price: 15000, img: baseImg },
+        { id: 'file12', name: 'sc bot wa xixy', price: 30000, img: baseImg },
+        { id: 'file13', name: 'Paket bebas', price: 1000, img: baseImg } // default price; will be chosen via modal
+    ];
+
+    // Add if not already present
+    newProducts.forEach(p => {
+        if(!window.productsFile.some(x=>x.id===p.id)) window.productsFile.push(p);
+    });
+
+    // Add descriptions (if global exists)
+    try {
+        if(typeof descriptions !== 'undefined'){
+            descriptions['file11'] = "Xixy Bot Whtsapp > Layanan bot WhatsApp berlangganan. Fitur otomatis, mudah dikonfigurasi, billing perbulan.";
+            descriptions['file12'] = "sc bot wa xixy > Script bot WhatsApp untuk automasi pesan dan tugas sederhana.";
+            descriptions['file13'] = "Paket Bebas > Pilih nominal paket dari 1k hingga 15k. Gunakan paket ini untuk pembelian fleksibel sesuai kebutuhan.";
+        }
+    } catch(e){}
+
+    // Re-render product list if renderer available
+    try { if(typeof renderList === 'function') renderList(window.productsFile, 'productsFile'); } catch(e){}
+
+    // Paket modal logic
+    const paketModal = document.getElementById('paketModal');
+    const paketOptions = document.getElementById('paketOptions');
+    const paketImg = document.getElementById('paketImg');
+    const paketTitle = document.getElementById('paketTitle');
+    const paketDesc = document.getElementById('paketDesc');
+    const paketAddBtn = document.getElementById('paketAdd');
+    const paketCancel = document.getElementById('paketCancel');
+    const paketQty = document.getElementById('paketQty');
+
+    // create options 1k..15k
+    const amounts = [];
+    for(let k=1;k<=15;k++) amounts.push(k*1000);
+    let selectedAmount = amounts[0];
+
+    function buildOptions(){
+        paketOptions.innerHTML = '';
+        amounts.forEach(a=>{
+            const el = document.createElement('button');
+            el.type = 'button';
+            el.className = 'option';
+            el.dataset.value = a;
+            el.textContent = `Rp${a.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.')}`;
+            el.addEventListener('click', function(){
+                paketOptions.querySelectorAll('.option').forEach(x=>x.classList.remove('active'));
+                el.classList.add('active');
+                selectedAmount = Number(el.dataset.value);
+            });
+            paketOptions.appendChild(el);
+            if(a===selectedAmount) el.classList.add('active');
+        });
+    }
+    buildOptions();
+
+    function openPaketModal(){
+        selectedAmount = amounts[0];
+        paketQty.value = 1;
+        paketOptions.querySelectorAll('.option').forEach(x=>x.classList.remove('active'));
+        const first = paketOptions.querySelector('.option');
+        if(first) first.classList.add('active');
+        paketImg.src = baseImg;
+        paketTitle.textContent = 'Paket Bebas';
+        paketDesc.textContent = 'Pilih nominal paket (1k - 15k) untuk ditambahkan ke keranjang.';
+        paketModal.classList.add('show');
+        paketModal.setAttribute('aria-hidden','false');
+        setTimeout(()=> paketAddBtn.focus(),50);
+    }
+
+    function closePaketModal(){
+        paketModal.classList.remove('show');
+        paketModal.setAttribute('aria-hidden','true');
+    }
+
+    paketCancel.addEventListener('click', closePaketModal);
+    paketModal.addEventListener('click', function(e){ if(e.target===paketModal) closePaketModal(); });
+
+    // When confirm, add to cart with chosen price and qty
+    paketAddBtn.addEventListener('click', function(){
+        const qty = Math.max(1, parseInt(paketQty.value) || 1);
+        const price = Number(selectedAmount) || 1000;
+        const prod = (window.productsFile || []).find(p=>p.id === 'file13');
+        if(!prod){ alert('Produk tidak ditemukan'); closePaketModal(); return; }
+
+        // create unique id per chosen price so different amount stacks separately
+        const uid = `file13::${price}`;
+
+        window.cart = window.cart || JSON.parse(localStorage.getItem('ocin_cart_v1') || '[]');
+        const existing = window.cart.find(i=>i.id === uid);
+        if(existing) existing.qty += qty;
+        else {
+            window.cart.push({
+                id: uid,
+                name: `${prod.name} - Rp${price.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.')}`,
+                price: price,
+                img: prod.img,
+                qty: qty
+            });
+        }
+        try{ if(typeof saveCart === 'function') saveCart(); else localStorage.setItem('ocin_cart_v1', JSON.stringify(window.cart)); }catch(e){}
+        try{ if(typeof renderCart === 'function') renderCart(); }catch(e){}
+        closePaketModal();
+    });
+
+    // Intercept add-btn clicks for Paket (file13) to open modal instead of direct add
+    document.addEventListener('click', function(e){
+        const btn = e.target.closest('.add-btn');
+        if(!btn) return;
+        const pid = btn.dataset.id;
+        if(pid !== 'file13') return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        openPaketModal();
+    }, true);
+
+    // Ensure new products are visible in search and list; re-render if possible
+    try { if(typeof renderList === 'function') renderList(window.productsFile, 'productsFile'); } catch(e){}
+
+    // Add to descriptions already handled above; final save to localStorage not required here
+})();
+</script>
+<script>
+(function(){
+    const paketAddBtn = document.getElementById('paketAdd');
+    if(!paketAddBtn) return;
+
+    // safe formatter (use existing fmt if available)
+    const fmtSafe = (typeof fmt === 'function') ? fmt : (n => 'Rp' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+
+    paketAddBtn.addEventListener('click', function originalFixHandler(e){
+        // run in capture to stop previous handlers and prevent double-add
+        try{ e.preventDefault(); e.stopImmediatePropagation(); } catch(err){}
+
+        // read chosen amount and qty from modal DOM
+        const qtyEl = document.getElementById('paketQty');
+        const qty = Math.max(1, parseInt(qtyEl && qtyEl.value, 10) || 1);
+        const activeOpt = document.querySelector('#paketOptions .option.active');
+        const price = activeOpt ? Number(activeOpt.dataset.value) : 1000;
+
+        const prod = (window.productsFile || []).find(p => p.id === 'file13');
+        if(!prod){
+            alert('Produk Paket Bebas tidak ditemukan.');
+            return;
+        }
+
+        const uid = `file13::${price}`;
+
+        // Prefer the site's primary cart variable if present, otherwise use window.cart
+        let targetCart;
+        if(typeof cart !== 'undefined'){ // primary cart from main script
+            targetCart = cart;
+        } else {
+            targetCart = window.cart = window.cart || JSON.parse(localStorage.getItem('ocin_cart_v1') || '[]');
+        }
+
+        const idx = targetCart.findIndex(i => i && i.id === uid);
+        if(idx >= 0){
+            targetCart[idx].qty = (targetCart[idx].qty || 0) + qty;
+        } else {
+            targetCart.push({
+                id: uid,
+                name: `${prod.name} - ${fmtSafe(price)}`,
+                price: price,
+                img: prod.img,
+                qty: qty
+            });
+        }
+
+        // sync both references for compatibility
+        try{ if(typeof cart !== 'undefined') cart = targetCart; } catch(e){}
+        window.cart = targetCart;
+
+        // persist and re-render using existing helpers when available
+        if(typeof saveCart === 'function'){
+            try { saveCart(); } catch(e){ localStorage.setItem('ocin_cart_v1', JSON.stringify(targetCart)); }
+        } else {
+            try { localStorage.setItem('ocin_cart_v1', JSON.stringify(targetCart)); } catch(e){}
+        }
+        if(typeof renderCart === 'function'){
+            try { renderCart(); } catch(e){}
+        }
+
+        // close modal
+        const modal = document.getElementById('paketModal');
+        if(modal) modal.classList.remove('show');
+
+    }, true); // capture to preempt earlier listener
+})();
+</script>
+<style>
+/* Disable pinch/zoom and reduce accidental double-tap zoom */
+html, body {
+    touch-action: manipulation; /* disables pinch-zoom while preserving scroll */
+    -ms-touch-action: manipulation;
+}
+
+/* Prevent zoom via gesture on some browsers */
+@supports (touch-action: none) {
+    html, body { touch-action: manipulation; }
+}
+</style>
+
+<script>
+(function(){
+    // Ensure viewport meta forbids user scaling (updates existing or injects new)
+    try {
+        var content = 'width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no';
+        var meta = document.querySelector('meta[name="viewport"]');
+        if(meta) meta.setAttribute('content', content);
+        else {
+            meta = document.createElement('meta');
+            meta.name = 'viewport';
+            meta.content = content;
+            document.head.appendChild(meta);
+        }
+    }catch(e){}
+
+    // Prevent pinch-zoom on iOS Safari
+    document.addEventListener('gesturestart', function(e){ e.preventDefault(); });
+
+    // Prevent double-tap to zoom (common mobile workaround)
+    var lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e){
+        var now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            e.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, { passive: false });
+
+    // Prevent ctrl/cmd + wheel zoom (desktop)
+    window.addEventListener('wheel', function(e){
+        if (e.ctrlKey || e.metaKey) e.preventDefault();
+    }, { passive: false });
+
+    // Prevent common keyboard zoom shortcuts (Ctrl/Cmd + + / - / 0)
+    window.addEventListener('keydown', function(e){
+        if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=' || e.key === '0')) {
+            e.preventDefault();
+        }
+    }, false);
+})();
+</script>
+
+
+
+
+<style>
+/* Toast / Notification system (bottom-right, responsive) */
+.toast-container {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 80000;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    align-items: flex-end;
+    pointer-events: none;
+    max-width: calc(100% - 40px);
+}
+@media (max-width:720px){ .toast-container { left: 50%; right: auto; transform: translateX(-50%); width: calc(100% - 36px); align-items: center; } }
+
+.toast {
+    pointer-events: auto;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    min-width: 260px;
+    max-width: 420px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    color: #e6eef8;
+    border: 1px solid rgba(255,255,255,0.04);
+    padding: 10px 12px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+    font-weight: 700;
+    font-size: 13px;
+    transform-origin: bottom right;
+    animation: toastIn .28s cubic-bezier(.2,.9,.2,1);
+}
+@keyframes toastIn { from { opacity:0; transform: translateY(8px) scale(.98); } to { opacity:1; transform: translateY(0) scale(1); } }
+
+.toast .icon {
+    width: 40px; height: 40px; border-radius: 8px; display:flex;align-items:center;justify-content:center;font-size:18px;
+    background: rgba(0,0,0,0.25); flex-shrink:0;
+}
+.toast .content { flex:1; min-width:0; }
+.toast .title { font-weight:800; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.toast .msg { font-weight:600; font-size:12px; color:var(--muted); display:block; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.toast .close {
+    background:transparent;border:0;color:inherit;font-weight:800;cursor:pointer;padding:6px;border-radius:8px;
+    opacity:0.8;
+}
+.toast .close:focus { outline:2px solid rgba(255,255,255,0.06); }
+
+.toast.success { border-left:4px solid #16a34a; }
+.toast.info    { border-left:4px solid #60a5fa; }
+.toast.warn    { border-left:4px solid #f59e0b; }
+.toast.error   { border-left:4px solid #ef4444; }
+
+.toast .progress {
+    height:4px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 4px;
+    margin-top:8px;
+    overflow:hidden;
+}
+.toast .progress > i {
+    display:block; height:100%; width:100%; transform-origin:left center; transform:scaleX(1);
+    background: linear-gradient(90deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+    transition: transform linear;
+}
+
+/* Compact variant for very small screens */
+@media (max-width:420px){
+    .toast { min-width: 220px; max-width: 94vw; padding:10px; }
+    .toast .icon { width:36px;height:36px;font-size:16px; }
+}
+</style>
+
+<div id="toastRoot" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+(function(){
+    const root = document.getElementById('toastRoot');
+    if(!root) return;
+
+    // Create a toast; options: { type: 'info'|'success'|'warn'|'error', title, message, timeout(ms), action: { label, onClick } }
+    function notify(message, opts = {}) {
+        const type = opts.type || 'info';
+        const title = opts.title || (type === 'success' ? 'Berhasil' : type === 'error' ? 'Terjadi Kesalahan' : type === 'warn' ? 'Perhatian' : 'Info');
+        const timeout = typeof opts.timeout === 'number' ? opts.timeout : 4200;
+
+        const el = document.createElement('div');
+        el.className = 'toast ' + type;
+        el.setAttribute('role','status');
+        el.setAttribute('aria-live','polite');
+
+        const icon = document.createElement('div');
+        icon.className = 'icon';
+        icon.innerHTML = ({
+            success: '✅',
+            error: '⚠️',
+            warn: '⚠',
+            info: 'ℹ️'
+        })[type] || 'ℹ️';
+
+        const content = document.createElement('div');
+        content.className = 'content';
+        const t = document.createElement('span'); t.className = 'title'; t.textContent = title;
+        const m = document.createElement('span'); m.className = 'msg'; m.textContent = message || '';
+        content.appendChild(t);
+        content.appendChild(m);
+
+        const right = document.createElement('div');
+        right.style.display = 'flex';
+        right.style.flexDirection = 'column';
+        right.style.alignItems = 'flex-end';
+        right.style.gap = '6px';
+
+        // close button
+        const close = document.createElement('button');
+        close.className = 'close';
+        close.type = 'button';
+        close.innerHTML = '✕';
+        close.addEventListener('click', remove);
+
+        right.appendChild(close);
+
+        // progress bar
+        const progressWrap = document.createElement('div');
+        progressWrap.className = 'progress';
+        progressWrap.setAttribute('aria-hidden','true');
+        const progress = document.createElement('i');
+        progress.style.transform = 'scaleX(1)';
+        progressWrap.appendChild(progress);
+        content.appendChild(progressWrap);
+
+        el.appendChild(icon);
+        el.appendChild(content);
+        el.appendChild(right);
+
+        root.appendChild(el);
+
+        // animation for progress
+        let start = Date.now();
+        let paused = false;
+        let remaining = timeout;
+        let rafId = null;
+
+        function tick(){
+            if(paused) { rafId = requestAnimationFrame(tick); return; }
+            const elapsed = Date.now() - start;
+            const frac = Math.max(0, 1 - (elapsed / timeout));
+            progress.style.transform = 'scaleX(' + frac + ')';
+            if(elapsed >= timeout) { remove(); return; }
+            rafId = requestAnimationFrame(tick);
+        }
+
+        function remove(){
+            if(rafId) cancelAnimationFrame(rafId);
+            el.style.transition = 'opacity .18s ease, transform .18s ease';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(6px) scale(.98)';
+            setTimeout(()=> { try{ el.remove(); } catch(e){} }, 200);
+        }
+
+        // pause on hover/focus
+        el.addEventListener('mouseenter', ()=> { paused = true; });
+        el.addEventListener('mouseleave', ()=> { paused = false; start = Date.now() - (timeout - remaining); });
+        el.addEventListener('focusin', ()=> { paused = true; });
+        el.addEventListener('focusout', ()=> { paused = false; start = Date.now() - (timeout - remaining); });
+
+        // expose cancel via return
+        // start ticking
+        start = Date.now();
+        rafId = requestAnimationFrame(tick);
+
+        return { remove };
+    }
+
+    // expose globally
+    window.notify = notify;
+
+    // Helper: lookup product name by id (handles ids like "file13::1000" or normal)
+    function productNameFor(id){
+        if(!id) return id || '';
+        const base = id.split('::')[0];
+        const all = [ ...(window.productsFile || []), ...(window.productsCheat || []) ];
+        const p = all.find(x => x && x.id === base);
+        return p ? p.name : id;
+    }
+
+    // Delegated listeners to map common activities -> notifications
+    document.addEventListener('click', function(e){
+        const btn = e.target.closest('.add-btn');
+        if(btn){
+            const pid = btn.dataset && btn.dataset.id;
+            const name = productNameFor(pid);
+            notify(`Ditambahkan ke keranjang: ${name}`, { type: 'success', timeout: 3000 });
+            return;
+        }
+
+        const actionBtn = e.target.closest('[data-action]');
+        if(actionBtn){
+            const action = actionBtn.dataset.action;
+            const id = actionBtn.dataset.id;
+            const name = productNameFor(id);
+            if(action === 'inc') notify(`Jumlah ditambah: ${name}`, { type: 'info', timeout: 2000 });
+            else if(action === 'dec') notify(`Jumlah dikurangi: ${name}`, { type: 'info', timeout: 2000 });
+            else if(action === 'remove') notify(`Dihapus dari keranjang: ${name}`, { type: 'warn', timeout: 2500 });
+            return;
+        }
+
+        // detail copy button (the id was added in detail modal)
+        if(e.target && (e.target.id === 'copyDetail' || e.target.closest && e.target.closest('#copyDetail'))){
+            setTimeout(()=> notify('Deskripsi disalin ke clipboard', { type: 'success', timeout: 1800 }), 80);
+            return;
+        }
+
+        // Paket and phone add buttons
+        if(e.target && (e.target.id === 'phoneAdd' || e.target.closest && e.target.closest('#phoneAdd'))){
+            // small delay to allow modal script to update cart
+            setTimeout(()=> notify('Produk khusus ditambahkan ke keranjang', { type: 'success', timeout: 2200 }), 120);
+            return;
+        }
+        if(e.target && (e.target.id === 'paketAdd' || e.target.closest && e.target.closest('#paketAdd'))){
+            setTimeout(()=> notify('Paket ditambahkan ke keranjang', { type: 'success', timeout: 2200 }), 120);
+            return;
+        }
+
+        // confirm payment
+        if(e.target && (e.target.id === 'confirmPay' || e.target.closest && e.target.closest('#confirmPay'))){
+            notify('Mengonfirmasi pembayaran... Anda akan diarahkan ke WhatsApp', { type: 'info', timeout: 3200 });
+            return;
+        }
+
+    }, true); // capture to catch events early
+
+    // Observe cart changes (localStorage) and display summary notifications on clears / restores
+    window.addEventListener('storage', function(ev){
+        if(ev.key === 'ocin_cart_v1'){
+            const newVal = ev.newValue;
+            if(!newVal || newVal === '[]') {
+                notify('Keranjang dikosongkan', { type: 'warn', timeout: 2500 });
+            } else {
+                try {
+                    const items = JSON.parse(newVal);
+                    if(Array.isArray(items)){
+                        const count = items.reduce((s,i)=>s + (i.qty || 0), 0);
+                        notify(`Keranjang: ${count} item`, { type: 'info', timeout: 1800 });
+                    }
+                } catch(e){}
+            }
+        }
+    });
+
+    // Small friendly toast on first load
+    document.addEventListener('DOMContentLoaded', function(){
+        notify('Selamat datang di Ocin Shop — belanja aman & cepat', { type: 'info', timeout: 3600 });
+    });
+
+})();
+</script>
+
+
+
+
+<!-- Voucher feature: button in category bar, modal, apply/remove logic, integrate with checkout -->
+<style>
+    
+    /* Voucher button in extras */
+    #voucherBtn {
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+        padding:8px 10px;
+        border-radius:10px;
+        border:1px solid rgba(255,255,255,0.04);
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        cursor:pointer;
+        font-weight:800;
+    }
+    #voucherModal .modal-card { color: inherit; }
+    #voucherApplied { font-size:13px; color:var(--muted); display:flex; align-items:center; gap:8px; margin-top:8px; }
+    #voucherApplied .chip { padding:6px 8px; border-radius:8px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); font-weight:700; }
+    #voucherError { color:#ff7b7b; font-size:13px; display:none; margin-top:6px; }
+</style>
+
+<!-- Voucher button (moved into category bar extras if present, otherwise appended to header) -->
+<button id="voucherBtn" type="button" title="Gunakan vocer">Vocer</button>
+
+<!-- Modal -->
+<div id="voucherModal" class="modal" role="dialog" aria-hidden="true" style="display:none;">
+    <div class="modal-card" style="max-width:420px;">
+        <h3 style="margin-top:0">Masukkan Kode Vocer</h3>
+        <div style="font-size:13px;color:var(--muted)">Masukkan kode untuk mendapatkan potongan.</div>
+        <div style="height:8px"></div>
+        <input id="voucherInput" type="text" placeholder="Kode vocer" style="width:100%;padding:10px;border-radius:10px;border:0;background:rgba(255,255,255,0.03);color:inherit">
+        <div id="voucherError" role="alert">Kode tidak valid.</div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+            <button id="voucherCancel" class="btn ghost">Batal</button>
+            <button id="voucherApply" class="btn">Terapkan</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    const STORAGE_KEY = 'ocin_voucher_v1';
+    const voucherBtn = document.getElementById('voucherBtn');
+
+    // Known vouchers (example)
+    const VOUCHERS = {
+        'OCIN10K': { type:'percent', value:10, max:20000, desc:'Diskon 10% (maks Rp20.000)' },
+        'OCIN5K': { type:'fixed', value:5000, desc:'Potongan Rp5.000' },
+        'OCIN50K': { type:'percent', value:50, max:50000, desc:'Diskon 50% (maks Rp50.000)' }
+    };
+
+    // Utils
+    const fmt = window.fmt || (n => 'Rp' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+    function readCart(){
+        return window.cart || JSON.parse(localStorage.getItem('ocin_cart_v1') || '[]');
+    }
+    function saveVoucher(v){
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(v)); } catch(e){}
+    }
+    function loadVoucher(){
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch(e){ return null; }
+    }
+    function clearVoucher(){
+        try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+    }
+
+    // Build small UI inside sidebar to show applied voucher
+    function ensureVoucherRow(){
+        const sidebar = document.querySelector('.sidebar .card');
+        if(!sidebar) return null;
+        let el = document.getElementById('voucherRow');
+        if(!el){
+            el = document.createElement('div');
+            el.id = 'voucherRow';
+            el.style.marginTop = '10px';
+            sidebar.appendChild(el);
+        }
+        return el;
+    }
+
+    function computeTotals(){
+        const cart = readCart();
+        const subtotal = cart.reduce((s,i)=> s + (i.price || 0) * (i.qty || 1), 0);
+        const voucher = loadVoucher();
+        let discount = 0;
+        if(voucher){
+            const v = (VOUCHERS[voucher.code] || voucher.meta || null) || null;
+            if(v){
+                if(v.type === 'percent'){
+                    discount = Math.floor(subtotal * (v.value/100));
+                    if(typeof v.max === 'number') discount = Math.min(discount, v.max);
+                } else if(v.type === 'fixed'){
+                    discount = v.value;
+                }
+            } else if(voucher.kind === 'fixed' && typeof voucher.amount === 'number'){
+                discount = voucher.amount;
+            }
+        }
+        discount = Math.max(0, Math.min(discount, subtotal));
+        const total = Math.max(0, subtotal - discount);
+        return { subtotal, discount, total, voucher: loadVoucher() };
+    }
+
+    function updateVoucherUI(){
+        const el = ensureVoucherRow();
+        const out = computeTotals();
+        if(!el) return;
+        el.innerHTML = '';
+        // show subtotal + discount
+        const line = document.createElement('div');
+        line.style.display = 'flex';
+        line.style.justifyContent = 'space-between';
+        line.style.alignItems = 'center';
+        line.style.marginTop = '8px';
+        line.innerHTML = `<div style="font-weight:700">Total</div><div id="computedTotal" style="font-weight:800">${fmt(out.total)}</div>`;
+        el.appendChild(line);
+
+        if(out.voucher){
+            const box = document.createElement('div');
+            box.style.display = 'flex';
+            box.style.justifyContent = 'space-between';
+            box.style.alignItems = 'center';
+            box.style.marginTop = '8px';
+            box.innerHTML = `<div style="font-size:13px;color:var(--muted)">${out.voucher.code} • ${out.voucher.desc || ''}</div>`;
+            const rem = document.createElement('button');
+            rem.className = 'btn ghost';
+            rem.textContent = 'Hapus';
+            rem.addEventListener('click', function(){
+                clearVoucher();
+                updateVoucherUI();
+                if(typeof window.notify === 'function') window.notify('Vocer dihapus', { type: 'info' });
+                // also update main cart total element
+                refreshCartTotalElement();
+            });
+            box.appendChild(rem);
+            el.appendChild(box);
+
+            // show discount line
+            if(out.discount > 0){
+                const dline = document.createElement('div');
+                dline.style.display = 'flex';
+                dline.style.justifyContent = 'space-between';
+                dline.style.alignItems = 'center';
+                dline.style.marginTop = '6px';
+                dline.innerHTML = `<div style="font-size:13px;color:var(--muted)">Potongan</div><div style="font-weight:800;color:var(--accent)">${fmt(out.discount)}</div>`;
+                el.appendChild(dline);
+            }
+        }
+
+        // update main cartTotal element (sidebar top)
+        refreshCartTotalElement();
+    }
+
+    function refreshCartTotalElement(){
+        const el = document.getElementById('cartTotal');
+        if(!el) return;
+        const t = computeTotals();
+        // Show: original -> discounted
+        if(t.discount > 0){
+            el.innerHTML = `<span style="text-decoration:line-through;color:var(--muted);margin-right:8px">${fmt(t.subtotal)}</span> <span style="font-weight:800">${fmt(t.total)}</span>`;
+        } else {
+            el.textContent = fmt(t.total);
+        }
+        // update cartCount also (in case)
+        const countEl = document.getElementById('cartCount');
+        if(countEl){
+            const cart = readCart();
+            countEl.textContent = cart.reduce((s,i)=>s + (i.qty || 1), 0);
+        }
+    }
+
+    // Modal logic
+    const modal = document.getElementById('voucherModal');
+    const input = document.getElementById('voucherInput');
+    const err = document.getElementById('voucherError');
+    document.getElementById('voucherCancel').addEventListener('click', closeModal);
+    function openModal(prefill){
+        err.style.display = 'none';
+        input.value = prefill || '';
+        modal.style.display = 'flex';
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden','false');
+        setTimeout(()=> input.focus(),50);
+    }
+    function closeModal(){
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden','true');
+    }
+
+    // Attach voucher button into category bar extras if present
+    function placeButton(){
+        const bar = document.getElementById('categoryBar');
+        const header = document.querySelector('header');
+        if(bar){
+            const wrap = bar.querySelector('.extras-wrap') || bar.appendChild(document.createElement('div'));
+            wrap.appendChild(voucherBtn);
+        } else if(header){
+            header.insertBefore(voucherBtn, header.querySelector('#openCartBtn') || null);
+        }
+    }
+    placeButton();
+
+    voucherBtn.addEventListener('click', function(){ openModal(''); });
+
+    // Validate and apply
+    document.getElementById('voucherApply').addEventListener('click', function(){
+        err.style.display = 'none';
+        const codeRaw = (input.value || '').trim().toUpperCase();
+        if(!codeRaw){
+            err.textContent = 'Masukkan kode vocer.'; err.style.display = 'block'; input.focus(); return;
+        }
+        // allow known vouchers
+        if(VOUCHERS[codeRaw]){
+            const meta = VOUCHERS[codeRaw];
+            const applied = { code: codeRaw, desc: meta.desc || '', meta: meta };
+            saveVoucher(applied);
+            updateVoucherUI();
+            if(typeof window.notify === 'function') window.notify('Vocer diterapkan: ' + codeRaw, { type: 'success' });
+            closeModal();
+            return;
+        }
+        // allow simple fixed numeric codes like "RP5000" or "5000" -> convert to fixed
+        const m = codeRaw.match(/^RP?(\d{3,})$/i);
+        if(m){
+            const amount = parseInt(m[1],10);
+            const applied = { code: codeRaw, desc: `Potongan ${fmt(amount)}`, meta: { type:'fixed', value: amount } };
+            saveVoucher(applied);
+            updateVoucherUI();
+            if(typeof window.notify === 'function') window.notify('Vocer diterapkan', { type: 'success' });
+            closeModal();
+            return;
+        }
+        // failing validation
+        err.textContent = 'Kode tidak valid atau sudah kadaluarsa.'; err.style.display = 'block'; input.focus();
+    });
+
+    // When cart changes (many code paths update localStorage), observe storage and DOM clicks to refresh UI
+    window.addEventListener('storage', function(ev){
+        if(ev.key === 'ocin_cart_v1' || ev.key === STORAGE_KEY) updateVoucherUI();
+    });
+    // Also update when DOM interactions happen (add/remove)
+    document.addEventListener('click', function(e){
+        // on add/remove/inc/dec/phone/paket actions, refresh UI
+        if(e.target.closest('.add-btn') || e.target.closest('[data-action]') || e.target.closest('#paketAdd') || e.target.closest('#phoneAdd') || e.target.closest('#paketCancel')) {
+            setTimeout(updateVoucherUI, 80);
+        }
+    }, true);
+
+    // Intercept confirmPay to include voucher discount in WA message and clear voucher on success.
+    const confirmBtn = document.getElementById('confirmPay');
+    if(confirmBtn){
+        confirmBtn.addEventListener('click', function captureHandler(ev){
+            // run in capture to stop original listener
+            ev.stopImmediatePropagation();
+            ev.preventDefault();
+
+            const selectedMethodEl = document.querySelector('#methods .method.active');
+            const selectedMethod = selectedMethodEl ? selectedMethodEl.dataset.method : null;
+            if(!selectedMethod){
+                alert('Pilih metode pembayaran terlebih dahulu.');
+                return;
+            }
+            const cart = readCart();
+            if(!Array.isArray(cart) || cart.length === 0){
+                alert('Keranjang kosong');
+                return;
+            }
+
+            const totals = computeTotals();
+            const productLines = cart.map(i=>`${i.name} x${i.qty||1}`).join(', ');
+            const code = (typeof randomCode === 'function') ? randomCode(12) : Math.random().toString(36).slice(2,8).toUpperCase();
+            const amount = totals.total;
+            const voucher = loadVoucher();
+            let voucherLine = voucher ? `\nVoucher: ${voucher.code}` : '';
+            const msg = `Halo min Saya akan membayar Sebesar RP ${amount}\nKode Pesanan : ${code}\nNama Produk : ${productLines}${voucherLine}\nOcin Shop`;
+            const waNumber = '639094023904';
+            const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
+
+            // clear cart & voucher, persist & UI update
+            try{ localStorage.removeItem('ocin_cart_v1'); }catch(e){}
+            try{ clearVoucher(); }catch(e){}
+            window.cart = [];
+            try{ if(typeof renderCart === 'function') renderCart(); } catch(e){}
+            updateVoucherUI();
+
+            window.open(url, '_blank');
+            // close modal
+            const paymentModal = document.getElementById('paymentModal');
+            if(paymentModal) { paymentModal.classList.remove('show'); paymentModal.setAttribute('aria-hidden','true'); }
+            if(typeof window.notify === 'function') window.notify('Mengonfirmasi pembayaran... Anda akan diarahkan ke WhatsApp', { type: 'info', timeout: 3000 });
+        }, true);
+    }
+
+    // Initialize UI on load
+    document.addEventListener('DOMContentLoaded', function(){
+        updateVoucherUI();
+    });
+    // also immediate in case DOM already ready
+    if(document.readyState === 'interactive' || document.readyState === 'complete') updateVoucherUI();
+
+    // Close modal on backdrop click
+    modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
+})();
+</script>
+
+<script>
+(function(){
+    const USED_KEY = 'ocin_voucher_used_v1';
+
+    function loadUsed(){
+        try { return JSON.parse(localStorage.getItem(USED_KEY) || '[]'); }
+        catch(e){ return []; }
+    }
+    function saveUsed(list){
+        try { localStorage.setItem(USED_KEY, JSON.stringify(Array.from(new Set(list)))); }
+        catch(e){ }
+    }
+
+    // mark a code as used (idempotent)
+    function markUsed(code){
+        if(!code) return;
+        const c = code.trim().toUpperCase();
+        if(!c) return;
+        const used = loadUsed();
+        if(!used.includes(c)){
+            used.push(c);
+            saveUsed(used);
+            dispatchUsedUpdated();
+        }
+    }
+
+    // UI helpers
+    function showVoucherError(msg){
+        const err = document.getElementById('voucherError');
+        if(err){ err.textContent = msg; err.style.display = 'block'; }
+        if(window.notify) window.notify(msg, { type: 'warn', timeout: 2500 });
+    }
+    function clearVoucherError(){
+        const err = document.getElementById('voucherError');
+        if(err) err.style.display = 'none';
+    }
+
+    // Prevent applying an already-used voucher. Capture early to stop original handler.
+    const applyBtn = document.getElementById('voucherApply');
+    if(applyBtn){
+        applyBtn.addEventListener('click', function(ev){
+            try {
+                const input = document.getElementById('voucherInput');
+                const code = (input && input.value || '').trim().toUpperCase();
+                if(!code) return; // let existing validation show error
+                const used = loadUsed();
+                if(used.includes(code)){
+                    ev.preventDefault();
+                    ev.stopImmediatePropagation();
+                    showVoucherError('Kode sudah pernah dipakai.');
+                    return;
+                }
+                // mark as used immediately so it becomes single-use across the site
+                // (this keeps voucher single-use even across reloads / sessions)
+                markUsed(code);
+                // allow original handler to continue (it will save the applied voucher record)
+            } catch(e){}
+        }, true); // capture
+    }
+
+    // When user types a code in modal, warn if already used
+    const voucherInput = document.getElementById('voucherInput');
+    if(voucherInput){
+        voucherInput.addEventListener('input', function(){
+            const code = (this.value || '').trim().toUpperCase();
+            if(!code){ clearVoucherError(); return; }
+            const used = loadUsed();
+            if(used.includes(code)){
+                showVoucherError('Kode sudah pernah dipakai.');
+            } else {
+                clearVoucherError();
+            }
+        });
+    }
+
+    // Expose an event so other parts of the page can react when used list updates
+    function dispatchUsedUpdated(){
+        try { window.dispatchEvent(new CustomEvent('ocin:usedVouchersUpdated', { detail: loadUsed() })); } catch(e){}
+    }
+
+    // Render a small "used vouchers" hint inside sidebar voucher row
+    function renderUsedList(){
+        const sidebarCard = document.querySelector('.sidebar .card');
+        if(!sidebarCard) return;
+        let el = document.getElementById('usedVoucherRow');
+        if(!el){
+            el = document.createElement('div');
+            el.id = 'usedVoucherRow';
+            el.style.fontSize = '12px';
+            el.style.color = 'var(--muted)';
+            el.style.marginTop = '8px';
+            sidebarCard.appendChild(el);
+        }
+        const used = loadUsed();
+        if(used.length === 0) el.textContent = '';
+        else el.textContent = 'Vocer terpakai: ' + used.join(', ');
+    }
+
+    // Keep UI in sync on load / storage events / custom events
+    document.addEventListener('DOMContentLoaded', renderUsedList);
+    window.addEventListener('ocin:usedVouchersUpdated', renderUsedList);
+    window.addEventListener('storage', function(ev){
+        if(ev.key === USED_KEY || ev.key === 'ocin_voucher_v1' || ev.key === 'ocin_cart_v1') renderUsedList();
+    });
+
+    // Defensive: if a voucher was applied programmatically elsewhere, ensure it's persisted as used
+    // Listen for the voucher storage key being set by the original voucher code and mark it used.
+    const VOUCHER_STORAGE_KEY = 'ocin_voucher_v1';
+    window.addEventListener('storage', function(ev){
+        if(ev.key === VOUCHER_STORAGE_KEY && ev.newValue){
+            try {
+                const v = JSON.parse(ev.newValue);
+                if(v && v.code) markUsed(String(v.code).toUpperCase());
+            } catch(e){}
+        }
+    });
+
+    // Also mark voucher used when checkout confirm is activated (best-effort).
+    const confirmBtn = document.getElementById('confirmPay');
+    if(confirmBtn){
+        confirmBtn.addEventListener('click', function(){
+            try {
+                const voucher = (function(){ try { return JSON.parse(localStorage.getItem('ocin_voucher_v1')||'null'); } catch(e){ return null; } })();
+                if(voucher && voucher.code) markUsed(String(voucher.code).toUpperCase());
+            } catch(e){}
+        }, false);
+    }
+
+})();
+</script>
+
+
+
+
+<script>
+(function(){
+    const CLICK_KEY = 'ocin_logo_clicks_v1';
+    const AWARD_KEY = 'ocin_logo_voucher_awarded_v1';
+    const VOUCHER_KEY = 'ocin_voucher_v1';
+    const TARGET = 50;
+    const CODE = 'MAYDAY10';
+
+    function fmtCount(n){ return n + ' / ' + TARGET; }
+
+    function notify(msg, opts){
+        if(window.notify) return window.notify(msg, opts || {});
+        try { alert(msg); } catch(e){}
+    }
+
+    function getClicks(){ return parseInt(localStorage.getItem(CLICK_KEY) || '0', 10); }
+    function setClicks(n){ try{ localStorage.setItem(CLICK_KEY, String(n)); }catch(e){} }
+
+    function awarded(){ return localStorage.getItem(AWARD_KEY) === '1'; }
+    function setAwarded(){ try{ localStorage.setItem(AWARD_KEY, '1'); }catch(e){} }
+
+    function applyVoucher(){
+        const voucher = {
+            code: CODE,
+            desc: 'Diskon 5% (hadiah klik logo)',
+            meta: { type: 'percent', value: 5, max: 200000 } // max safeguard
+        };
+        try {
+            localStorage.setItem(VOUCHER_KEY, JSON.stringify(voucher));
+            // Dispatch a synthetic storage event so in-page listeners update immediately
+            try{
+                const ev = new StorageEvent('storage', {
+                    key: VOUCHER_KEY,
+                    newValue: JSON.stringify(voucher),
+                    oldValue: null,
+                    storageArea: localStorage,
+                    url: location.href
+                });
+                window.dispatchEvent(ev);
+            }catch(e){
+                // fallback: trigger a custom event that voucher code may not handle but at least show notification
+                window.dispatchEvent(new CustomEvent('ocin:voucherApplied', {detail: voucher}));
+            }
+            setAwarded();
+            notify('Selamat! Anda mendapatkan vocer ' + CODE + ' (Diskon 5%)', { type: 'success' });
+        } catch(e){
+            notify('Gagal menerapkan vocer secara otomatis, kode: ' + CODE, { type: 'error' });
+        }
+    }
+
+    function handleHit(){
+        if(awarded()) { notify('Vocer sudah diklaim: ' + CODE, { type: 'info' }); return; }
+        let n = getClicks() + 1;
+        setClicks(n);
+        if(n >= TARGET){
+            applyVoucher();
+            setClicks(0);
+        } else {
+            notify('Tekan logo sebanyak: ' + fmtCount(n), { type: 'info', timeout: 900 });
+        }
+    }
+
+    // attach to logo image(s)
+    function attach(){
+        const logos = document.querySelectorAll('.logo img, header .logo, header .brand, header .logo > div');
+        if(!logos || logos.length === 0) return;
+        logos.forEach(el=>{
+            // count both click and keyboard activation
+            el.style.cursor = el.style.cursor || 'pointer';
+            el.addEventListener('click', handleHit, { passive:true });
+            el.addEventListener('keydown', function(e){
+                if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleHit(); }
+            });
+            // small accessible hint
+            if(el.getAttribute && !el.getAttribute('aria-label')) el.setAttribute('aria-label', 'Logo Ocin Shop (klik untuk kesempatan vocer)');
+            if(el.getAttribute && !el.getAttribute('role')) el.setAttribute('role', 'button');
+        });
+    }
+
+    // ensure attach after DOM ready
+    if(document.readyState === 'loading'){
+        document.addEventListener('DOMContentLoaded', attach);
+    } else {
+        attach();
+    }
+
+    // expose for debugging/testing
+    window.__ocinLogoVoucher = {
+        getClicks, setClicks, applyVoucher, awarded
+    };
+})();
+</script>
+
+
+
+<!-- Footer quick-menu modal (inserted at $PLACEHOLDER$) -->
+<style>
+    /* Footer modal */
+    .footer-modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(2,6,23,0.6);
+        z-index: 12000;
+        padding: 18px;
+    }
+    .footer-modal.show { display: flex; }
+
+    .footer-panel {
+        width: 100%;
+        max-width: 720px;
+        background: linear-gradient(180deg, rgba(3,7,18,0.96), rgba(6,10,22,0.98));
+        border-radius: 12px;
+        padding: 18px;
+        color: #e6eef8;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+        border: 1px solid rgba(255,255,255,0.04);
+        max-height: 80vh;
+        overflow: auto;
+    }
+
+    .footer-panel header {
+        display:flex;
+        align-items:center;
+        gap:12px;
+        margin-bottom:8px;
+    }
+    .footer-panel h3 { margin:0; font-size:18px; font-weight:800; }
+    .footer-panel .close-btn {
+        margin-left:auto;
+        background:transparent;
+        border:0;
+        color:var(--muted);
+        font-weight:800;
+        cursor:pointer;
+        padding:6px 8px;
+        border-radius:8px;
+    }
+    .footer-panel .close-btn:focus { outline:2px solid rgba(255,255,255,0.06); }
+
+    .footer-panel .body {
+        font-size:14px;
+        color:var(--muted);
+        line-height:1.5;
+        white-space:pre-wrap;
+    }
+
+    /* small footer link style hint (optional) */
+    .footer-center a.footer-action { cursor:pointer; }
+</style>
+
+<div id="footerMenuModal" class="footer-modal" role="dialog" aria-hidden="true" aria-labelledby="footerMenuTitle" tabindex="-1">
+    <div class="footer-panel" role="document">
+        <header>
+            <h3 id="footerMenuTitle">Judul</h3>
+            <button class="close-btn" id="footerMenuClose" aria-label="Tutup menu">✕</button>
+        </header>
+        <div id="footerMenuBody" class="body">Konten...</div>
+    </div>
+</div>
+
+<script>
+(function(){
+    // Map of content for each footer menu item
+    const FOOTER_TEXTS = {
+        tentang: `Tentang Ocin Shop
+
+Ocin Shop adalah toko online untuk file, bot WhatsApp, dan paket cheat. Kami menyediakan produk digital dengan panduan instalasi dan dukungan singkat. Semua pembeli diharapkan mengikuti aturan penggunaan produk dan etika yang berlaku.`,
+        ketentuan: `Ketentuan Layanan
+
+1) Semua transaksi dilakukan melalui konfirmasi pembayaran.\n2) Penjual tidak bertanggung jawab atas penyalahgunaan produk.\n3) Barang digital tidak dapat dikembalikan setelah dikirim.\n4) Dengan membeli, Anda setuju mengikuti ketentuan ini.`,
+        privasi: `Kebijakan Privasi
+
+Kami menghormati privasi Anda. Data yang dikumpulkan terbatas pada informasi yang diperlukan untuk pemesanan (nama, nomor, pesan). Data tidak dibagikan ke pihak ketiga kecuali untuk keperluan pembayaran dan verifikasi. Anda dapat meminta penghapusan data melalui kontak admin.`
+    };
+
+    const modal = document.getElementById('footerMenuModal');
+    const titleEl = document.getElementById('footerMenuTitle');
+    const bodyEl = document.getElementById('footerMenuBody');
+    const closeBtn = document.getElementById('footerMenuClose');
+    let lastFocus = null;
+
+    function open(type){
+        const key = String(type || '').toLowerCase();
+        const txt = FOOTER_TEXTS[key] || 'Konten tidak tersedia.';
+        // set title from key capitalized
+        titleEl.textContent = key ? (key.charAt(0).toUpperCase() + key.slice(1)) : 'Informasi';
+        bodyEl.textContent = txt;
+        lastFocus = document.activeElement;
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden','false');
+        // focus close for keyboard users
+        closeBtn.focus();
+        // trap focus minimal
+        document.addEventListener('focus', enforceFocus, true);
+    }
+
+    function close(){
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden','true');
+        document.removeEventListener('focus', enforceFocus, true);
+        if(lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    function enforceFocus(e){
+        if(!modal.contains(e.target)) {
+            e.stopPropagation();
+            closeBtn.focus();
+        }
+    }
+
+    // Close handlers
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', function(e){
+        if(e.target === modal) close();
+    });
+    document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && modal.classList.contains('show')) close();
+    });
+
+    // Attach listeners to footer links (when clicked show modal)
+    document.addEventListener('click', function(e){
+        const a = e.target.closest('.footer-center a');
+        if(!a) return;
+        const txt = (a.textContent || a.innerText || '').trim().toLowerCase();
+        // Only intercept specific links
+        if(txt === 'tentang' || txt === 'ketentuan' || txt === 'privasi'){
+            e.preventDefault();
+            open(txt);
+        }
+    });
+
+    // Enhance footer links with a helper class for cursor (optional)
+    document.addEventListener('DOMContentLoaded', function(){
+        const links = document.querySelectorAll('.footer-center a');
+        links.forEach(a=>{
+            const t = (a.textContent||'').trim().toLowerCase();
+            if(t === 'tentang' || t === 'ketentuan' || t === 'privasi'){
+                a.classList.add('footer-action');
+                a.setAttribute('role','button');
+                a.setAttribute('tabindex','0');
+                // keyboard support
+                a.addEventListener('keydown', function(ev){
+                    if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); a.click(); }
+                });
+            }
+        });
+    });
+})();
+</script>
+
+
+
+
+<!-- Game products GTA + device/variant selection modal -->
+<style>
+    /* Game modal styles (keeps visual parity with existing modals) */
+    #gameModal { display:none; position:fixed; inset:0; align-items:center; justify-content:center; background:rgba(2,6,23,0.6); z-index:9999; }
+    #gameModal.show { display:flex; }
+    #gameModal .modal-card { width:100%; max-width:520px; border-radius:12px; padding:16px; background:#071428; border:1px solid rgba(255,255,255,0.04); color:var(--muted); }
+    #gameModal .head { display:flex; gap:12px; align-items:center; }
+    #gameModal img { width:96px; height:64px; object-fit:cover; border-radius:8px; border:1px solid rgba(255,255,255,0.04); }
+    .devices, .variants { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+    .device-btn, .variant-btn { padding:8px 10px; border-radius:8px; background:rgba(255,255,255,0.02); border:1px solid transparent; cursor:pointer; color:inherit; font-weight:700; }
+    .device-btn.active, .variant-btn.active { border-color:var(--accent); background:rgba(105,111,199,0.07); }
+    #gamePricePreview { font-weight:800; margin-left:8px; color:var(--accent); }
+    .row-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+</style>
+
+<!-- Modal -->
+<div id="gameModal" role="dialog" aria-hidden="true" aria-labelledby="gameModalTitle">
+    <div class="modal-card" role="document">
+        <div class="head">
+            <img id="gameModalImg" src="" alt="">
+            <div>
+                <div id="gameModalTitle" style="font-weight:800;font-size:16px">Pilih Perangkat</div>
+                <div id="gameModalSub" style="font-size:13px;color:var(--muted)">Pilih perangkat & varian, lalu tambahkan ke keranjang.</div>
+                <div style="margin-top:8px;font-size:13px;color:var(--muted)">Harga: <span id="gamePricePreview">Rp0</span></div>
+            </div>
+        </div>
+
+        <div style="margin-top:12px">
+            <div style="font-size:13px;font-weight:800">Perangkat</div>
+            <div class="devices" id="gameDevices" role="tablist"></div>
+
+            <div style="margin-top:10px;font-size:13px;font-weight:800">Varian</div>
+            <div class="variants" id="gameVariants" role="list"></div>
+
+            <div style="margin-top:10px;display:flex;gap:8px;align-items:center;justify-content:flex-end">
+                <label style="font-size:13px;color:var(--muted)">Jumlah:</label>
+                <input id="gameQty" type="number" min="1" value="1" style="width:72px;padding:8px;border-radius:8px;border:0;background:rgba(255,255,255,0.03);color:inherit">
+            </div>
+        </div>
+
+        <div class="row-actions">
+            <button id="gameCancel" class="btn ghost">Batal</button>
+            <button id="gameAddConfirm" class="btn">Tambah ke Keranjang</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    // Ensure product arrays exist
+    window.productsFile = window.productsFile || [];
+
+    // Define two game products
+    const games = [
+        { id: 'game_gta_v', name: 'GTA V', price: 10000, img: 'gta2.jpg' },
+        { id: 'game_gta_sa', name: 'GTA SA', price: 5000, img: 'gta1.jpg' }
+    ];
+
+    // Add if not present
+    games.forEach(g => {
+        if(!window.productsFile.some(p => p && p.id === g.id)) window.productsFile.push(g);
+    });
+
+    // Add descriptions if available map exists
+    try {
+        if(typeof descriptions !== 'undefined'){
+            descriptions['game_gta_v'] = 'GTA V > Versi game populer dengan beberapa varian (Original, Enchant edition, GTA Online). Pilih perangkat yang sesuai sebelum membeli.';
+            descriptions['game_gta_sa'] = 'GTA SA > San Andreas dengan varian lokal / definitive. Pilih perangkat dan varian yang diinginkan.';
+        }
+    } catch(e){}
+
+    // Re-render product list if renderer exists
+    try { if(typeof renderList === 'function') renderList(window.productsFile, 'productsFile'); } catch(e){}
+
+    // Device -> variants mapping and price adjustments
+    const CONFIG = {
+        'game_gta_v': {
+            base: 10000,
+            devices: {
+                'PC': [
+                    { id:'original', label:'Original', delta:0 },
+                    { id:'enchant', label:'Enchant edition', delta:5000 },
+                    { id:'online', label:'GTA Online', delta:15000 }
+                ],
+                'PS': [
+                    { id:'original', label:'Original', delta:0 },
+                    { id:'enchant', label:'Enchant edition', delta:5000 },
+                    { id:'online', label:'GTA Online', delta:15000 }
+                ],
+                'Xbox': [
+                    { id:'original', label:'Original', delta:0 },
+                    { id:'enchant', label:'Enchant edition', delta:5000 },
+                    { id:'online', label:'GTA Online', delta:15000 }
+                ],
+            }
+        },
+        'game_gta_sa': {
+            base: 5000,
+            devices: {
+                'PC': [
+                    { id:'original', label:'Original', delta:5000 },
+                    { id:'ekstrime', label:'Ekstrime Indonesia', delta:10000 },
+                    { id:'definitive', label:'Definitive Edition', delta:15000 }
+                ],
+                'Android NO LAG': [
+                    { id:'original', label:'Original', delta:0 },
+                    { id:'ekstrime', label:'Ekstrime Indonesia', delta:2000 },
+                    { id:'definitive', label:'Definitive Edition', delta:5000 }
+                ]
+            }
+        }
+    };
+
+    // Modal elements
+    const modal = document.getElementById('gameModal');
+    const modalImg = document.getElementById('gameModalImg');
+    const modalTitle = document.getElementById('gameModalTitle');
+    const modalSub = document.getElementById('gameModalSub');
+    const devicesEl = document.getElementById('gameDevices');
+    const variantsEl = document.getElementById('gameVariants');
+    const pricePreview = document.getElementById('gamePricePreview');
+    const qtyEl = document.getElementById('gameQty');
+    const cancelBtn = document.getElementById('gameCancel');
+    const addConfirm = document.getElementById('gameAddConfirm');
+
+    let currentProduct = null;
+    let selectedDevice = null;
+    let selectedVariant = null;
+    let computedPrice = 0;
+
+    function fmt(n){ return 'Rp' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+
+    // Open modal for product id
+    function openGameModal(pid){
+        const prod = (window.productsFile || []).find(p => p.id === pid);
+        if(!prod) return;
+        currentProduct = pid;
+        const cfg = CONFIG[pid];
+        if(!cfg) return;
+        modalImg.src = prod.img || '';
+        modalTitle.textContent = prod.name;
+        modalSub.textContent = 'Pilih perangkat & varian untuk ' + prod.name;
+        // build devices
+        devicesEl.innerHTML = '';
+        selectedDevice = null;
+        selectedVariant = null;
+        variantsEl.innerHTML = '';
+        qtyEl.value = 1;
+        Object.keys(cfg.devices).forEach((d, idx) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'device-btn';
+            b.textContent = d;
+            b.dataset.device = d;
+            b.addEventListener('click', function(){
+                devicesEl.querySelectorAll('.device-btn').forEach(x=>x.classList.remove('active'));
+                b.classList.add('active');
+                selectDevice(d);
+            });
+            devicesEl.appendChild(b);
+            // auto select first
+            if(idx === 0) {
+                setTimeout(()=> { b.click(); }, 0);
+            }
+        });
+        updatePricePreview(cfg.base);
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden','false');
+        setTimeout(()=> addConfirm.focus(), 30);
+    }
+
+    function selectDevice(device){
+        selectedDevice = device;
+        selectedVariant = null;
+        variantsEl.innerHTML = '';
+        const cfg = CONFIG[currentProduct];
+        if(!cfg) return;
+        const list = cfg.devices[device] || [];
+        list.forEach((v, idx) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'variant-btn';
+            btn.textContent = v.label;
+            btn.dataset.vid = v.id;
+            btn.dataset.delta = v.delta || 0;
+            btn.addEventListener('click', function(){
+                variantsEl.querySelectorAll('.variant-btn').forEach(x=>x.classList.remove('active'));
+                btn.classList.add('active');
+                selectedVariant = v;
+                updateComputedPrice();
+            });
+            variantsEl.appendChild(btn);
+            if(idx === 0) setTimeout(()=> btn.click(), 0);
+        });
+        updateComputedPrice();
+    }
+
+    function updateComputedPrice(){
+        const cfg = CONFIG[currentProduct];
+        if(!cfg) return;
+        const base = cfg.base || 0;
+        const delta = (selectedVariant && selectedVariant.delta) ? Number(selectedVariant.delta) : 0;
+        computedPrice = base + delta;
+        updatePricePreview(computedPrice);
+    }
+
+    function updatePricePreview(v){
+        pricePreview.textContent = fmt(v || 0);
+    }
+
+    cancelBtn.addEventListener('click', function(){ closeModal(); });
+    modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
+
+    function closeModal(){
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden','true');
+        currentProduct = null;
+        selectedDevice = null;
+        selectedVariant = null;
+        variantsEl.innerHTML = '';
+        devicesEl.innerHTML = '';
+    }
+
+    // Confirm add to cart
+    addConfirm.addEventListener('click', function(){
+        if(!currentProduct || !selectedDevice || !selectedVariant){
+            alert('Pilih perangkat dan varian terlebih dahulu.');
+            return;
+        }
+        const qty = Math.max(1, parseInt(qtyEl.value,10) || 1);
+        const prod = (window.productsFile || []).find(p=> p.id === currentProduct);
+        if(!prod) { alert('Produk tidak ditemukan'); closeModal(); return; }
+
+        const variantId = selectedVariant.id || selectedVariant.label || 'v1';
+        const uid = `${currentProduct}::${selectedDevice}::${variantId}`;
+
+        // ensure global cart
+        window.cart = window.cart || JSON.parse(localStorage.getItem('ocin_cart_v1') || '[]');
+        const existing = window.cart.find(i => i.id === uid);
+        if(existing) existing.qty = (existing.qty || 0) + qty;
+        else {
+            const displayName = `${prod.name} (${selectedDevice} • ${selectedVariant.label})`;
+            window.cart.push({
+                id: uid,
+                name: displayName,
+                price: computedPrice || prod.price || 0,
+                img: prod.img,
+                qty: qty,
+                meta: { device: selectedDevice, variant: selectedVariant.label }
+            });
+        }
+
+        // persist & render using existing helpers if available
+        try { if(typeof saveCart === 'function') saveCart(); else localStorage.setItem('ocin_cart_v1', JSON.stringify(window.cart)); } catch(e){}
+        try { if(typeof renderCart === 'function') renderCart(); } catch(e){}
+
+        // show toast if available
+        try { if(typeof notify === 'function') notify(`${prod.name} (${selectedDevice} • ${selectedVariant.label}) ditambahkan`, { type: 'success' }); } catch(e){}
+
+        closeModal();
+    });
+
+    // Intercept add-btn clicks for these game product ids
+    document.addEventListener('click', function(e){
+        const btn = e.target.closest('.add-btn');
+        if(!btn) return;
+        const pid = btn.dataset && btn.dataset.id;
+        if(pid === 'game_gta_v' || pid === 'game_gta_sa'){
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            openGameModal(pid);
+        }
+    }, true);
+
+    // Ensure search/render reflect new products
+    try { if(typeof renderList === 'function') renderList(window.productsFile, 'productsFile'); } catch(e){}
+
+})();
+</script>
+
+
+
+<script>
+(function(){
+    // keep originals if present
+    const origSave = window.saveCart;
+    const origRender = window.renderCart;
+
+    // Unified persistence: always write window.cart to storage and sync module `cart`
+    window.saveCart = function(){
+        try {
+            // ensure window.cart exists
+            window.cart = window.cart || JSON.parse(localStorage.getItem('ocin_cart_v1') || '[]');
+            // persist authoritative cart
+            localStorage.setItem('ocin_cart_v1', JSON.stringify(window.cart));
+            // try to sync module-scoped cart variable used by other functions
+            try { cart = window.cart; } catch(e) {}
+        } catch(e){
+            // fallback to original if something unexpected
+            if(typeof origSave === 'function') try { origSave(); } catch(e){}
+        }
+    };
+
+    // Wrap renderCart so it uses window.cart if available
+    window.renderCart = function(){
+        try {
+            // If the global cart is set, sync the module cart before rendering
+            if(typeof window.cart !== 'undefined') {
+                try { cart = window.cart; } catch(e){}
+            } else {
+                // ensure module cart exists from storage
+                try { cart = JSON.parse(localStorage.getItem('ocin_cart_v1') || '[]'); } catch(e){}
+                window.cart = cart;
+            }
+        } catch(e){}
+        if(typeof origRender === 'function') {
+            try { origRender(); return; } catch(e){}
+        }
+        // minimal fallback renderer (keeps UI usable if original missing)
+        try {
+            const list = document.getElementById('cartList');
+            if(!list) return;
+            list.innerHTML = '';
+            let total = 0;
+            (window.cart || []).forEach(item => {
+                total += item.price * (item.qty || 1);
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <img src="${item.img||''}" alt="${item.name||''}" onerror="this.style.display='none'"/>
+                    <div class="ci-info">
+                        <div style="font-weight:700">${item.name||''}</div>
+                        <div style="font-size:13px;color:var(--muted)">${'Rp'+(item.price||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.')} x ${item.qty||1}</div>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+            const totalEl = document.getElementById('cartTotal');
+            if(totalEl) totalEl.textContent = 'Rp' + total.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+            const countEl = document.getElementById('cartCount');
+            if(countEl) countEl.textContent = (window.cart || []).reduce((s,i)=>s+(i.qty||1),0);
+        } catch(e){}
+    };
+
+    // Ensure initial sync on load
+    try {
+        window.cart = window.cart || JSON.parse(localStorage.getItem('ocin_cart_v1') || '[]');
+        try { cart = window.cart; } catch(e){}
+        if(typeof window.renderCart === 'function') window.renderCart();
+    } catch(e){}
+})();
+</script>
+
+
+
+
+<style>
+/* compact responsive category pills */
+.cat-filter{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.cat-filter .cat-btn{padding:6px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);font-weight:700;font-size:13px;cursor:pointer}
+.cat-filter .cat-btn.active{background:var(--accent);color:#071027;border-color:transparent}
+@media(max-width:480px){.cat-filter .cat-btn{padding:6px 8px;font-size:12px}}
+</style>
+
+<script>
+(function(){
+    const CATS = ['All','File','Cheat','BotWa','GTA','Paket'];
+    const BAR_ID = 'categoryBar';
+    const STORAGE = 'ocin_cat_sel_v1';
+
+    function ensureBar(){
+        let bar = document.getElementById(BAR_ID);
+        if(!bar){
+            const prodEl = document.getElementById('productsFile');
+            if(!prodEl) return null;
+            const card = prodEl.closest('.card') || prodEl.parentElement;
+            bar = document.createElement('div');
+            bar.id = BAR_ID;
+            bar.className = 'category-bar';
+            bar.innerHTML = '<div class="label"></div><div class="extras-wrap" role="toolbar" aria-label="Menu tambahan"></div>';
+            card.parentNode.insertBefore(bar, card);
+        }
+        return bar;
+    }
+
+    function build(){
+        const bar = ensureBar();
+        if(!bar) return;
+        if(bar.querySelector('.cat-filter')) return; // already built
+        const wrap = document.createElement('div');
+        wrap.className = 'cat-filter';
+        CATS.forEach(c=>{
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'cat-btn';
+            b.textContent = c;
+            b.dataset.cat = c;
+            b.setAttribute('aria-pressed','false');
+            b.addEventListener('click', ()=> selectCat(c));
+            wrap.appendChild(b);
+        });
+        // insert after label and before extras
+        const label = bar.querySelector('.label') || bar.firstElementChild;
+        if(label && label.nextSibling) bar.insertBefore(wrap, label.nextSibling);
+        else bar.appendChild(wrap);
+    }
+
+    function getCatForId(id){
+        if(!id) return 'File';
+        id = String(id).toLowerCase();
+        if(id.startsWith('cheat')) return 'Cheat';
+        if(id.startsWith('game_')) return 'GTA';
+        if(id === 'file13') return 'Paket';
+        if(id === 'file11' || id === 'file12') return 'BotWa';
+        // fallback: inspect product name if available
+        const all = [...(window.productsFile||[]), ...(window.productsCheat||[])];
+        const p = all.find(x=>x && String(x.id).toLowerCase()===id);
+        if(p){
+            const n = String(p.name||'').toLowerCase();
+            if(n.includes('bot')||n.includes('whatsapp')) return 'BotWa';
+            if(n.includes('cheat')) return 'Cheat';
+            if(n.includes('paket')||n.includes('bebas')) return 'Paket';
+            if(n.includes('gta')) return 'GTA';
+        }
+        return 'File';
+    }
+
+    function selectCat(cat){
+        const buttons = document.querySelectorAll('.cat-filter .cat-btn');
+        buttons.forEach(b=>{
+            const is = b.dataset.cat === cat;
+            b.classList.toggle('active', is);
+            b.setAttribute('aria-pressed', is ? 'true' : 'false');
+        });
+        localStorage.setItem(STORAGE, cat);
+        applyFilter(cat);
+    }
+
+    function applyFilter(cat){
+        const showAll = !cat || cat === 'All';
+        document.querySelectorAll('.product').forEach(prodEl=>{
+            // find id from image or add-btn
+            const img = prodEl.querySelector('img[data-id]');
+            const btn = prodEl.querySelector('button.add-btn[data-id]');
+            const id = (img && img.dataset.id) || (btn && btn.dataset.id) || '';
+            const c = getCatForId(id);
+            prodEl.style.display = (showAll || c === cat) ? '' : 'none';
+        });
+    }
+
+    // observe product containers so filter reapplies after re-render/search
+    function watch(){
+        const c1 = document.getElementById('productsFile');
+        const c2 = document.getElementById('productsCheat');
+        const obs = new MutationObserver(()=> {
+            const sel = localStorage.getItem(STORAGE) || 'All';
+            applyFilter(sel);
+        });
+        if(c1) obs.observe(c1, {childList:true, subtree:true});
+        if(c2) obs.observe(c2, {childList:true, subtree:true});
+    }
+
+    // init
+    document.addEventListener('DOMContentLoaded', ()=>{
+        build();
+        watch();
+        const sel = localStorage.getItem(STORAGE) || 'All';
+        // tiny delay to allow initial renderList to populate DOM
+        setTimeout(()=> { selectCat(sel); }, 80);
+    });
+})();
+</script>
+
+
+
+<style>
+/* Deter download: disable dragging, touch callout and text selection on images */
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+</style>
+
+<script>
+(function(){
+    // Protect single <img>
+    function protectImg(img){
+        if(!img || img._noDownload) return;
+        try {
+            img.setAttribute('draggable', 'false');
+            img.addEventListener('dragstart', prevent, {passive:false});
+            img.addEventListener('contextmenu', prevent, {passive:false});
+            img.addEventListener('mousedown', onMouseDown, {passive:false});
+            // best-effort: prevent long-press context menu on iOS/Android
+            img.style.touchAction = img.style.touchAction || 'manipulation';
+            img._noDownload = true;
+        } catch(e){}
+    }
+
+    function prevent(e){ try { e.preventDefault(); e.stopPropagation(); } catch(ex){} }
+
+    function onMouseDown(e){
+        // block right-click / long press
+        if(e && (e.button === 2 || e.which === 3)) prevent(e);
+    }
+
+    // Protect all existing images
+    function protectAll(){
+        document.querySelectorAll('img').forEach(protectImg);
+    }
+
+    // Observe dynamic additions
+    const mo = new MutationObserver(muts => {
+        for(const m of muts){
+            if(!m.addedNodes) continue;
+            m.addedNodes.forEach(node => {
+                if(node.nodeType !== 1) return;
+                if(node.tagName === 'IMG') protectImg(node);
+                node.querySelectorAll && node.querySelectorAll('img').forEach(protectImg);
+            });
+        }
+    });
+
+    if(document.readyState === 'loading'){
+        document.addEventListener('DOMContentLoaded', ()=>{ protectAll(); mo.observe(document.body, {childList:true, subtree:true}); });
+    } else {
+        protectAll(); mo.observe(document.body, {childList:true, subtree:true});
+    }
+
+    // Expose helper to protect a specific image if needed
+    window.protectImageFromDownload = protectImg;
+})();
+</script>
+<footer class="site-footer card" role="contentinfo" aria-label="Footer">
+<div class="inner">
+    <div class="footer-left">
+        <div class="brand-compact" aria-hidden="true">
+            <img src="logobaru.jpg" alt="">
+            <div>
+                <div style="font-weight:800;color:#e6eef8">Ocin Shop</div>
+                <div style="font-size:12px;color:var(--muted)">File Shop & Cheat Gacor</div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-center" role="navigation" aria-label="Footer links">
+        <a href="#" title="Tentang">Tentang</a>
+        <a href="#" title="Ketentuan">Ketentuan</a>
+        <a href="#" title="Privasi">Privasi</a>
+        <a href="#" id="uploadBtn" title="Upload">Upload</a>
+
+        <!-- Password modal for protected upload -->
+        <div id="uploadPassModal" class="modal" aria-hidden="true" role="dialog" style="display:none;">
+            <div class="modal-card" style="max-width:420px;">
+            <h3 style="margin-top:0">Masukkan Password Admin</h3>
+            <div style="font-size:13px;color:var(--muted)">Masukkan kata sandi untuk mengakses halaman upload.</div>
+            <div style="height:8px"></div>
+            <input id="uploadPassInput" type="password" placeholder="Ketik password..." style="width:100%;padding:10px;border-radius:10px;border:0;background:rgba(255,255,255,0.03);color:inherit">
+            <div id="uploadPassError" role="alert" style="color:#ff7b7b;font-size:13px;display:none;margin-top:8px">Password salah.</div>
+            <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+                <button id="uploadPassCancel" class="btn ghost">Batal</button>
+                <button id="uploadPassConfirm" class="btn">Masuk</button>
+            </div>
+            </div>
+        </div>
+
+        <script>
+        (function(){
+            const SECRET = 'fur2025';
+            const uploadBtn = document.getElementById('uploadBtn');
+            const modal = document.getElementById('uploadPassModal');
+            const input = document.getElementById('uploadPassInput');
+            const err = document.getElementById('uploadPassError');
+            const cancel = document.getElementById('uploadPassCancel');
+            const confirm = document.getElementById('uploadPassConfirm');
+            const targetUrl = 'https://ocinshop.my.id/upload.html';
+
+            function openModal(){
+            err.style.display = 'none';
+            input.value = '';
+            modal.style.display = 'flex';
+            modal.classList.add('show');
+            modal.setAttribute('aria-hidden','false');
+            setTimeout(()=> input.focus(),50);
+            }
+            function closeModal(){
+            modal.style.display = 'none';
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden','true');
+            }
+
+            uploadBtn.addEventListener('click', function(e){
+            e.preventDefault();
+            openModal();
+            });
+
+            cancel.addEventListener('click', function(){ closeModal(); });
+
+            confirm.addEventListener('click', function(){
+            const val = (input.value || '').trim();
+            if(val === SECRET){
+                // success: navigate to upload page
+                try { if(typeof window.notify === 'function') window.notify('Password benar. Mengalihkan...', { type:'success' }); } catch(e){}
+                closeModal();
+                window.location.href = targetUrl;
+            } else {
+                err.style.display = 'block';
+                input.focus();
+                try { if(typeof window.notify === 'function') window.notify('Password salah', { type:'error' }); } catch(e){}
+            }
+            });
+
+            // allow Enter key to submit
+            input.addEventListener('keydown', function(e){
+            if(e.key === 'Enter'){ e.preventDefault(); confirm.click(); }
+            if(e.key === 'Escape'){ closeModal(); }
+            });
+
+            // close on backdrop click
+            modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
+        })();
+        </script>
+        <a id="clearStorage" class="small-link" href="#" title="Cache">Cache</a>
+    </div>
+
+    <div class="footer-right">
+        <div class="copyright">&copy; <span id="year"></span> Ocin Shop</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)">
+            <img src="logocin.png" alt="Logo pembuat" style="width:50px;height:50px;border-radius:6px;object-fit:cover;border:1px solid rgba(255,255,255,0.04)">
+            <div>• Dibuat Oleh <strong style="color:var(--muted)">[Winstore X OcinVip]</strong></div>
+        </div>
+    </div>
+</div>
+</footer>
