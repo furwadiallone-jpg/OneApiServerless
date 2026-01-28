@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terasa Manis - Specialty Coffee & Eatery</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #1a5d3a;
+            --primary-light: #2d8659;
+            --primary-dark: #0f3d23;
+            --accent: #e8a87c;
+            --accent-light: #f5c9a0;
+            --dark: #0f1f0f;
+            --light: #fafaf8;
+            --text: #1a1a1a;
+            --text-light: #6c757d;
+            --white: #ffffff;
+            --shadow-sm: 0 2px 8px rgba(26, 93, 58, 0.08);
+            --shadow-md: 0 8px 24px rgba(26, 93, 58, 0.12);
+            --shadow-lg: 0 16px 48px rgba(26, 93, 58, 0.15);
+            --transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --transition-smooth: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ========== BUTTONS ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-decoration: none;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 0;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(26, 93, 58, 0.25);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 0;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-smooth);
+        }
+
+        .navbar.scrolled {
+            padding: 8px 0;
+            box-shadow: var(--shadow-md);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            height: 55px;
+            width: auto;
+            animation: slideInDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 45px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: var(--text);
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition-smooth);
+            font-size: 0.95rem;
+            text-decoration: none;
+            padding: 8px 0;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary);
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2.5px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(10px, 10px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* ========== HERO SECTION ========== */
+
+        
+    .hero {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f5f3f0 0%, #e8f4f0 50%, #f0f8f5 100%);
+        display: flex;
+        align-items: center;
+        margin-top: 70px;
+        position: relative;
+        overflow: hidden;
+        padding: 60px 0;
+    }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(232, 168, 124, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+    /* ========== GPT MODEL BANNER (UI only) ========== */
+    /* Adds a small fixed admin banner and toggle button to enable "gpt-5-mini" for clients.
+       Note: actual model switching requires server-side / API changes. This is UI only. */
+
+    .model-toggle-banner {
+        position: fixed;
+        left: 16px;
+        bottom: 16px;
+        z-index: 1100;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(26, 93, 58, 0.95);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(26, 93, 58, 0.2);
+        font-size: 0.9rem;
+        font-weight: 600;
+        backdrop-filter: blur(6px);
+    }
+
+    .model-toggle-banner .model-status {
+        background: linear-gradient(135deg, #ffb86b, #ff8555);
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .model-toggle-banner .model-toggle-btn {
+        background: #fff;
+        color: var(--primary);
+        border: none;
+        padding: 8px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.85rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .model-toggle-banner .model-toggle-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(26, 93, 58, 0.12);
+    }
+
+    /* When enabled, change status style */
+    .model-toggle-banner.model-enabled {
+        background: linear-gradient(135deg, #1a5d3a, #2d8659);
+    }
+
+    .model-toggle-banner.model-enabled .model-status {
+        background: linear-gradient(135deg, #7be495, #3be07a);
+        color: #08321a;
+    }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(26, 93, 58, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: var(--text);
+            max-width: 650px;
+            animation: slideInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(26, 93, 58, 0.08), rgba(232, 168, 124, 0.08));
+            border: 1.5px solid rgba(26, 93, 58, 0.2);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--primary);
+            backdrop-filter: blur(10px);
+            animation: fadeInDown 0.6s ease 0.2s backwards;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            line-height: 1.15;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideInLeft 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s backwards;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            margin-bottom: 35px;
+            color: var(--text-light);
+            line-height: 1.8;
+            animation: slideInLeft 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-30px) translateX(10px); }
+        }
+
+        /* ========== ABOUT SECTION ========== */
+        .about {
+            padding: 120px 0;
+            background: linear-gradient(180deg, var(--light) 0%, rgba(232, 168, 124, 0.05) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(26, 93, 58, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 30s ease-in-out infinite;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-title h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 15px;
+            color: var(--text);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+            animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            animation: zoomIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(26, 93, 58, 0.2), rgba(232, 168, 124, 0.1));
+            z-index: 2;
+        }
+
+        .about-content h3 {
+            font-size: clamp(1.5rem, 4vw, 2.8rem);
+            margin-bottom: 25px;
+            color: var(--text);
+        }
+
+        .about-content p {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.9;
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: 700;
+            position: relative;
+        }
+
+        .highlight::before {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(232, 168, 124, 0.3);
+            border-radius: 2px;
+            z-index: -1;
+        }
+
+        .quote {
+            background: linear-gradient(135deg, var(--white) 0%, rgba(232, 168, 124, 0.05) 100%);
+            padding: 30px;
+            border-left: 4px solid var(--primary);
+            margin-top: 35px;
+            border-radius: 12px;
+            font-style: italic;
+            box-shadow: var(--shadow-md);
+            color: var(--text);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            right: 10px;
+            font-size: 100px;
+            color: rgba(26, 93, 58, 0.1);
+            font-family: serif;
+        }
+
+        /* ========== MENU SECTION ========== */
+        .menu {
+            padding: 120px 0;
+            background: var(--white);
+            position: relative;
+        }
+
+        .menu::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(26, 93, 58, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .menu-filter {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.6s ease 0.3s backwards;
+        }
+
+        .filter-btn {
+            padding: 12px 28px;
+            background: var(--light);
+            border: 1.5px solid rgba(26, 93, 58, 0.2);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(26, 93, 58, 0.2);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .menu-card {
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            cursor: pointer;
+            animation: fadeInUp 0.6s ease backwards;
+            border: 1px solid rgba(26, 93, 58, 0.08);
+        }
+
+        .menu-card:nth-child(1) { animation-delay: 0.1s; }
+        .menu-card:nth-child(2) { animation-delay: 0.15s; }
+        .menu-card:nth-child(3) { animation-delay: 0.2s; }
+        .menu-card:nth-child(4) { animation-delay: 0.25s; }
+        .menu-card:nth-child(5) { animation-delay: 0.3s; }
+        .menu-card:nth-child(6) { animation-delay: 0.35s; }
+
+        .menu-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .menu-img {
+            height: 240px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, var(--light), rgba(232, 168, 124, 0.1));
+        }
+
+        .menu-img::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(26, 93, 58, 0.1));
+            z-index: 2;
+        }
+
+        .menu-img img {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .menu-card:hover .menu-img img {
+            transform: scale(1.1) rotate(1deg);
+        }
+
+        .menu-body {
+            padding: 25px;
+        }
+
+        .menu-tag {
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .menu-name {
+            font-size: 1.35rem;
+            color: var(--text);
+            margin: 0;
+        }
+
+        /* ========== PRICE LIST SECTION ========== */
+        .price-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .price-card {
+            background: linear-gradient(135deg, var(--white) 0%, rgba(232, 168, 124, 0.05) 100%);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(26, 93, 58, 0.08);
+            animation: fadeInUp 0.6s ease backwards;
+        }
+
+        .price-card:nth-child(1) { animation-delay: 0.2s; }
+        .price-card:nth-child(2) { animation-delay: 0.3s; }
+
+        .price-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .price-card h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+        }
+
+        .price-card img {
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ========== INSTAGRAM SECTION ========== */
+        .instagram-section {
+            margin-top: 100px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .instagram-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--text);
+        }
+
+        .instagram-wrapper {
+            display: flex;
+            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 0.6s ease 0.4s backwards;
+        }
+
+        /* ========== CONTACT SECTION ========== */
+        .contact {
+            padding: 120px 0;
+            background: linear-gradient(135deg, var(--light) 0%, rgba(26, 93, 58, 0.03) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            right: -100px;
+            top: 0;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(232, 168, 124, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 25s ease-in-out infinite;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-info {
+            background: var(--white);
+            padding: 45px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            animation: slideInLeft 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+            border: 1px solid rgba(26, 93, 58, 0.08);
+        }
+
+        .contact-info h3 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .contact-info > p {
+            color: var(--text-light);
+            margin-bottom: 35px;
+            font-size: 0.95rem;
+        }
+
+        .contact-item {
+            margin-bottom: 30px;
+            padding-left: 35px;
+            position: relative;
+        }
+
+        .contact-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(26, 93, 58, 0.1);
+        }
+
+        .contact-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .contact-item p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .contact-item a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .contact-item a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .contact-item a:hover::after {
+            width: 100%;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+        }
+
+        .social-links a {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .social-links a:hover {
+            transform: translateY(-4px) scale(1.1);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .map-wrapper {
+            height: 450px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            animation: slideInRight 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+            border: 1px solid rgba(26, 93, 58, 0.08);
+        }
+
+        .map-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 50px 0 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        footer h3 {
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            animation: slideInDown 0.6s ease;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            animation: fadeInUp 0.6s ease 0.1s backwards;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scaleX(0);
+            }
+            to {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .nav-menu {
+                gap: 30px;
+            }
+
+            .about-grid,
+            .contact-grid {
+                gap: 40px;
+            }
+
+            .contact-info {
+                padding: 35px;
+            }
+
+            .map-wrapper {
+                height: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: var(--white);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                gap: 0;
+                padding: 20px 0;
+                box-shadow: var(--shadow-lg);
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-menu a {
+                display: block;
+                padding: 15px;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero {
+                margin-top: 0;
+                padding: 40px 0;
+                min-height: auto;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .about,
+            .menu,
+            .contact {
+                padding: 80px 0;
+            }
+
+            .about-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .price-section {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-filter {
+                gap: 8px;
+            }
+
+            .filter-btn {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+
+            .about-content h3 {
+                font-size: 1.8rem;
+            }
+
+            .contact-info {
+                padding: 25px;
+            }
+
+            .map-wrapper {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .navbar {
+                padding: 10px 0;
+            }
+
+            .hero {
+                padding: 30px 0;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.6rem;
+            }
+
+            .menu-card {
+                animation: none;
+            }
+
+            .about-content h3 {
+                font-size: 1.5rem;
+            }
+
+            .about-grid,
+            .contact-grid {
+                gap: 20px;
+            }
+
+            .nav-menu {
+                width: 100%;
+            }
+
+            .menu-filter {
+                flex-direction: column;
+            }
+
+            .filter-btn {
+                width: 100%;
+            }
+
+            .contact-info {
+                padding: 20px;
+            }
+
+            footer h3 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-content">
+            <a href="#" class="logo">
+                <img src="https://i.ibb.co.com/9H36njxy/logo-terasa-manis-1.png" alt="Terasa Manis" style="height: 50px;">
+            </a>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">Kami</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#contact">Kontak</a></li>
+            </ul>
+
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="home"> 
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-tag">☕ Specialty Coffee</div>
+                <h1>Terasa Manis</h1>
+                <p style="color: var(--white);">Rasakan kenikmatan biji kopi pilihan dari petani lokal Sambas, diseduh dengan hati oleh barista berpengalaman di Tebas Kuala untuk menciptakan momen "Terasa Manis" dalam harimu.</p>
+                <a href="#menu" class="btn">
+                    <i class="fas fa-arrow-right"></i> Lihat Menu
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2>Cerita Kami</h2>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweqnhMoO1ceFPVzTYYQgv0u0q_M14eEaYgNswBlwG4dH3jHL2kc0luxQ7BMdqLZ3UZYUMiqLuZ89lyMKl2sYCASwNW9IJ9OS9OlWbsD9L5_kijwgFDm4zC2VpaXVhF6JfEwx6Eeb=s3072-v1" alt="Tentang Kami">
+                </div>
+
+                <div class="about-content fade-in">
+                    <h3>Selamat Datang di <span class="highlight">TERASA MANIS</span></h3>
+                    <p style="color: black;">Terasa Manis Tebas Kuala hadir dengan misi sederhana: menghadirkan kopi berkualitas tinggi dari petani lokal Indonesia dalam suasana yang nyaman dan hangat untuk masyarakat Sambas dan sekitarnya.</p>
+                    <p style="color: black;">Kami mempercayai setiap biji kopi pilihan yang kami sajikan, bekerja langsung dengan petani terpercaya untuk memastikan kualitas terbaik. Di Tebas Kuala, kami menciptakan ruang di mana Anda bisa melepas penat, menikmati kopi sempurna, dan terhubung dengan komunitas lokal.</p>
+
+                    <div class="quote">
+                        "Di Terasa Manis, setiap cangkir kopi adalah momen istimewa yang mengubah hari Anda menjadi lebih bermakna."
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MENU -->
+    <section class="menu" id="menu">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2>Menu Kami</h2>
+            </div>
+            <div class="menu-filter fade-in" id="filterContainer">
+                <button class="filter-btn active" onclick="filterMenu('all')">Semua</button>
+                <button class="filter-btn" onclick="filterMenu('coffee')">☕ Coffee Based</button>
+                <button class="filter-btn" onclick="filterMenu('non-coffee')">🥤 Non-Coffee</button>
+                <button class="filter-btn" onclick="filterMenu('food')">🍽️ Food & Snacks</button>
+            </div>
+
+            <div class="menu-grid" id="coffeeGrid"></div>
+            <div class="menu-grid" id="nonCoffeeGrid"></div>
+            <div class="menu-grid" id="foodGrid"></div>
+            <div class="menu-grid" id="allGrid"></div>
+
+            <!-- PRICE LIST -->
+            <div style="margin-top: 100px;">
+                <div class="section-title fade-in">
+                    <h2>Daftar Harga</h2>
+                </div>
+
+                <div class="price-section">
+                    <div class="price-card fade-in">
+                        <h3>📋 Minuman</h3>
+                        <img src="https://i.ibb.co.com/cSS8RbMy/list-Minuman.jpg" alt="Daftar Harga Minuman">
+                    </div>
+                    <div class="price-card fade-in">
+                        <h3>🍽️ Makanan</h3>
+                        <img src="https://i.ibb.co.com/qFMk97LL/list-makanan.jpg" alt="Daftar Harga Makanan">
+                    </div>
+                </div>
+            </div>
+
+            <!-- INSTAGRAM -->
+            <div class="instagram-section fade-in">
+                <h2>Follow Kami di Instagram</h2>
+                <script src="https://www.instagram.com/embed.js"></script>
+                <div class="instagram-wrapper">
+                    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/terasamanis.id/" data-instgrm-version="14" style="width: 100%; max-width: 600px;"></blockquote>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2>Hubungi Kami</h2>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-info fade-in">
+                    <h3>📍 Lokasi & Kontak</h3>
+                    <p>Kunjungi kami untuk menikmati kopi terbaik</p>
+
+                    <div class="contact-item">
+                        <h4>Alamat</h4>
+                        <p>Tebas Kuala, Kec. Tebas, Kabupaten Sambas, Kalimantan Barat</p>
+                    </div>
+
+                    <div class="contact-item">
+                        <h4>WhatsApp</h4>
+                        <a href="https://wa.me/6281347773894" target="_blank">081347773894</a>
+                    </div>
+
+                    <div class="contact-item">
+                        <h4>Email</h4>
+                        <p>hello@terasamanis.co.id</p>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/terasamanis.id/" target="_blank" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://web.facebook.com/p/TerasaManis-100066932766067/" target="_blank" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="map-wrapper fade-in">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.8217769049617!2d109.1467677!3d1.229452!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31e4998707e4ffcb:0x1e7c5b848cc2e943!2sTerasa+manis!5e0!3m2!1sen!2sid!4v1706170800000" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <h3>Terasa Manis</h3>
+            <p>&copy; 2026 Terasa Manis Coffee. All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- WHATSAPP FLOATING BUTTON -->
+    <a href="https://wa.me/6281347773894" class="whatsapp-float" target="_blank" title="Chat WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <style>
+        /* ========== WHATSAPP FLOATING BUTTON ========== */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #25d366, #20ba5a);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3);
+            transition: var(--transition);
+            z-index: 999;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .whatsapp-float:hover {
+            background: linear-gradient(135deg, #20ba5a, #1ba347);
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 12px 32px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-float:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 480px) {
+            .whatsapp-float {
+                width: 55px;
+                height: 55px;
+                bottom: 80px;
+                right: 20px;
+                font-size: 24px;
+            }
+        }
+    </style>
+
+    <!-- AI CHAT WIDGET -->
+    <div class="ai-chat-container" id="aiChatContainer">
+        <div class="chat-header">
+            <div class="chat-header-content">
+                <div class="chat-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="chat-header-info">
+                    <h3>Terasa Manis AI</h3>
+                    <p class="chat-status">🟢 Online</p>
+                </div>
+            </div>
+            <button class="chat-close" id="chatClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <p>Halo! 👋 Saya adalah AI Assistant dari Terasa Manis. Saya bisa membantu Anda menemukan minuman dan makanan terbaik, memberikan rekomendasi lokasi, atau menjawab pertanyaan apapun tentang kafe kami. Ada yang bisa saya bantu?</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Ketik pesan Anda..." class="chat-input">
+            <button id="chatSend" class="chat-send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- AI CHAT TOGGLE BUTTON -->
+    <button class="ai-chat-toggle" id="aiChatToggle">
+        <i class="fas fa-robot"></i>
+        <span class="chat-badge" id="chatBadge">1</span>
+    </button>
+
+    <style>
+        /* ========== AI CHAT WIDGET ========== */
+        .ai-chat-toggle {
+            position: fixed;
+            width: 65px;
+            height: 65px;
+            bottom: 110px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            z-index: 998;
+        }
+
+        .ai-chat-toggle:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 12px 40px rgba(26, 93, 58, 0.35);
+        }
+
+        .ai-chat-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .chat-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #ff6b35, #ff8555);
+            color: white;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+        }
+
+        .ai-chat-container {
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            width: 420px;
+            height: 600px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+            animation: slideUpChat 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+            border: 1px solid rgba(26, 93, 58, 0.08);
+        }
+
+        .ai-chat-container.active {
+            display: flex;
+        }
+
+        @keyframes slideUpChat {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-header-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .chat-avatar {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .chat-header-info h3 {
+            font-size: 1.1rem;
+            margin: 0;
+            color: var(--white);
+        }
+
+        .chat-status {
+            font-size: 0.75rem;
+            margin: 5px 0 0 0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .chat-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--white);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .chat-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: linear-gradient(135deg, var(--light), rgba(232, 168, 124, 0.05));
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(26, 93, 58, 0.05);
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .ai-message .message-avatar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+        }
+
+        .user-message .message-avatar {
+            background: rgba(26, 93, 58, 0.1);
+            color: var(--primary);
+        }
+
+        .user-message {
+            flex-direction: row-reverse;
+        }
+
+        .message-content {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            word-wrap: break-word;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .ai-message .message-content {
+            background: var(--white);
+            color: var(--text);
+            border: 1px solid rgba(26, 93, 58, 0.1);
+            box-shadow: 0 2px 8px rgba(26, 93, 58, 0.05);
+        }
+
+        .user-message .message-content {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+        }
+
+        .message-content p {
+            margin: 0;
+        }
+
+        .message-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .message-content li {
+            margin: 5px 0;
+        }
+
+        .message-content strong {
+            color: var(--primary);
+        }
+
+        .user-message .message-content strong {
+            color: var(--white);
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            background: var(--white);
+            border-top: 1px solid rgba(26, 93, 58, 0.08);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid rgba(26, 93, 58, 0.1);
+            border-radius: 25px;
+            padding: 12px 18px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            transition: var(--transition-smooth);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 93, 58, 0.1);
+        }
+
+        .chat-send-btn {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: var(--transition);
+        }
+
+        .chat-send-btn:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 93, 58, 0.2);
+        }
+
+        .chat-send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: var(--white);
+            border-radius: 15px;
+            width: fit-content;
+            border: 1px solid rgba(26, 93, 58, 0.1);
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        .suggestion-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .suggestion-btn {
+            background: linear-gradient(135deg, rgba(26, 93, 58, 0.08), rgba(232, 168, 124, 0.08));
+            border: 1px solid rgba(26, 93, 58, 0.2);
+            color: var(--primary);
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .suggestion-btn:hover {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 480px) {
+            .ai-chat-container {
+                width: calc(100vw - 40px);
+                height: 500px;
+                bottom: 110px;
+                right: 20px;
+            }
+
+            .ai-chat-toggle {
+                bottom: 100px;
+                right: 20px;
+                width: 55px;
+                height: 55px;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+        }
+    </style>
+
+    <!-- SCRIPTS -->
+    <script>
+        // ========== NAVBAR SCROLL EFFECT ==========
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ========== MENU DATA ==========
+        const menuData = [
+            { category: 'coffee', name: 'Taro Latte', img: 'https://i.ibb.co.com/b5hwZYBN/taro-late.jpg' },
+            { category: 'coffee', name: 'Teman Hari Mu', img: 'https://i.ibb.co.com/PkFYYR9/teman-hari-mu.jpg' },
+            { category: 'non-coffee', name: 'Mango Jelly Milk', img: 'https://i.ibb.co.com/7tmWtFp0/minuman.jpg' },
+            { category: 'non-coffee', name: 'Lemon', img: 'https://i.ibb.co.com/rGwwcbnG/lemon.jpg' },
+            { category: 'food', name: 'Choco Toast', img: 'https://i.ibb.co.com/MDL1220W/choco-toast.jpg' },
+            { category: 'food', name: 'Ayam Suwir Kemangi', img: 'https://i.ibb.co.com/35KBB364/New-Menu-Ayam-Suwir-Kemangi.jpg' },
+            { category: 'food', name: 'Grilled Chicken', img: 'https://i.ibb.co.com/v6ZPxQVn/Grilled-Chicken.jpg' },
+            { category: 'food', name: 'Fried Chicken', img: 'https://i.ibb.co.com/TDV1q53b/fried-chicken.jpg' },
+            { category: 'food', name: 'Noodle Chicken', img: 'https://i.ibb.co.com/k64pn41h/noodle-chicken.jpg' },
+            { category: 'food', name: 'Cheese Noodle', img: 'https://i.ibb.co.com/HfhbpnL6/Noodle.jpg' }
+        ];
+
+        // ========== RENDER MENU ==========
+        function renderMenu() {
+            const categories = { coffee: '', 'non-coffee': '', food: '', all: '' };
+
+            menuData.forEach(item => {
+                const categoryEmoji = { 
+                    coffee: '☕', 
+                    'non-coffee': '🥤', 
+                    food: '🍽️' 
+                };
+
+                const card = `
+                    <div class="menu-card" data-category="${item.category}">
+                        <div class="menu-img">
+                            <img src="${item.img}" alt="${item.name}" loading="lazy">
+                        </div>
+                        <div class="menu-body">
+                            <div class="menu-tag">${categoryEmoji[item.category]} ${item.category.replace('-', ' ')}</div>
+                            <h4 class="menu-name">${item.name}</h4>
+                        </div>
+                    </div>
+                `;
+
+                categories[item.category] += card;
+                categories.all += card;
+            });
+
+            document.getElementById('coffeeGrid').innerHTML = categories.coffee;
+            document.getElementById('nonCoffeeGrid').innerHTML = categories['non-coffee'];
+            document.getElementById('foodGrid').innerHTML = categories.food;
+            document.getElementById('allGrid').innerHTML = categories.all;
+        }
+
+        // ========== FILTER MENU ==========
+        function filterMenu(category) {
+            const grids = document.querySelectorAll('.menu-grid');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            grids.forEach(g => g.innerHTML = '');
+            buttons.forEach(b => b.classList.remove('active'));
+
+            event.target.classList.add('active');
+
+            if (category === 'all') {
+                document.getElementById('allGrid').innerHTML = menuData.map(item => {
+                    const emoji = { coffee: '☕', 'non-coffee': '🥤', food: '🍽️' };
+                    return `
+                        <div class="menu-card" data-category="${item.category}">
+                            <div class="menu-img">
+                                <img src="${item.img}" alt="${item.name}" loading="lazy">
+                            </div>
+                            <div class="menu-body">
+                                <div class="menu-tag">${emoji[item.category]} ${item.category.replace('-', ' ')}</div>
+                                <h4 class="menu-name">${item.name}</h4>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                const filtered = menuData.filter(item => item.category === category);
+                const emoji = { coffee: '☕', 'non-coffee': '🥤', food: '🍽️' };
+                const html = filtered.map(item => `
+                    <div class="menu-card" data-category="${item.category}">
+                        <div class="menu-img">
+                            <img src="${item.img}" alt="${item.name}" loading="lazy">
+                        </div>
+                        <div class="menu-body">
+                            <div class="menu-tag">${emoji[item.category]} ${item.category.replace('-', ' ')}</div>
+                            <h4 class="menu-name">${item.name}</h4>
+                        </div>
+                    </div>
+                `).join('');
+
+                const gridId = category === 'non-coffee' ? 'nonCoffeeGrid' : (category + 'Grid');
+                document.getElementById(gridId).innerHTML = html;
+            }
+        }
+
+        // ========== HAMBURGER MENU ==========
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // ========== SCROLL ANIMATIONS ==========
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in, .menu-card, .price-card, .contact-info, .map-wrapper').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ========== INIT ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMenu();
+            document.querySelectorAll('.menu-card').forEach(card => observer.observe(card));
+        });
+        // ========== FLOATING LEAVES ANIMATION ==========
+        function createFallingLeaves() {
+            const leafContainer = document.createElement('div');
+            leafContainer.id = 'leafContainer';
+            leafContainer.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
+            `;
+            document.body.appendChild(leafContainer);
+
+            const leafSVG = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                    <path d="M50 10 Q80 30 85 60 Q80 75 50 85 Q20 75 15 60 Q20 30 50 10" fill="currentColor" opacity="0.7"/>
+                    <path d="M50 30 L50 70" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+                </svg>
+            `;
+
+            for (let i = 0; i < 12; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'falling-leaf';
+                leaf.innerHTML = leafSVG;
+                leaf.style.cssText = `
+                    position: absolute;
+                    left: ${Math.random() * 100}%;
+                    top: -20px;
+                    width: ${30 + Math.random() * 40}px;
+                    height: ${30 + Math.random() * 40}px;
+                    color: ${['#2d8659', '#1a5d3a', '#3a9d69', '#2d8659'].random()};
+                    animation: fall ${5 + Math.random() * 5}s linear infinite;
+                    animation-delay: ${Math.random() * 3}s;
+                    filter: drop-shadow(0 2px 4px rgba(26, 93, 58, 0.15));
+                `;
+                leafContainer.appendChild(leaf);
+            }
+        }
+
+        // Helper for array random selection
+        Array.prototype.random = function() {
+            return this[Math.floor(Math.random() * this.length)];
+        };
+
+        // Add keyframe for falling leaves
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+            @keyframes fall {
+                0% {
+                    transform: translateY(0) rotateZ(0deg);
+                    opacity: 1;
+                }
+                50% {
+                    transform: translateY(${window.innerHeight * 0.5}px) rotateZ(180deg) translateX(${Math.random() * 100 - 50}px);
+                }
+                100% {
+                    transform: translateY(${window.innerHeight}px) rotateZ(360deg);
+                    opacity: 0;
+                }
+            }
+
+            @keyframes leafFloat {
+                0%, 100% { transform: translateX(0) translateY(0); }
+                25% { transform: translateX(15px) translateY(-5px); }
+                50% { transform: translateX(-10px) translateY(-10px); }
+                75% { transform: translateX(10px) translateY(-5px); }
+            }
+
+            .leaf-accent {
+                display: inline-block;
+                animation: leafFloat 4s ease-in-out infinite;
+                margin: 0 5px;
+            }
+        `;
+        document.head.appendChild(styleSheet);
+
+        // Initialize leaves on page load
+        window.addEventListener('load', createFallingLeaves);
+    </script>
+
+</body>
+</html>
+
+
+<style>
+/* Override hero background to use the provided image with a subtle overlay for readability */
+.hero {
+    background:
+        linear-gradient(135deg, rgba(0, 0, 0, 0.22) 0%, rgba(104, 75, 55, 0.06) 50%, rgba(0,0,0,0.20) 100%),
+        url("https://i.ibb.co.com/LDPc1dtK/suasana1.jpg") center/cover no-repeat;
+    background-blend-mode: overlay;
+}
+
+/* Slight adjustment for smaller screens */
+@media (max-width: 768px) {
+    .hero {
+        background-position: center top;
+    }
+}
+</style>
+
+<style>
+/* Set the site base background to the provided image (overrides earlier body background) */
+body {
+    background-image: linear-gradient(rgba(0,0,0,0.04), rgba(0,0,0,0.04)), url("https://i.ibb.co.com/MDL1220W/choco-toast.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /* keep text readable */
+    color: var(--text);
+}
+</style>
+
+
+
+<script>
+    // ========== AI CHAT DISABLED ==========
+    // AI Chat feature is currently disabled
+    document.addEventListener('DOMContentLoaded', () => {
+        const aiChatToggle = document.getElementById('aiChatToggle');
+        const aiChatContainer = document.getElementById('aiChatContainer');
+        
+        if (aiChatToggle) aiChatToggle.style.display = 'none';
+        if (aiChatContainer) aiChatContainer.style.display = 'none';
+    });
+</script>
+
+<!-- ========== CLICK LEAVES EFFECT ========== -->
+<script>
+document.addEventListener('click', (e) => {
+    const leafContainer = document.getElementById('leafContainer');
+    if (!leafContainer) return;
+
+    const leafSVG = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <path d="M50 10 Q80 30 85 60 Q80 75 50 85 Q20 75 15 60 Q20 30 50 10" fill="currentColor" opacity="0.7"/>
+            <path d="M50 30 L50 70" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        </svg>
+    `;
+
+    for (let i = 0; i < 5; i++) {
+        const leaf = document.createElement('div');
+        leaf.innerHTML = leafSVG;
+        leaf.style.cssText = `
+            position: fixed;
+            left: ${e.clientX}px;
+            top: ${e.clientY}px;
+            width: ${20 + Math.random() * 30}px;
+            height: ${20 + Math.random() * 30}px;
+            color: ${['#2d8659', '#1a5d3a', '#3a9d69', '#e8a87c'].random()};
+            pointer-events: none;
+            animation: clickLeafFall ${1.5 + Math.random() * 1}s ease-out forwards;
+            filter: drop-shadow(0 2px 4px rgba(26, 93, 58, 0.15));
+        `;
+        leafContainer.appendChild(leaf);
+
+        setTimeout(() => leaf.remove(), 2500);
+    }
+});
+
+// Add keyframe for click leaves
+const clickLeafStyle = document.createElement('style');
+clickLeafStyle.textContent = `
+    @keyframes clickLeafFall {
+        0% {
+            transform: translateY(0) rotateZ(0deg) scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(${100 + Math.random() * 100}px) rotateZ(${Math.random() * 360}deg) translateX(${Math.random() * 150 - 75}px) scale(0.3);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(clickLeafStyle);
+</script>
