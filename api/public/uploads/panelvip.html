@@ -4993,3 +4993,289 @@ html,body{
     window.openBuyLockedModal = openBuyModal;
 })();
 </script>
+
+<!-- OJK License Footer -->
+<style>
+    .ojk-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(180deg, rgba(7, 17, 41, 0.95), rgba(0, 0, 0, 0.98));
+        border-top: 2px solid rgba(229, 57, 53, 0.3);
+        padding: 12px 20px;
+        z-index: 999998;
+        font-size: 11px;
+        color: #9fb6ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        min-height: 56px;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .ojk-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        max-width: 1200px;
+        width: 100%;
+    }
+
+    .ojk-logo-wrapper {
+        min-width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 4px;
+        flex-shrink: 0;
+    }
+
+    .ojk-logo {
+        height: 28px;
+        width: auto;
+        object-fit: contain;
+        filter: brightness(1.1) contrast(1.1);
+    }
+
+    .ojk-divider {
+        width: 1px;
+        height: 24px;
+        background: linear-gradient(180deg, transparent, rgba(229, 57, 53, 0.4), transparent);
+        flex-shrink: 0;
+    }
+
+    .ojk-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        flex: 1;
+    }
+
+    .ojk-text-label {
+        font-weight: 800;
+        color: #ffb3b3;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .ojk-text-main {
+        font-weight: 600;
+        color: #cfe0ff;
+        font-size: 11px;
+    }
+
+    .ojk-text-main a {
+        color: #ff9f9f;
+        text-decoration: none;
+        transition: color 0.2s ease;
+        font-weight: 700;
+    }
+
+    .ojk-text-main a:hover {
+        color: #ffb3b3;
+        text-decoration: underline;
+    }
+
+    .ojk-badge {
+        background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1));
+        color: #2ecc71;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 800;
+        border: 1px solid rgba(46, 204, 113, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .ojk-verify-icon {
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 4px;
+    }
+
+    @media (max-width: 768px) {
+        .ojk-footer {
+            padding: 10px 12px;
+            min-height: 52px;
+            gap: 10px;
+        }
+
+        .ojk-content {
+            gap: 10px;
+        }
+
+        .ojk-logo-wrapper {
+            min-width: 32px;
+            height: 32px;
+        }
+
+        .ojk-logo {
+            height: 24px;
+        }
+
+        .ojk-text-label {
+            font-size: 9px;
+        }
+
+        .ojk-text-main {
+            font-size: 10px;
+        }
+
+        .ojk-badge {
+            font-size: 9px;
+            padding: 3px 6px;
+        }
+
+        .ojk-divider {
+            height: 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .ojk-footer {
+            padding: 8px 10px;
+            min-height: 48px;
+            gap: 8px;
+        }
+
+        .ojk-content {
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .ojk-logo-wrapper {
+            align-self: flex-start;
+        }
+
+        .ojk-divider {
+            display: none;
+        }
+
+        .ojk-text {
+            gap: 1px;
+        }
+
+        .ojk-text-label {
+            font-size: 8px;
+        }
+
+        .ojk-text-main {
+            font-size: 9px;
+        }
+    }
+
+    /* Animation untuk footer */
+    @keyframes ojkGlow {
+        0%, 100% {
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
+        }
+        50% {
+            box-shadow: 0 -6px 16px rgba(229, 57, 53, 0.2);
+        }
+    }
+
+    .ojk-footer:hover {
+        animation: ojkGlow 2s ease-in-out;
+    }
+
+    /* Adjust body padding to account for footer */
+    body {
+        padding-bottom: 56px !important;
+    }
+
+    @media (max-width: 768px) {
+        body {
+            padding-bottom: 52px !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding-bottom: 48px !important;
+        }
+    }
+</style>
+
+<footer class="ojk-footer" role="contentinfo" aria-label="OJK License Information">
+    <div class="ojk-content">
+        <div class="ojk-logo-wrapper" title="Otoritas Jasa Keuangan">
+            <img src="https://ojk.go.id/_catalogs/masterpage/responsive-master/images/logo.png" alt="OJK Logo" class="ojk-logo" loading="lazy" />
+        </div>
+
+        <div class="ojk-divider" aria-hidden="true"></div>
+
+        <div class="ojk-text">
+            <div class="ojk-text-label">⚖️ Lisensi & Compliance</div>
+            <div class="ojk-text-main">
+                Diawasi oleh <a href="https://ojk.go.id" target="_blank" rel="noopener noreferrer">OJK (Otoritas Jasa Keuangan)</a> • 
+                <a href="https://ojk.go.id/id/kanal/informasi/Pages/Perlindungan-Konsumen.aspx" target="_blank" rel="noopener noreferrer">Perlindungan Konsumen</a>
+            </div>
+        </div>
+
+        <div class="ojk-badge">
+            <span class="ojk-verify-icon">✓</span>Terdaftar & Aman
+        </div>
+    </div>
+</footer>
+
+<script>
+(function() {
+    const footer = document.querySelector('.ojk-footer');
+    if (!footer) return;
+
+    // Optional: Add tooltip functionality
+    const logoWrapper = footer.querySelector('.ojk-logo-wrapper');
+    if (logoWrapper) {
+        logoWrapper.addEventListener('mouseenter', function() {
+            const tooltip = document.createElement('div');
+            tooltip.style.cssText = `
+                position: absolute;
+                bottom: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(46, 204, 113, 0.9);
+                color: #fff;
+                padding: 8px 12px;
+                border-radius: 8px;
+                font-size: 11px;
+                font-weight: 700;
+                white-space: nowrap;
+                margin-bottom: 8px;
+                z-index: 10;
+                pointer-events: none;
+                animation: tooltipFadeIn 0.2s ease;
+            `;
+            tooltip.textContent = 'Diverifikasi oleh OJK';
+            this.appendChild(tooltip);
+
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes tooltipFadeIn {
+                    from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+                    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+                }
+            `;
+            document.head.appendChild(style);
+
+            setTimeout(() => tooltip.remove(), 3000);
+        });
+    }
+
+    // Log footer initialization
+    console.log('%c✓ OJK License Footer Loaded', 'color: #2ecc71; font-weight: bold; font-size: 12px');
+})();
+</script>
