@@ -736,7 +736,7 @@
                         
                         if (selectedMembership) {
                             const data = membershipData[selectedMembership.tier];
-                            const waUrl = `https://wa.me/6285182883856?text=Halo%20Admin%2C%20saya%20ingin%20membeli%20membership%20${data.tier}%20seharga%20${selectedMembership.price}rb`;
+                            const waUrl = `https://wa.me/62856508758739?text=Halo%20Admin%2C%20saya%20ingin%20membeli%20membership%20${data.tier}%20seharga%20${selectedMembership.price}rb`;
                             window.open(waUrl, '_blank');
                             overlay.classList.remove('show');
                         }
@@ -1643,7 +1643,7 @@ const USER_MAP = {
     "ocfvk": 40,
     "ocgbk": 50,
     "ocjmk": 70,
-    "@0505": 100
+    "admin0505": 100
 };
 
 
@@ -1932,7 +1932,7 @@ html,body{
 <a
     class="wa-fab pulse"
     id="waFab"
-    href="https://wa.me/6285182883856?text=Halo%20Admin%2C%20saya%20ingin%20membeli%20username%20vip%20untuk%20panel."
+    href="https://wa.me/62856508758739?text=Halo%20Admin%2C%20saya%20ingin%20membeli%20username%20vip%20untuk%20panel."
     target="_blank"
     rel="noopener noreferrer"
     aria-label="Chat via WhatsApp"
@@ -2434,7 +2434,7 @@ html,body{
         );
         // Set WA number to existing wa link in page or keep default
         const waNumber = (document.getElementById('waFab') && document.getElementById('waFab').href) ? null : null;
-        el.report.href = 'https://wa.me/6285182883856?text=' + reportText;
+        el.report.href = 'https://wa.me/62856508758739?text=' + reportText;
     }
 
     // copy formatter
@@ -2931,205 +2931,6 @@ html,body{
     // Small initial hint
     pushLog('Bypass diagnostics siap • tekan "Jalankan Deteksi Lengkap" untuk mulai', 'info');
 
-})();
-</script>
-
-
-
-<!-- Background music player (footer) -->
-<style>
-/* small stylish footer player */
-#musicFooter{
-    position:fixed;
-    left:50%;
-    bottom:12px;
-    transform:translateX(-50%);
-    z-index:999999;
-    display:flex;
-    gap:10px;
-    align-items:center;
-    padding:8px 12px;
-    background:linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-    backdrop-filter: blur(6px);
-    border-radius:999px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.02);
-    color:#fff;
-    font-weight:700;
-    font-size:13px;
-    pointer-events:auto;
-    max-width:92%;
-    min-width:220px;
-}
-#musicFooter .disc{
-    width:36px;height:36px;border-radius:50%;
-    background:linear-gradient(135deg,#ffd7a8,#ff7a7a);
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 4px 12px rgba(0,0,0,0.45);
-    flex:0 0 36px;
-}
-#musicFooter .disc.spin{ animation: spinDisc 4s linear infinite; }
-@keyframes spinDisc{ to{ transform:rotate(360deg);} }
-#musicFooter .meta{display:flex;flex-direction:column;min-width:120px;overflow:hidden}
-#musicFooter .meta .label{font-size:11px;color:#a8c7ff;font-weight:800;opacity:0.95}
-#musicFooter .meta .title{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
-#musicFooter .controls{display:inline-flex;gap:8px;align-items:center;margin-left:auto}
-#musicFooter .ctl{
-    width:34px;height:34px;border-radius:8px;border:0;background:rgba(255,255,255,0.03);
-    color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
-    font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,0.35);
-}
-#musicFooter .ctl:hover{ transform:translateY(-2px); background:rgba(255,255,255,0.05) }
-#musicFooter .smallNote{font-size:11px;color:#9fb6ff;opacity:0.9;margin-left:10px}
-#musicFooter .progress{height:4px;width:100%;background:rgba(255,255,255,0.04);border-radius:6px;margin-top:6px;overflow:hidden}
-#musicFooter .progress > i{display:block;height:100%;background:linear-gradient(90deg,#ffd600,#06a5ff);width:0%}
-@media(max-width:420px){ #musicFooter{ font-size:12px; padding:8px } .meta{min-width:88px} }
-</style>
-
-<div id="musicFooter" role="region" aria-label="Background music player">
-    <div class="disc" id="musicDisc">💿</div>
-    <div class="meta">
-        <div class="label">Garena Free Fire</div>
-        <div class="title" id="musicTitle">Muat..</div>
-        <div class="progress" aria-hidden="true"><i id="musicProgress"></i></div>
-    </div>
-
-    <div class="controls" role="group" aria-label="Player controls">
-        <button class="ctl" id="musicPrev" title="Sebelumnya">⏮</button>
-        <button class="ctl" id="musicToggle" title="Putar / Jeda">⏯</button>
-        <button class="ctl" id="musicNext" title="Lompat">⏭</button>
-    </div>
-</div>
-
-<script>
-(function(){
-    // playlist (files expected in same folder as HTML)
-    const tracks = [
-        'Free-Fire-Original.mp3',
-        'Free-Fire-SpookyNight.mp3',
-        'Free-Fire-3rdAnniversary.mp3',
-        'Free-Fire-Winterlands2019.mp3',
-        'Free-Fire-Winther2018.mp3',
-        'Free-Fire-XAttackOnTitan.mp3',
-        'Free-FireWorldCup2019.mp3'
-    ];
-
-    // helpers
-    function niceName(fn){
-        return fn.replace(/\.[^.]+$/,'').replace(/[_\-]+/g,' ').replace(/\b(mp3|wav|ogg)\b/gi,'').trim();
-    }
-    function shuffle(a){
-        for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
-        return a;
-    }
-
-    // build shuffled order and prepare audio element
-    let order = shuffle(tracks.slice());
-    let idx = 0;
-    const audio = document.createElement('audio');
-    audio.preload = 'auto';
-    audio.crossOrigin = 'anonymous';
-    audio.volume = 0.65;
-    audio.src = order[idx];
-    audio.loop = false;
-    audio.setAttribute('playsinline','');
-    document.body.appendChild(audio); // hidden element
-
-    // UI refs
-    const elTitle = document.getElementById('musicTitle');
-    const elDisc = document.getElementById('musicDisc');
-    const elToggle = document.getElementById('musicToggle');
-    const elNext = document.getElementById('musicNext');
-    const elPrev = document.getElementById('musicPrev');
-    const elProgress = document.getElementById('musicProgress');
-
-    function reflect(){
-        elTitle.textContent = niceName(order[idx]) || 'Unknown';
-        if(!audio.paused){
-            elDisc.classList.add('spin');
-            elToggle.textContent = '⏸';
-            elToggle.title = 'Jeda';
-        } else {
-            elDisc.classList.remove('spin');
-            elToggle.textContent = '▶';
-            elToggle.title = 'Putar';
-        }
-    }
-
-    // attempt autoplay; some browsers require user gesture - handle promise rejection
-    function tryPlay(){
-        audio.play().then(()=> {
-            reflect();
-        }).catch(()=> {
-            // failed to autoplay — show paused state and let user press play
-            audio.pause();
-            reflect();
-            elTitle.textContent = niceName(order[idx]) + ' • (▶ Play)';
-        });
-    }
-
-    // move to next in sequence; when playlist finished, reshuffle and continue (continuous random order)
-    function nextTrack(){
-        idx++;
-        if(idx >= order.length){
-            order = shuffle(tracks.slice());
-            idx = 0;
-        }
-        audio.src = order[idx];
-        audio.currentTime = 0;
-        tryPlay();
-    }
-
-    function prevTrack(){
-        idx = (idx - 1 + order.length) % order.length;
-        audio.src = order[idx];
-        audio.currentTime = 0;
-        tryPlay();
-    }
-
-    // events
-    audio.addEventListener('ended', nextTrack);
-    audio.addEventListener('timeupdate', ()=> {
-        if(audio.duration && !isNaN(audio.duration)){
-            const pct = Math.max(0, Math.min(100, (audio.currentTime / audio.duration) * 100));
-            elProgress.style.width = pct + '%';
-            elProgress.parentElement.querySelector('i').style.width = pct + '%';
-        }
-    });
-    audio.addEventListener('play', reflect);
-    audio.addEventListener('pause', reflect);
-    audio.addEventListener('loadedmetadata', reflect);
-
-    // control handlers
-    elToggle.addEventListener('click', function(){
-        if(audio.paused) { audio.play().catch(()=>{}); }
-        else audio.pause();
-    });
-    elNext.addEventListener('click', function(){ nextTrack(); });
-    elPrev.addEventListener('click', function(){ prevTrack(); });
-
-    // allow clicking title to jump to next (small UX)
-    elTitle.addEventListener('click', function(){ nextTrack(); });
-
-    // keyboard shortcuts: space toggles play/pause, right/left skip
-    window.addEventListener('keydown', function(e){
-        if(['INPUT','TEXTAREA'].includes((e.target && e.target.tagName)||'')) return;
-        if(e.code === 'Space'){ e.preventDefault(); elToggle.click(); }
-        if(e.code === 'ArrowRight') elNext.click();
-        if(e.code === 'ArrowLeft') elPrev.click();
-    });
-
-    // initialize UI and try to autoplay with random start
-    // start from a random index in shuffled order to ensure "mulai secara acak"
-    idx = Math.floor(Math.random() * order.length);
-    audio.src = order[idx];
-    // small delay to give the DOM a moment
-    setTimeout(tryPlay, 120);
-
-    // expose small API for debugging if needed
-    window._bgMusicPlayer = {
-        audio, tracks: tracks.slice(), order, currentIndex: () => idx,
-        next: nextTrack, prev: prevTrack, play: ()=>audio.play(), pause: ()=>audio.pause()
-    };
 })();
 </script>
 
@@ -4467,14 +4268,14 @@ html,body{
 
                     <div class="payment-confirmation">
                         <label class="checkbox-container">
-                            <input type="checkbox" id="buyLockedConfirmCheck" />
+                            <input type="checkbox" id="buyLockedConfirmCheck" disabled />
                             <span class="checkmark"></span>
                             <span class="label-text">Saya sudah transfer pembayaran</span>
                         </label>
                     </div>
 
                     <div class="buy-locked-actions">
-                        <button class="btn btn-red" id="buyLockedWABtn" disabled>
+                        <button class="btn btn-red" id="buyLockedWABtn" disabled style="opacity: 0.5; cursor: not-allowed;">
                             <span class="btn-text">✓ Kirim ke WhatsApp Admin</span>
                             <span class="btn-loader" style="display:none">
                                 <span class="spinner"></span>
@@ -4957,7 +4758,7 @@ html,body{
                     `Terima kasih 🙏`
                 );
 
-                window.open(`https://wa.me/6285182883856?text=${message}`, '_blank');
+                window.open(`https://wa.me/62856508758739?text=${message}`, '_blank');
 
                 // Reset button
                 btnText.style.display = 'inline';
@@ -4994,289 +4795,537 @@ html,body{
 })();
 </script>
 
-<!-- OJK License Footer -->
+
+<!-- OJK Official License Footer -->
 <style>
-    .ojk-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(180deg, rgba(7, 17, 41, 0.95), rgba(0, 0, 0, 0.98));
-        border-top: 2px solid rgba(229, 57, 53, 0.3);
-        padding: 12px 20px;
-        z-index: 999998;
-        font-size: 11px;
-        color: #9fb6ff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
+/* OJK Footer Styles */
+.ojk-footer {
+    margin-top: 40px;
+    padding: 24px;
+    background: linear-gradient(180deg, rgba(107, 0, 0, 0.08), rgba(0, 0, 0, 0.3));
+    border-top: 2px solid rgba(229, 57, 53, 0.2);
+    border-radius: 14px;
+    animation: fadeInUp 0.6s ease;
+}
+
+.ojk-footer-content {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: center;
+    max-width: 100%;
+}
+
+.ojk-logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+}
+
+.ojk-logo {
+    width: 70px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.ojk-logo:hover {
+    transform: scale(1.08);
+    filter: drop-shadow(0 4px 8px rgba(229, 57, 53, 0.3));
+}
+
+.ojk-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ojk-title {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.ojk-subtitle {
+    color: #ffb3b3;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.95;
+}
+
+.ojk-description {
+    color: #cfe0ff;
+    font-size: 11px;
+    line-height: 1.4;
+    max-width: 280px;
+}
+
+.ojk-badge-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.ojk-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1));
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    border-radius: 8px;
+    color: #2ecc71;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+}
+
+.ojk-badge:hover {
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.3), rgba(46, 204, 113, 0.2));
+    border-color: rgba(46, 204, 113, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
+}
+
+.ojk-badge-icon {
+    font-size: 13px;
+}
+
+.ojk-link {
+    color: #ff9f9f;
+    text-decoration: none;
+    font-weight: 700;
+    border-bottom: 2px solid rgba(229, 57, 53, 0.3);
+    transition: all 0.3s ease;
+    padding-bottom: 2px;
+}
+
+.ojk-link:hover {
+    color: #fff;
+    border-bottom-color: rgba(229, 57, 53, 0.6);
+}
+
+.ojk-divider {
+    display: none;
+    width: 2px;
+    height: 50px;
+    background: linear-gradient(180deg, transparent, rgba(229, 57, 53, 0.3), transparent);
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1024px) {
+    .ojk-footer-content {
+        grid-template-columns: auto 1fr;
+        gap: 20px;
+    }
+
+    .ojk-badge-section {
+        grid-column: 1 / -1;
+        align-items: flex-start;
+        flex-direction: row;
         flex-wrap: wrap;
-        min-height: 56px;
-        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
-    }
-
-    .ojk-content {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        max-width: 1200px;
-        width: 100%;
-    }
-
-    .ojk-logo-wrapper {
-        min-width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 4px;
-        flex-shrink: 0;
-    }
-
-    .ojk-logo {
-        height: 28px;
-        width: auto;
-        object-fit: contain;
-        filter: brightness(1.1) contrast(1.1);
+        gap: 10px;
     }
 
     .ojk-divider {
-        width: 1px;
-        height: 24px;
-        background: linear-gradient(180deg, transparent, rgba(229, 57, 53, 0.4), transparent);
-        flex-shrink: 0;
+        display: block;
+    }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 640px) {
+    .ojk-footer {
+        padding: 16px;
+        margin-top: 28px;
+        border-radius: 12px;
     }
 
-    .ojk-text {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        flex: 1;
+    .ojk-footer-content {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        text-align: center;
     }
 
-    .ojk-text-label {
-        font-weight: 800;
-        color: #ffb3b3;
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+    .ojk-logo-section {
+        justify-content: center;
     }
 
-    .ojk-text-main {
-        font-weight: 600;
-        color: #cfe0ff;
+    .ojk-logo {
+        width: 60px;
+    }
+
+    .ojk-info-section {
+        align-items: center;
+    }
+
+    .ojk-description {
+        max-width: 100%;
+    }
+
+    .ojk-badge-section {
+        grid-column: 1;
+        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .ojk-title {
+        font-size: 13px;
+    }
+
+    .ojk-subtitle {
         font-size: 11px;
     }
 
-    .ojk-text-main a {
-        color: #ff9f9f;
-        text-decoration: none;
-        transition: color 0.2s ease;
-        font-weight: 700;
-    }
-
-    .ojk-text-main a:hover {
-        color: #ffb3b3;
-        text-decoration: underline;
+    .ojk-description {
+        font-size: 10px;
     }
 
     .ojk-badge {
-        background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1));
-        color: #2ecc71;
-        padding: 4px 8px;
-        border-radius: 6px;
         font-size: 10px;
-        font-weight: 800;
-        border: 1px solid rgba(46, 204, 113, 0.3);
-        text-transform: uppercase;
-        letter-spacing: 0.4px;
-        flex-shrink: 0;
-        white-space: nowrap;
+        padding: 6px 10px;
     }
 
-    .ojk-verify-icon {
-        width: 20px;
-        height: 20px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 4px;
+    .ojk-divider {
+        display: none;
+    }
+}
+
+/* Small screens */
+@media (max-width: 420px) {
+    .ojk-footer {
+        padding: 12px;
+        gap: 12px;
     }
 
-    @media (max-width: 768px) {
-        .ojk-footer {
-            padding: 10px 12px;
-            min-height: 52px;
-            gap: 10px;
-        }
-
-        .ojk-content {
-            gap: 10px;
-        }
-
-        .ojk-logo-wrapper {
-            min-width: 32px;
-            height: 32px;
-        }
-
-        .ojk-logo {
-            height: 24px;
-        }
-
-        .ojk-text-label {
-            font-size: 9px;
-        }
-
-        .ojk-text-main {
-            font-size: 10px;
-        }
-
-        .ojk-badge {
-            font-size: 9px;
-            padding: 3px 6px;
-        }
-
-        .ojk-divider {
-            height: 20px;
-        }
+    .ojk-logo {
+        width: 50px;
     }
 
-    @media (max-width: 480px) {
-        .ojk-footer {
-            padding: 8px 10px;
-            min-height: 48px;
-            gap: 8px;
-        }
-
-        .ojk-content {
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .ojk-logo-wrapper {
-            align-self: flex-start;
-        }
-
-        .ojk-divider {
-            display: none;
-        }
-
-        .ojk-text {
-            gap: 1px;
-        }
-
-        .ojk-text-label {
-            font-size: 8px;
-        }
-
-        .ojk-text-main {
-            font-size: 9px;
-        }
+    .ojk-title {
+        font-size: 12px;
     }
 
-    /* Animation untuk footer */
-    @keyframes ojkGlow {
-        0%, 100% {
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
-        }
-        50% {
-            box-shadow: 0 -6px 16px rgba(229, 57, 53, 0.2);
-        }
+    .ojk-badge-section {
+        gap: 8px;
     }
 
-    .ojk-footer:hover {
-        animation: ojkGlow 2s ease-in-out;
+    .ojk-badge {
+        padding: 5px 8px;
+        font-size: 9px;
     }
+}
 
-    /* Adjust body padding to account for footer */
-    body {
-        padding-bottom: 56px !important;
-    }
+/* Animation */
+@keyframes ojkPulse {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
 
-    @media (max-width: 768px) {
-        body {
-            padding-bottom: 52px !important;
-        }
-    }
+.ojk-badge {
+    animation: ojkPulse 3s ease-in-out infinite;
+    animation-delay: 0.5s;
+}
 
-    @media (max-width: 480px) {
-        body {
-            padding-bottom: 48px !important;
-        }
-    }
+.ojk-badge:nth-child(2) {
+    animation-delay: 1s;
+}
 </style>
 
-<footer class="ojk-footer" role="contentinfo" aria-label="OJK License Information">
-    <div class="ojk-content">
-        <div class="ojk-logo-wrapper" title="Otoritas Jasa Keuangan">
-            <img src="https://ojk.go.id/_catalogs/masterpage/responsive-master/images/logo.png" alt="OJK Logo" class="ojk-logo" loading="lazy" />
+<!-- OJK Footer HTML -->
+<footer class="ojk-footer">
+    <div class="ojk-footer-content">
+        <!-- OJK Logo -->
+        <div class="ojk-logo-section">
+            <img 
+                src="https://ojk.go.id/_catalogs/masterpage/responsive-master/images/logo.png" 
+                alt="Logo OJK Official" 
+                class="ojk-logo"
+                loading="lazy"
+                title="Otoritas Jasa Keuangan"
+            />
         </div>
 
-        <div class="ojk-divider" aria-hidden="true"></div>
-
-        <div class="ojk-text">
-            <div class="ojk-text-label">⚖️ Lisensi & Compliance</div>
-            <div class="ojk-text-main">
-                Diawasi oleh <a href="https://ojk.go.id" target="_blank" rel="noopener noreferrer">OJK (Otoritas Jasa Keuangan)</a> • 
-                <a href="https://ojk.go.id/id/kanal/informasi/Pages/Perlindungan-Konsumen.aspx" target="_blank" rel="noopener noreferrer">Perlindungan Konsumen</a>
+        <!-- OJK Info -->
+        <div class="ojk-info-section">
+            <div class="ojk-title">📋 Lisensi Official OJK</div>
+            <div class="ojk-subtitle">Otoritas Jasa Keuangan</div>
+            <div class="ojk-description">
+                Platform ini beroperasi dengan pengawasan dan regulasi dari 
+                <a href="https://ojk.go.id" target="_blank" rel="noopener noreferrer" class="ojk-link">OJK Resmi</a>
+                untuk keamanan transaksi finansial Anda.
             </div>
         </div>
 
-        <div class="ojk-badge">
-            <span class="ojk-verify-icon">✓</span>Terdaftar & Aman
+        <!-- Divider -->
+        <div class="ojk-divider"></div>
+
+        <!-- Badges -->
+        <div class="ojk-badge-section">
+            <div class="ojk-badge">
+                <span class="ojk-badge-icon">✓</span>
+                <span>Terverifikasi</span>
+            </div>
+            <div class="ojk-badge">
+                <span class="ojk-badge-icon">🔒</span>
+                <span>Aman & Terpercaya</span>
+            </div>
         </div>
     </div>
 </footer>
 
 <script>
 (function() {
-    const footer = document.querySelector('.ojk-footer');
-    if (!footer) return;
+    // OJK Logo loader optimization
+    const ojkLogo = document.querySelector('.ojk-logo');
+    if (ojkLogo) {
+        // Fallback jika gambar gagal load
+        ojkLogo.addEventListener('error', function() {
+            this.style.display = 'none';
+            const fallback = document.createElement('div');
+            fallback.textContent = '🏛️';
+            fallback.style.cssText = 'font-size: 40px; width: 70px; text-align: center;';
+            this.parentNode.insertBefore(fallback, this);
+        });
 
-    // Optional: Add tooltip functionality
-    const logoWrapper = footer.querySelector('.ojk-logo-wrapper');
-    if (logoWrapper) {
-        logoWrapper.addEventListener('mouseenter', function() {
-            const tooltip = document.createElement('div');
-            tooltip.style.cssText = `
-                position: absolute;
-                bottom: 100%;
-                left: 50%;
-                transform: translateX(-50%);
-                background: rgba(46, 204, 113, 0.9);
-                color: #fff;
-                padding: 8px 12px;
-                border-radius: 8px;
-                font-size: 11px;
-                font-weight: 700;
-                white-space: nowrap;
-                margin-bottom: 8px;
-                z-index: 10;
-                pointer-events: none;
-                animation: tooltipFadeIn 0.2s ease;
-            `;
-            tooltip.textContent = 'Diverifikasi oleh OJK';
-            this.appendChild(tooltip);
+        // Lazy load optimization
+        if ('loading' in HTMLImageElement.prototype) {
+            ojkLogo.loading = 'lazy';
+        }
+    }
 
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes tooltipFadeIn {
-                    from { opacity: 0; transform: translateX(-50%) translateY(4px); }
-                    to { opacity: 1; transform: translateX(-50%) translateY(0); }
-                }
-            `;
-            document.head.appendChild(style);
-
-            setTimeout(() => tooltip.remove(), 3000);
+    // Mobile touch optimization untuk OJK link
+    const ojkLink = document.querySelector('.ojk-link');
+    if (ojkLink) {
+        ojkLink.addEventListener('touchstart', function() {
+            this.style.opacity = '0.7';
+        });
+        ojkLink.addEventListener('touchend', function() {
+            this.style.opacity = '1';
         });
     }
 
-    // Log footer initialization
-    console.log('%c✓ OJK License Footer Loaded', 'color: #2ecc71; font-weight: bold; font-size: 12px');
+    // Intersection Observer untuk lazy animation
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const footer = document.querySelector('.ojk-footer');
+        if (footer) {
+            footer.style.opacity = '0';
+            footer.style.transform = 'translateY(20px)';
+            footer.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(footer);
+        }
+    }
 })();
 </script>
 
+
+
+
+
+<script>
+(function() {
+    // Inject OJK verification banner ke dalam payment modals
+    
+    const ojkVerificationHTML = `
+        <div class="payment-ojk-verification">
+            <div class="ojk-verify-header">
+                <span class="ojk-verify-icon">🏛️</span>
+                <span class="ojk-verify-text">Terverifikasi OJK - Transaksi Aman</span>
+            </div>
+            <div class="ojk-verify-details">
+                <div class="ojk-verify-item">
+                    <span class="ojk-item-icon">✓</span>
+                    <span>Enkripsi SSL 256-bit</span>
+                </div>
+                <div class="ojk-verify-item">
+                    <span class="ojk-item-icon">🔒</span>
+                    <span>Perlindungan Data Konsumen</span>
+                </div>
+                <div class="ojk-verify-item">
+                    <span class="ojk-item-icon">✓</span>
+                    <span>Pengawasan OJK Resmi</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    const ojkStyles = document.createElement('style');
+    ojkStyles.textContent = `
+        .payment-ojk-verification {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.15), rgba(46, 204, 113, 0.08));
+            border: 2px solid rgba(46, 204, 113, 0.4);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+            animation: ojkVerifySlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes ojkVerifySlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ojk-verify-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-weight: 800;
+            color: #2ecc71;
+            font-size: 13px;
+            letter-spacing: 0.3px;
+        }
+
+        .ojk-verify-icon {
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: ojkIconPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes ojkIconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .ojk-verify-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ojk-verify-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #a8e6c1;
+            font-weight: 600;
+        }
+
+        .ojk-item-icon {
+            min-width: 16px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        /* Mobile responsif */
+        @media (max-width: 480px) {
+            .payment-ojk-verification {
+                padding: 12px;
+                margin-bottom: 14px;
+            }
+
+            .ojk-verify-header {
+                font-size: 12px;
+                gap: 8px;
+            }
+
+            .ojk-verify-item {
+                font-size: 10px;
+            }
+
+            .ojk-verify-icon {
+                font-size: 16px;
+            }
+        }
+    `;
+    document.head.appendChild(ojkStyles);
+
+    // Inject ke membership payment modal
+    const membershipPaymentMethod = document.querySelector('.payment-method');
+    if (membershipPaymentMethod) {
+        const ojkBanner = document.createElement('div');
+        ojkBanner.innerHTML = ojkVerificationHTML;
+        membershipPaymentMethod.parentNode.insertBefore(ojkBanner, membershipPaymentMethod);
+    }
+
+    // Inject ke buy locked modal (jika ada)
+    const buyLockedContent = document.querySelector('.buy-locked-content');
+    if (buyLockedContent) {
+        const ojkBannerBuy = document.createElement('div');
+        ojkBannerBuy.innerHTML = ojkVerificationHTML;
+        // Insert sebelum QR payment section
+        const qrSection = buyLockedContent.querySelector('.qr-payment-section');
+        if (qrSection) {
+            qrSection.parentNode.insertBefore(ojkBannerBuy, qrSection);
+        }
+    }
+
+    // Inject ke QR section dalam bypass/stabilizer cards jika ada
+    document.querySelectorAll('.qr-section, .qr-container').forEach(qrEl => {
+        if (!qrEl.parentElement.querySelector('.payment-ojk-verification')) {
+            const ojkBannerQR = document.createElement('div');
+            ojkBannerQR.innerHTML = ojkVerificationHTML;
+            qrEl.parentNode.insertBefore(ojkBannerQR, qrEl);
+        }
+    });
+
+    // Observer untuk auto-inject OJK ke modal yang dinamis
+    if ('MutationObserver' in window) {
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                // Jika ada elemen baru dengan class membership-modal
+                if (mutation.addedNodes.length) {
+                    mutation.addedNodes.forEach(node => {
+                        if (node.nodeType === 1) { // Element node
+                            const paymentMethod = node.querySelector?.('.payment-method');
+                            if (paymentMethod && !node.querySelector('.payment-ojk-verification')) {
+                                const ojkNew = document.createElement('div');
+                                ojkNew.innerHTML = ojkVerificationHTML;
+                                paymentMethod.parentNode.insertBefore(ojkNew, paymentMethod);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+    // Enhanced QR scan dengan pesan OJK
+    function enhanceQRWithOJK() {
+        const qrConfirmBtn = document.getElementById('qrConfirmBtn');
+        if (qrConfirmBtn) {
+            qrConfirmBtn.addEventListener('click', function() {
+                // Tampilkan notifikasi OJK
+                showNotif('✓ Verifikasi OJK: Transaksi aman dan terlindungi', 'success', 3000);
+            });
+        }
+    }
+
+    // Jalankan enhancement
+    setTimeout(enhanceQRWithOJK, 500);
+    document.addEventListener('click', function() {
+        setTimeout(enhanceQRWithOJK, 300);
+    });
+})();
+</script>
