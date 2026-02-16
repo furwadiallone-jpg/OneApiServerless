@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OcinshopPay</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-color: #050505;
+            --card-bg: rgba(20, 20, 20, 0.6);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --accent-color: #DFFF00; /* Lime Green dari gambar Shaga */
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --glass-blur: blur(20px);
+            --radius: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            background-image: url('holewwllp.jpg'); /* Ganti dengan gambar Anda */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        /* Overlay gelap agar teks terbaca */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, #000000 90%);
+            z-index: -1;
+        }
+
+        /* --- MAIN CONTAINER (IPHONE STYLE CARD) --- */
+        .container {
+            width: 100%;
+            max-width: 480px; /* Ukuran mobile modern */
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Dekorasi Header Tech */
+        .tech-header {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        h1 span {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        /* --- FORM STYLES --- */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-family: 'Space Mono', monospace;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid transparent;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        /* --- PAYMENT METHODS GRID --- */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 kolom */
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .method-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .method-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .method-card.active {
+            border-color: var(--accent-color);
+            background: rgba(223, 255, 0, 0.05);
+        }
+
+        .method-card img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
+        .method-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* --- BUTTON --- */
+        .btn-pay {
+            width: 100%;
+            padding: 18px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-pay:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-pay span.arrow {
+            font-size: 1.2rem;
+        }
+        .payment-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(110%);
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 10;
+        }
+
+        .payment-overlay.show {
+            transform: translateY(0);
+        }
+
+        .timer-box {
+            background: rgba(255,50,50, 0.1);
+            border: 1px solid rgba(255,50,50, 0.3);
+            color: #ff5555;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            font-family: 'Space Mono', monospace;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .qr-container {
+            text-align: center;
+            margin: 20px 0;
+            background: #DFFF00;;
+            padding: 15px;
+            border-radius: 16px;
+            width: 200px;
+            align-self: center;
+        }
+
+        .qr-container img {
+            width: 100%;
+            display: block;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .back-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        /* FOOTER DECORATION */
+        .footer-deco {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            color: #444;
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 400px) {
+            h1 { font-size: 1.5rem; }
+            .payment-methods { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="tech-header">
+            <span>:PAYMENT GATEWAY</span>
+            <span>SECURE_V.2.0</span>
+        </div>
+
+        <h1>PayShop <br><span>OcinStore</span></h1>
+        <p class="subtitle">Selesaikan pembayaran untuk memproses pesanan.</p>
+
+        <div id="checkoutForm">
+            <div class="form-group">
+                <label>Masukkan Nominal (IDR)</label>
+                <input type="text" value="Rp 10.000" readonly style="color: var(--accent-color); font-weight: bold;">
+            </div>
+
+            <div class="form-group">
+                <label>NAMA ANDA</label>
+                <input type="text" id="custName" placeholder="Masukkan nama lengkap">
+            </div>
+
+            <label style="margin-bottom: 10px;">METODE PEMBAYARAN</label>
+            <div class="payment-methods">
+                <div class="method-card" onclick="selectMethod('dana', '085849542691', 'DANA')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Logo_dana_blue.svg/1200px-Logo_dana_blue.svg.png" alt="Dana">
+                    <span class="method-name">DANA</span>
+                </div>
+                
+                <div class="method-card" onclick="selectMethod('gopay', '085849542691', 'GoPay')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gopay_logo.svg/2560px-Gopay_logo.svg.png" alt="Gopay">
+                    <span class="method-name">GoPay</span>
+                </div>
+
+                <div class="method-card" onclick="selectMethod('ovo', '085849542691', 'OVO')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Logo_ovo_purple.svg/2560px-Logo_ovo_purple.svg.png" alt="OVO">
+                    <span class="method-name">OVO</span>
+                </div>
+
+                <div class="method-card" onclick="selectMethod('seabank', '901022951895', 'SeaBank')">
+                    <img src="https://connect-assets.prosple.com/cdn/ff/aR5Uie39qbwq2CgUyQY1_So4lu1vgdHsX2FltQYvPic/1643078729/public/styles/scale_and_crop_center_120x120/public/2022-01/logo-seabankindonesia-200x200-2022.jpg?itok=EmkF_sz-" alt="SeaBank" style="background: white;">
+                    <span class="method-name">SeaBank</span>
+                </div>
+
+                <div class="method-card" onclick="selectMethod('qris', 'Scan QR Code', 'QRIS')" style="grid-column: span 2;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo_QRIS.svg/1200px-Logo_QRIS.svg.png" alt="QRIS" style="background: rgb(191, 232, 8);">
+                    <span class="method-name">QRIS (All Payment)</span>
+                </div>
+            </div>
+
+            <button class="btn-pay" onclick="processPayment()">
+                <span>BAYAR SEKARANG</span>
+                <span class="arrow">→</span>
+            </button>
+        </div>
+
+        <div class="payment-overlay" id="paymentDetails">
+            <button class="back-btn" onclick="closePayment()">←</button>
+            
+            <div class="timer-box" id="timer">
+                Sisa Waktu: 05:00
+            </div>
+
+            <h2 style="font-size: 1.2rem; margin-bottom: 10px;">Menunggu Pembayaran</h2>
+            <p style="font-size: 0.8rem; color: #888; margin-bottom: 20px;">Silakan transfer sesuai nominal ke:</p>
+
+            <div id="qrisContainer" class="qr-container" style="display: none;">
+                <img src="https://ocinshop.my.id/qris.jpg" alt="Scan QRIS">
+                <p style="color: black; font-size: 0.8rem; margin-top: 5px; font-weight: bold;">Scan untuk Bayar</p>
+            </div>
+
+            <div id="manualContainer">
+                <div class="detail-row">
+                    <span style="color: #888;">Bank/Wallet</span>
+                    <span id="displayBank" style="font-weight: bold;">-</span>
+                </div>
+                <div class="detail-row">
+                    <span style="color: #888;">Nomor Tujuan</span>
+                    <div>
+                        <span id="displayNumber" style="font-family: 'Space Mono'; font-size: 1.1rem;">-</span>
+                        <button class="copy-btn" onclick="copyToClipboard()"><i class="fa fa-copy"></i></button>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <span style="color: #888;">Total Bayar</span>
+                    <span style="color: var(--accent-color); font-weight: bold;">Rp 10.000</span>
+                </div>
+            </div>
+
+            <div style="margin-top: auto;">
+                <p style="font-size: 0.7rem; color: #666; text-align: center; margin-bottom: 15px;">
+                    Sistem akan memverifikasi pembayaran secara otomatis. Jangan tutup halaman ini.
+                </p>
+                <button class="btn-pay" style="background: #222; color: white; border: 1px solid #444;" onclick="alert('Mengecek status pembayaran...')">
+                    <span>KONFIRMASI</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="footer-deco">
+            <span>[ :UNIFIED CLIP MECHANISM ]</span>
+            <span>158mm x 99mm</span>
+        </div>
+    </div>
+
+    <script>
+        let selectedData = {
+            id: null,
+            number: null,
+            name: null
+        };
+        let countdown;
+
+        // Fungsi memilih metode pembayaran
+        function selectMethod(id, number, name) {
+            // Reset visual active state
+            document.querySelectorAll('.method-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Set active state pada elemen yang diklik
+            event.currentTarget.classList.add('active');
+
+            // Simpan data
+            selectedData = { id, number, name };
+        }
+
+        // Fungsi Proses Pembayaran (Pindah Layar)
+        function processPayment() {
+            const nameInput = document.getElementById('custName').value;
+
+            if(nameInput === "") {
+                alert("Mohon isi nama Anda terlebih dahulu.");
+                return;
+            }
+            if(!selectedData.id) {
+                alert("Mohon pilih metode pembayaran.");
+                return;
+            }
+
+            // Setup Tampilan Detail
+            const overlay = document.getElementById('paymentDetails');
+            const qrisBox = document.getElementById('qrisContainer');
+            const manualBox = document.getElementById('manualContainer');
+
+            document.getElementById('displayBank').innerText = selectedData.name;
+            document.getElementById('displayNumber').innerText = selectedData.number;
+
+            // Logika Tampilan QRIS vs Nomor Biasa
+            if(selectedData.id === 'qris') {
+                qrisBox.style.display = 'block';
+                manualBox.style.display = 'none';
+            } else {
+                qrisBox.style.display = 'none';
+                manualBox.style.display = 'block';
+            }
+
+            // Tampilkan Overlay
+            overlay.classList.add('show');
+
+            // Mulai Timer
+            startTimer(5 * 60); // 5 menit
+        }
+
+        // Fungsi Menutup Layar Pembayaran
+        function closePayment() {
+            document.getElementById('paymentDetails').classList.remove('show');
+            clearInterval(countdown);
+        }
+
+        // Fungsi Timer Mundur
+        function startTimer(duration) {
+            let timer = duration, minutes, seconds;
+            const display = document.querySelector('#timer');
+            
+            clearInterval(countdown); // Reset jika ada timer sebelumnya
+
+            countdown = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = "Sisa Waktu: " + minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(countdown);
+                    display.textContent = "WAKTU HABIS - PESANAN DIBATALKAN";
+                    display.style.color = "red";
+                    alert("Waktu pembayaran habis. Silakan ulang pemesanan.");
+                    closePayment();
+                }
+            }, 1000);
+        }
+
+        // Fungsi Copy Nomor
+        function copyToClipboard() {
+            const num = document.getElementById('displayNumber').innerText;
+            navigator.clipboard.writeText(num).then(() => {
+                alert("Nomor berhasil disalin!");
+            });
+        }
+    </script>
+</body>
+</html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Temukan input nominal yang awalnya readonly lalu ubah jadi input yang bisa diisi
+    const nominalInput = document.querySelector('#checkoutForm input[readonly]');
+    if (nominalInput) {
+        nominalInput.removeAttribute('readonly');
+        nominalInput.id = 'amountInput';
+        nominalInput.setAttribute('inputmode', 'numeric');
+        nominalInput.placeholder = 'Masukkan nominal';
+        // Normalisasi/format awal
+        nominalInput.value = formatRupiah(nominalInput.value);
+        nominalInput.style.color = 'var(--accent-color)';
+        nominalInput.style.fontWeight = '700';
+
+        nominalInput.addEventListener('input', function () {
+            const caret = this.selectionStart;
+            const raw = this.value.replace(/[^0-9]/g, '');
+            this.value = formatRupiah(raw);
+            // set caret ke akhir supaya pengalaman mengetik lebih mulus
+            this.setSelectionRange(this.value.length, this.value.length);
+        });
+    }
+
+    // Cari elemen Total Bayar di overlay untuk di-update saat proses pembayaran
+    const totalSpan = document.querySelector('#manualContainer .detail-row span[style*="accent-color"]');
+
+    // Util: format angka menjadi Rupiah (dengan titik ribuan)
+    function formatRupiah(input) {
+        if (!input && input !== 0) return '';
+        const numbers = String(input).replace(/[^0-9]/g, '');
+        if (numbers === '') return '';
+        return 'Rp ' + numbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    // Ambil referensi ke fungsi processPayment asli, lalu bungkus untuk validasi nominal
+    if (typeof window.processPayment === 'function') {
+        const originalProcess = window.processPayment;
+        window.processPayment = function () {
+            const amtEl = document.getElementById('amountInput');
+            const raw = amtEl ? amtEl.value.replace(/[^0-9]/g, '') : '';
+            const amountNum = raw ? parseInt(raw, 10) : 0;
+
+            if (!amountNum || amountNum <= 0) {
+                alert('Mohon masukkan nominal pembayaran yang valid.');
+                if (amtEl) amtEl.focus();
+                return;
+            }
+
+            // Update tampilan Total Bayar di overlay
+            if (totalSpan) {
+                totalSpan.textContent = formatRupiah(raw);
+            } else {
+                // fallback: cari span terakhir di manualContainer
+                const fallback = document.querySelector('#manualContainer .detail-row:last-child span');
+                if (fallback) fallback.textContent = formatRupiah(raw);
+            }
+
+            // Panggil fungsi processPayment asli untuk melanjutkan proses (memakai selectedData, nama, dll)
+            originalProcess();
+        };
+    }
+});
+</script>
+
+
+<style>
+    html, body { touch-action: manipulation; -ms-touch-action: manipulation; }
+</style>
+<script>
+(function () {
+    // Update or create viewport to disable zoom
+    var vp = document.querySelector('meta[name="viewport"]');
+    var viewportContent = 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    if (vp) {
+        vp.setAttribute('content', viewportContent);
+    } else {
+        var m = document.createElement('meta');
+        m.name = 'viewport';
+        m.content = viewportContent;
+        document.head.appendChild(m);
+    }
+
+    // Prevent pinch zoom (multi-touch)
+    window.addEventListener('touchstart', function (e) {
+        if (e.touches && e.touches.length > 1) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    // Prevent iOS gesture-based zoom
+    window.addEventListener('gesturestart', function (e) {
+        e.preventDefault();
+    }, { passive: false });
+
+    // Prevent ctrl/meta + wheel zoom
+    window.addEventListener('wheel', function (e) {
+        if (e.ctrlKey || e.metaKey) e.preventDefault();
+    }, { passive: false });
+
+    // Prevent ctrl/meta + plus/minus/0 keyboard zoom
+    window.addEventListener('keydown', function (e) {
+        if (e.ctrlKey || e.metaKey) {
+            var k = e.key;
+            if (k === '+' || k === '-' || k === '=' || k === '0') {
+                e.preventDefault();
+            }
+        }
+    }, false);
+})();
+</script>
+
+
+<!-- Status / Konfirmasi Window -->
+<style>
+/* Modal styles for status window */
+#statusWindow {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.6);
+    z-index: 9999;
+    padding: 20px;
+}
+#statusWindow.show { display: flex; }
+.status-card {
+    width: 100%;
+    max-width: 520px;
+    background: #0b0b0b;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 18px;
+    color: #fff;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+    font-family: 'Inter', sans-serif;
+}
+.status-card h3 { margin: 0 0 10px 0; font-weight: 600; }
+.status-row { display:flex; justify-content:space-between; gap:10px; margin-bottom:10px; align-items:center; }
+.status-row label { font-family: 'Space Mono', monospace; color:#9a9a9a; font-size:0.8rem; }
+.status-row .value { font-weight:700; color:var(--accent-color); }
+.status-row input[type="text"], .status-row input[type="tel"] {
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+    color: #fff;
+}
+.sw-actions { display:flex; gap:10px; margin-top:12px; }
+.sw-actions .btn { flex:1; padding:12px; border-radius:10px; font-weight:700; cursor:pointer; border: none; }
+.btn-primary { background: var(--accent-color); color:#000; }
+.btn-ghost { background: transparent; border:1px solid rgba(255,255,255,0.08); color:#fff; }
+.order-box { margin-top:12px; border-top:1px solid rgba(255,255,255,0.05); padding-top:12px; color:#ddd; font-size:0.95rem; }
+.order-box .order-item { margin-bottom:8px; }
+.order-box a.panel-btn {
+    display:inline-block;
+    margin-top:8px;
+    padding:8px 12px;
+    background:#111;
+    color:var(--accent-color);
+    border-radius:8px;
+    text-decoration:none;
+    border:1px solid rgba(255,255,255,0.04);
+}
+.close-x { position:absolute; right:22px; top:18px; color:#ccc; cursor:pointer; font-weight:700; }
+</style>
+
+<div id="statusWindow" aria-hidden="true">
+    <div class="status-card" role="dialog" aria-modal="true">
+        <div style="position:relative;">
+            <span class="close-x" id="swClose">×</span>
+            <h3>Cek Status Pembayaran</h3>
+        </div>
+
+        <div class="status-row" style="margin-top:8px;">
+            <label>Harga Yang Dibayar</label>
+            <div class="value" id="swAmount">-</div>
+        </div>
+
+        <div class="status-row">
+            <label>Metode Pembayaran</label>
+            <div class="value" id="swMethod">-</div>
+        </div>
+
+        <div class="status-row" style="flex-direction:column; align-items:flex-start;">
+            <label for="swPaymentId">ID Pembayaran</label>
+            <input type="text" id="swPaymentId" placeholder="Masukkan ID pembayaran">
+        </div>
+
+        <div class="status-row" style="flex-direction:column; align-items:flex-start;">
+            <label for="swPaidAmount">Nominal yang dibayar</label>
+            <input type="text" id="swPaidAmount" placeholder="Rp 10.000">
+        </div>
+
+        <div class="sw-actions">
+            <button class="btn btn-primary" id="swCheckBtn">Cek Status Pembayaran</button>
+            <button class="btn btn-ghost" id="swCloseBtn">Tutup</button>
+        </div>
+
+        <div class="order-box" id="swOrderBox" style="display:none;">
+            <div id="swOrderContent"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    // Util: parse/format rupiah
+    function extractNumberFromFormatted(s) {
+        if (!s) return 0;
+        const digits = String(s).replace(/[^0-9]/g, '');
+        return digits ? parseInt(digits, 10) : 0;
+    }
+    function formatRupiahFromNumber(n) {
+        if (!n && n !== 0) return '';
+        return 'Rp ' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    // References
+    const statusWindow = document.getElementById('statusWindow');
+    const swAmount = document.getElementById('swAmount');
+    const swMethod = document.getElementById('swMethod');
+    const swPaymentId = document.getElementById('swPaymentId');
+    const swPaidAmount = document.getElementById('swPaidAmount');
+    const swCheckBtn = document.getElementById('swCheckBtn');
+    const swCloseBtn = document.getElementById('swCloseBtn');
+    const swCloseX = document.getElementById('swClose');
+    const swOrderBox = document.getElementById('swOrderBox');
+    const swOrderContent = document.getElementById('swOrderContent');
+
+    // Open status window (called from KONFIRMASI)
+    function openStatusWindow(e) {
+        e && e.preventDefault();
+        // Grab expected amount from input (amountInput) if present, otherwise fallback to displayed total in overlay
+        let expectedText = '';
+        const amtEl = document.getElementById('amountInput');
+        if (amtEl && amtEl.value.trim() !== '') {
+            expectedText = amtEl.value.trim();
+        } else {
+            // fallback to manualContainer last row value
+            const fallback = document.querySelector('#manualContainer .detail-row:last-child span');
+            expectedText = fallback ? fallback.textContent.trim() : '';
+        }
+        const methodText = (window.selectedData && window.selectedData.name) ? window.selectedData.name : (document.getElementById('displayBank') ? document.getElementById('displayBank').innerText : '-');
+
+        // Fill fields
+        swAmount.textContent = expectedText || '-';
+        swMethod.textContent = methodText || '-';
+        swPaymentId.value = '';
+        swPaidAmount.value = expectedText || '';
+
+        swOrderBox.style.display = 'none';
+        swOrderContent.innerHTML = '';
+
+        statusWindow.classList.add('show');
+        statusWindow.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeStatusWindow() {
+        statusWindow.classList.remove('show');
+        statusWindow.setAttribute('aria-hidden', 'true');
+    }
+
+    // Map price to order info
+    const orderMap = {
+        10000: { code: '[ocqpk]' },
+        20000: { code: '[ocwpk]' },
+        30000: { code: '[ocepk]' },
+        35000: { code: '[ocetk]' },
+        40000: { code: '[ocrpk]' },
+        50000: { code: '[octpk]' },
+        70000: { code: '[ocupk]' },
+        100000: { code: '[adminpanel.my.id]' }
+    };
+
+    function checkPaymentStatus() {
+        const idVal = (swPaymentId.value || '').trim();
+        if (!idVal) {
+            alert('Silakan masukkan ID pembayaran terlebih dahulu.');
+            swPaymentId.focus();
+            return;
+        }
+
+        // Extract digits sequence from ID and check if numeric >= 2026010
+        const digitsSeq = (idVal.match(/\d+/g) || []).join('');
+        const idNum = digitsSeq ? parseInt(digitsSeq, 10) : NaN;
+        let status = 'Gagal';
+        if (!isNaN(idNum) && idNum >= 2026010) {
+            status = 'Berhasil';
+        } else {
+            // Could be Pending or Gagal; per rules we use Gagal for invalid ids
+            status = 'Gagal';
+        }
+
+        alert('Status Pembayaran untuk ID ' + idVal + ': ' + status);
+
+        // Compare paid nominal with expected nominal
+        const expectedNum = extractNumberFromFormatted(swAmount.textContent);
+        const paidNum = extractNumberFromFormatted(swPaidAmount.value);
+
+        if (paidNum && expectedNum && paidNum !== expectedNum) {
+            alert('Terima kasih telah membayar ' + formatRupiahFromNumber(paidNum));
+        }
+
+        // If successful, show order info depending on expected price (the originally input nominal)
+        if (status === 'Berhasil') {
+            const key = expectedNum;
+            if (orderMap[key]) {
+                const code = orderMap[key].code;
+                swOrderContent.innerHTML = ''
+                    + '<div class="order-item">Daftar Pesanan Anda:</div>'
+                    + '<div class="order-item">- Item PANEL</div>'
+                    + '<div class="order-item"><a class="panel-btn" href="https://ocinshop.my.id/panelvip.html" target="_blank" rel="noopener">Akses Panel</a></div>'
+                    + '<div class="order-item">- Kode Username: &nbsp;' + code + '</div>';
+            } else {
+                // If price not mapped, show generic success message
+                swOrderContent.innerHTML = '<div class="order-item">Pembayaran terverifikasi. Jika ini pembelian produk digital, tunggu konfirmasi lebih lanjut.</div>';
+            }
+            swOrderBox.style.display = 'block';
+        } else {
+            swOrderBox.style.display = 'none';
+            swOrderContent.innerHTML = '';
+        }
+    }
+
+    // Hook up the KONFIRMASI button in the payment overlay (replaces its inline handler)
+    const overlayConfirmBtn = document.querySelector('#paymentDetails .btn-pay');
+    if (overlayConfirmBtn) {
+        overlayConfirmBtn.onclick = openStatusWindow;
+    }
+
+    // Wire buttons
+    swCheckBtn.addEventListener('click', checkPaymentStatus);
+    swCloseBtn.addEventListener('click', closeStatusWindow);
+    swCloseX.addEventListener('click', closeStatusWindow);
+
+    // Allow Enter key in ID or Paid amount to trigger check
+    swPaymentId.addEventListener('keydown', function (e) { if (e.key === 'Enter') { checkPaymentStatus(); } });
+    swPaidAmount.addEventListener('keydown', function (e) { if (e.key === 'Enter') { checkPaymentStatus(); } });
+
+    // Basic input formatting for paid amount to show Rp format while typing
+    swPaidAmount.addEventListener('input', function () {
+        const raw = (this.value || '').replace(/[^0-9]/g, '');
+        this.value = raw ? formatRupiahFromNumber(parseInt(raw, 10)) : '';
+    });
+
+})();
+</script>
