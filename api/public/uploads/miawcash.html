@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Tycoon - Ternak Cuan (Cat & Dog)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff9a9e;
+            --secondary: #a18cd1;
+            --dog-color: #f6d365;
+            --bg: #f8f9fa;
+            --white-glass: rgba(255, 255, 255, 0.85);
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        /* Stats Panel */
+        .dashboard {
+            width: 90%;
+            max-width: 500px;
+            background: var(--white-glass);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            position: sticky;
+            top: 15px;
+            z-index: 1000;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.5);
+            padding: 10px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .level-section {
+            grid-column: span 2;
+            margin-top: 10px;
+        }
+
+        .bar-bg {
+            background: #eee;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Play Area */
+        .main-game {
+            display: flex;
+            gap: 40px;
+            margin: 40px 0;
+            justify-content: center;
+        }
+
+        .pet-container {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .pet-container:active { transform: scale(0.9); }
+
+        .pet-avatar {
+            font-size: 6rem;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
+        }
+
+        .pet-label {
+            background: rgba(0,0,0,0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        /* Shop Area */
+        .shop {
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .tab-menu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: var(--white-glass);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .tab-btn.active {
+            background: #333;
+            color: white;
+        }
+
+        .shop-item {
+            background: var(--white-glass);
+            padding: 15px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .item-info h4 { margin: 0; font-size: 0.95rem; }
+        .item-info p { margin: 2px 0; font-size: 0.75rem; color: #666; }
+
+        .buy-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .buy-btn:disabled { background: #ccc; }
+
+        /* Withdraw */
+        .withdraw-box {
+            width: 90%;
+            max-width: 500px;
+            background: #333;
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        #wdBtn {
+            background: #4cd137;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #wdBtn:disabled { background: #555; cursor: not-allowed; }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: none;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast" class="toast"></div>
+
+    <div class="dashboard">
+        <div class="stat-card">
+            <div style="font-size: 0.7rem; color: #666;">UANG TUNAI</div>
+            <div id="cashText" style="font-weight: bold; color: #2ecc71;">Rp 0</div>
+        </div>
+        <div class="stat-card">
+            <div style="font-size: 0.7rem; color: #666;">KOIN (RP 500)</div>
+            <div id="coinText" style="font-weight: bold; color: #f1c40f;">0 🪙</div>
+        </div>
+        <div class="level-section">
+            <div style="display:flex; justify-content:space-between; font-size:0.8rem">
+                <span id="lvText" style="font-weight:bold">Lv. 1</span>
+                <span id="xpText">0/100 XP</span>
+            </div>
+            <div class="bar-bg">
+                <div id="xpBar" class="bar-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-game">
+        <div class="pet-container" onclick="clickPet('cat')">
+            <div class="pet-avatar">🐱</div>
+            <div class="pet-label">ELUS KUCING</div>
+        </div>
+        <div class="pet-container" onclick="clickPet('dog')">
+            <div class="pet-avatar">🐶</div>
+            <div class="pet-label">AJAK MAIN</div>
+        </div>
+    </div>
+
+    <div class="shop">
+        <div class="tab-menu">
+            <button class="tab-btn active" onclick="switchTab('cat')">Toko Kucing</button>
+            <button class="tab-btn" onclick="switchTab('dog')">Toko Anjing</button>
+        </div>
+        <div id="shopContent"></div>
+    </div>
+
+    <div class="withdraw-box">
+        <div style="font-size: 0.9rem">Saldo Koin Bisa Ditarik (Min 10)</div>
+        <button id="wdBtn" onclick="withdraw()" disabled>Tarik Rp 0</button>
+    </div>
+
+    <script>
+        // --- DATA & CONFIG ---
+        const CONFIG = {
+            coinValue: 500,
+            minWithdraw: 10,
+            xpPerLevel: 100,
+            levelForCoin: 10
+        };
+
+        let state = {
+            cash: 0,
+            coins: 0,
+            level: 1,
+            xp: 0,
+            ownedPets: {
+                cat: { kampung: 0, persia: 0, anggora: 0 },
+                dog: { bulldog: 0, husky: 0, golden: 0 }
+            }
+        };
+
+        const ITEMS = {
+            cat: [
+                { id: 'kampung', name: 'Kucing Kampung', price: 1000, inc: 2, icon: '🐈' },
+                { id: 'persia', name: 'Kucing Persia', price: 10000, inc: 15, icon: '🐈‍⬛' },
+                { id: 'anggora', name: 'Kucing Anggora', price: 50000, inc: 80, icon: '🐩' }
+            ],
+            dog: [
+                { id: 'bulldog', name: 'Anjing Bulldog', price: 5000, inc: 8, icon: '🐕' },
+                { id: 'husky', name: 'Siberian Husky', price: 25000, inc: 45, icon: '🐺' },
+                { id: 'golden', name: 'Golden Retriever', price: 150000, inc: 250, icon: '🦮' }
+            ]
+        };
+
+        let currentTab = 'cat';
+
+        // --- CORE LOGIC ---
+
+        function init() {
+            const saved = localStorage.getItem('petTycoonSave');
+            if (saved) state = JSON.parse(saved);
+            
+            renderShop();
+            updateUI();
+            
+            // Loop Pendapatan Pasif & Save
+            setInterval(() => {
+                let passive = 0;
+                ['cat', 'dog'].forEach(type => {
+                    ITEMS[type].forEach(item => {
+                        passive += state.ownedPets[type][item.id] * item.inc;
+                    });
+                });
+                
+                if(passive > 0) {
+                    addCash(passive);
+                    addXP(1); // Bonus XP pasif kecil
+                }
+                save();
+            }, 1000);
+        }
+
+        function clickPet(type) {
+            const power = type === 'cat' ? 5 : 8; // Anjing kasih uang lebih banyak per klik
+            addCash(power + (state.level * 2));
+            addXP(5);
+            
+            // Animasi kecil
+            const container = event.currentTarget;
+            container.style.transform = 'scale(1.2)';
+            setTimeout(() => container.style.transform = 'scale(1)', 100);
+        }
+
+        function addCash(amt) {
+            state.cash += amt;
+            updateUI();
+        }
+
+        function addXP(amt) {
+            state.xp += amt;
+            const threshold = state.level * CONFIG.xpPerLevel;
+            
+            if (state.xp >= threshold) {
+                state.level++;
+                state.xp = 0;
+                showToast(`Level Up! Sekarang Lv. ${state.level}`);
+                
+                if (state.level % CONFIG.levelForCoin === 0) {
+                    state.coins += 1;
+                    showToast(`+1 Koin didapat!`);
+                }
+            }
+            updateUI();
+        }
+
+        function buyItem(type, id, price) {
+            if (state.cash >= price) {
+                state.cash -= price;
+                state.ownedPets[type][id]++;
+                showToast(`Berhasil membeli!`);
+                renderShop();
+                updateUI();
+            } else {
+                showToast(`Uang tidak cukup!`);
+            }
+        }
+
+        // --- UI RENDER ---
+
+        function updateUI() {
+            document.getElementById('cashText').innerText = `Rp ${Math.floor(state.cash).toLocaleString()}`;
+            document.getElementById('coinText').innerText = `${state.coins} 🪙`;
+            document.getElementById('lvText').innerText = `Lv. ${state.level}`;
+            
+            const threshold = state.level * CONFIG.xpPerLevel;
+            document.getElementById('xpText').innerText = `${state.xp}/${threshold} XP`;
+            document.getElementById('xpBar').style.width = `${(state.xp / threshold) * 100}%`;
+
+            const wdBtn = document.getElementById('wdBtn');
+            const wdAmount = state.coins * CONFIG.coinValue;
+            wdBtn.innerText = `Tarik Rp ${wdAmount.toLocaleString()}`;
+            wdBtn.disabled = state.coins < CONFIG.minWithdraw;
+        }
+
+        function switchTab(type) {
+            currentTab = type;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            renderShop();
+        }
+
+        function renderShop() {
+            const container = document.getElementById('shopContent');
+            container.innerHTML = '';
+            
+            ITEMS[currentTab].forEach(item => {
+                const count = state.ownedPets[currentTab][item.id];
+                const div = document.createElement('div');
+                div.className = 'shop-item';
+                div.innerHTML = `
+                    <div class="item-info">
+                        <h4>${item.icon} ${item.name}</h4>
+                        <p>Harga: Rp ${item.price.toLocaleString()} | Milik: ${count}</p>
+                        <p style="color:#27ae60">+Rp ${item.inc}/dtk</p>
+                    </div>
+                    <button class="buy-btn" onclick="buyItem('${currentTab}', '${item.id}', ${item.price})">BELI</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2500);
+        }
+
+        function save() {
+            localStorage.setItem('petTycoonSave', JSON.stringify(state));
+        }
+
+        function withdraw() {
+            const rupiah = state.coins * CONFIG.coinValue;
+            const msg = `Halo Admin, saya mau withdraw ${state.coins} koin (Rp ${rupiah}) dari Game Pet Tycoon. Level saya: ${state.level}`;
+            window.open(`https://wa.me/62856508758739?text=${encodeURIComponent(msg)}`);
+        }
+
+        init();
+    </script>
+</body>
+</html>
