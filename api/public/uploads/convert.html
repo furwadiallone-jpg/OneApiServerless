@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCINSHOP | Server Migration Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon: #00ff41;
+            --neon-dim: rgba(0, 255, 65, 0.2);
+            --bg: #050505;
+            --surface: #0f0f0f;
+            --red: #ff3e3e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Fira Code', monospace; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--neon);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Scanline global effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* TERMUX LOADING - Tetap Fullscreen */
+        #termux-screen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 999;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            font-size: 13px;
+        }
+
+        /* MAIN PANEL - RESPONSIVE CONTAINER */
+        #main-app {
+            display: none;
+            width: 95%;
+            max-width: 900px;
+            height: 90vh;
+            background: var(--surface);
+            border: 1px solid var(--neon-dim);
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Top Bar */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: #1a1a1a;
+            border-bottom: 1px solid var(--neon-dim);
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Dashboard Grid - Menu agar tidak berhamburan */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 600px) {
+            .content-grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--neon-dim);
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .card-title {
+            font-size: 10px;
+            color: #888;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        /* Info Server Display */
+        .server-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .server-info h2 { font-size: 18px; color: #fff; }
+
+        /* Progress Circle/Area */
+        .progress-section {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 255, 65, 0.02);
+            border: 1px dashed var(--neon-dim);
+        }
+
+        .percentage-text {
+            font-size: 48px;
+            font-weight: 700;
+            text-shadow: 0 0 15px var(--neon);
+        }
+
+        /* Terminal Console */
+        .terminal-box {
+            grid-column: 1 / -1;
+            background: #000;
+            height: 150px;
+            padding: 10px;
+            font-size: 11px;
+            border: 1px solid #222;
+            overflow-y: hidden;
+            position: relative;
+        }
+
+        /* Action Buttons */
+        .footer-action {
+            padding: 20px;
+            border-top: 1px solid var(--neon-dim);
+        }
+
+        .btn-main {
+            width: 100%;
+            padding: 15px;
+            background: transparent;
+            border: 1px solid var(--neon);
+            color: var(--neon);
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-main:hover:not(:disabled) {
+            background: var(--neon);
+            color: #000;
+        }
+
+        .btn-main:disabled {
+            opacity: 0.5;
+            cursor: wait;
+            border-color: #444;
+            color: #444;
+        }
+
+        .pulse { animation: neon-pulse 1.5s infinite; }
+        @keyframes neon-pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="termux-screen">
+        <div id="boot-logs"></div>
+        <div class="pulse" style="width: 10px; height: 18px; background: var(--neon); display: inline-block;"></div>
+    </div>
+
+    <main id="main-app">
+        <nav class="top-nav">
+            <span>OCINSHOP v4.26 [STABLE]</span>
+            <span id="digital-clock">00:00:00</span>
+        </nav>
+
+        <div class="content-grid">
+            <div class="card">
+                <div class="card-title">Detected Origin (Source)</div>
+                <div class="server-info">
+                    <h2 id="real-ip">Searching...</h2>
+                    <p id="real-loc" style="color: var(--red);">Locating Node...</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Target Destination</div>
+                <div class="server-info">
+                    <h2>ocinshop.my.id</h2>
+                    <p style="color: #00d4ff;">Kuala Lumpur (MY)</p>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="card-title">Migration Status</div>
+                <div class="percentage-text" id="perc">0.00%</div>
+                <p id="status-text" style="font-size: 10px; margin-top: 10px;">IDLE - AWAITING COMMAND</p>
+            </div>
+
+            <div class="terminal-box" id="console-out">
+                <div style="color: #666;">// System kernel connected via secure tunnel...</div>
+            </div>
+        </div>
+
+        <div class="footer-action">
+            <button class="btn-main" id="init-btn">Initiate 20-Min Deep Migration</button>
+        </div>
+    </main>
+
+    <script>
+        const bootLogs = document.getElementById('boot-logs');
+        const termux = document.getElementById('termux-screen');
+        const main = document.getElementById('main-app');
+        const initBtn = document.getElementById('init-btn');
+        const consoleOut = document.getElementById('console-out');
+
+        // 1. Ambil Lokasi Real
+        async function getGeo() {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                document.getElementById('real-ip').textContent = data.ip;
+                document.getElementById('real-loc').textContent = `${data.city}, ${data.country_name} (ID)`;
+            } catch (e) {
+                document.getElementById('real-ip').textContent = "103.82.241.11";
+                document.getElementById('real-loc').textContent = "Jakarta, Indonesia";
+            }
+        }
+
+        // 2. Simulasi Termux Loading
+        const bootStrings = [
+            "apt update && apt upgrade -y",
+            "sh -c \"$(curl -fsSL https://nexus.ocinshop/install.sh)\"",
+            "Importing encryption keys... [SUCCESS]",
+            "Checking local server status... [ID_CGK: ONLINE]",
+            "Preparing migration bridge to Malaysia...",
+            "Loading Neural-UI Modules v2026.02...",
+            "Starting NEXUS-CORE daemon..."
+        ];
+
+        async function runBoot() {
+            for(let s of bootStrings) {
+                let p = document.createElement('p');
+                p.innerHTML = `<span style="color:#fff">ocin@termux:~$</span> ${s}`;
+                bootLogs.appendChild(p);
+                await new Promise(r => setTimeout(r, 600));
+                termux.scrollTop = termux.scrollHeight;
+            }
+            setTimeout(() => {
+                termux.style.display = 'none';
+                main.style.display = 'flex';
+                getGeo();
+            }, 800);
+        }
+
+        // 3. Logika Konversi 20 Menit (1200 detik)
+        initBtn.onclick = function() {
+            this.disabled = true;
+            let totalSeconds = 20 * 60; 
+            let passed = 0;
+            document.getElementById('status-text').textContent = "MIGRATING SERVER DATA TO MALAYSIA...";
+
+            const timer = setInterval(() => {
+                passed++;
+                let prog = (passed / totalSeconds) * 100;
+                document.getElementById('perc').textContent = prog.toFixed(2) + "%";
+
+                // Update Terminal Output setiap detik
+                const line = document.createElement('div');
+                line.style.marginBottom = '2px';
+                line.textContent = `[${new Date().toLocaleTimeString()}] Transferring block 0x${Math.floor(Math.random()*10000).toString(16)}... OK`;
+                consoleOut.appendChild(line);
+                consoleOut.scrollTop = consoleOut.scrollHeight;
+
+                if(passed >= totalSeconds) {
+                    clearInterval(timer);
+                    document.getElementById('status-text').textContent = "SUCCESS: SERVER FULLY MIGRATED TO MALAYSIA";
+                    this.textContent = "COMPLETED";
+                }
+            }, 1000);
+        };
+
+        // Digital Clock
+        setInterval(() => {
+            document.getElementById('digital-clock').textContent = new Date().toLocaleTimeString();
+        }, 1000);
+
+        runBoot();
+    </script>
+</body>
+</html>
