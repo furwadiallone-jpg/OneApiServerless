@@ -5330,3 +5330,537 @@ html,body{
 })();
 </script>
 
+
+
+<!-- Server Status Real-time Section -->
+<style>
+.server-section {
+    margin-top: 20px;
+}
+
+.server-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.server-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.008));
+    border: 1px solid rgba(229, 57, 53, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.server-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(229, 57, 53, 0.2);
+    border-color: rgba(229, 57, 53, 0.4);
+}
+
+.server-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(229, 57, 53, 0.2);
+}
+
+.server-name {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.server-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1));
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.server-status-badge.full {
+    background: linear-gradient(135deg, rgba(229, 57, 53, 0.2), rgba(229, 57, 53, 0.1));
+    color: #ff6b6b;
+    border-color: rgba(229, 57, 53, 0.3);
+}
+
+.server-status-badge.warning {
+    background: linear-gradient(135deg, rgba(241, 196, 15, 0.2), rgba(241, 196, 15, 0.1));
+    color: #ffc107;
+    border-color: rgba(241, 196, 15, 0.3);
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #2ecc71;
+    animation: statusPulse 1.5s ease-in-out infinite;
+    box-shadow: 0 0 8px rgba(46, 204, 113, 0.5);
+}
+
+.status-indicator.full {
+    background: #ff6b6b;
+    box-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
+}
+
+.status-indicator.warning {
+    background: #ffc107;
+    box-shadow: 0 0 8px rgba(255, 193, 7, 0.5);
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.server-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    font-size: 12px;
+}
+
+.server-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.server-stat-label {
+    color: #9fb6ff;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.3px;
+}
+
+.server-stat-value {
+    color: #fff;
+    font-weight: 800;
+    font-size: 16px;
+    font-family: monospace;
+}
+
+.server-stat-value.warning {
+    color: #ffc107;
+}
+
+.server-stat-value.danger {
+    color: #ff6b6b;
+}
+
+.server-progress {
+    margin-bottom: 12px;
+}
+
+.server-progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 11px;
+}
+
+.server-progress-label-left {
+    color: #cfe0ff;
+    font-weight: 600;
+}
+
+.server-progress-label-right {
+    color: #9fb6ff;
+    font-weight: 700;
+}
+
+.server-progress-bar {
+    height: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.server-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+}
+
+.server-progress-fill::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: serverShimmer 2s infinite;
+}
+
+@keyframes serverShimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.server-progress-fill.warning {
+    background: linear-gradient(90deg, #ffc107, #ff9800);
+}
+
+.server-progress-fill.danger {
+    background: linear-gradient(90deg, #ff6b6b, #e53935);
+    animation: serverDanger 0.8s ease-in-out infinite;
+}
+
+@keyframes serverDanger {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.server-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    font-size: 11px;
+    color: #9fb6ff;
+    margin-bottom: 12px;
+}
+
+.server-ping {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.server-ping-bar {
+    display: flex;
+    gap: 2px;
+}
+
+.server-ping-line {
+    width: 2px;
+    height: 10px;
+    background: #2ecc71;
+    border-radius: 2px;
+    animation: pingBounce 0.6s ease-in-out infinite;
+}
+
+.server-ping-line:nth-child(1) { animation-delay: 0s; }
+.server-ping-line:nth-child(2) { animation-delay: 0.15s; }
+.server-ping-line:nth-child(3) { animation-delay: 0.3s; }
+.server-ping-line:nth-child(4) { animation-delay: 0.45s; }
+
+@keyframes pingBounce {
+    0%, 100% { height: 4px; }
+    50% { height: 10px; }
+}
+
+.server-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.server-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, rgba(229, 57, 53, 0.2), rgba(107, 0, 0, 0.2));
+    color: #ff9f9f;
+    border: 1px solid rgba(229, 57, 53, 0.3);
+}
+
+.server-btn:hover {
+    background: linear-gradient(135deg, rgba(229, 57, 53, 0.3), rgba(107, 0, 0, 0.3));
+    border-color: rgba(229, 57, 53, 0.5);
+    transform: translateY(-2px);
+}
+
+.server-btn:active {
+    transform: translateY(0);
+}
+
+.server-refresh-all {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: 12px;
+    border: 1px solid rgba(229, 57, 53, 0.2);
+}
+
+.server-refresh-btn {
+    flex: 1;
+    padding: 10px;
+    border: 0;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    background: linear-gradient(135deg, #e53935, #c41c1c);
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.server-refresh-btn:hover {
+    box-shadow: 0 6px 16px rgba(229, 57, 53, 0.3);
+    transform: translateY(-2px);
+}
+
+.server-refresh-btn:active {
+    transform: translateY(0);
+}
+
+.server-last-update {
+    text-align: center;
+    color: #9fb6ff;
+    font-size: 11px;
+    padding: 8px;
+    margin-top: 8px;
+}
+
+@media (max-width: 880px) {
+    .server-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .server-card {
+        padding: 12px;
+    }
+
+    .server-name {
+        font-size: 13px;
+    }
+
+    .server-stat-value {
+        font-size: 14px;
+    }
+}
+</style>
+
+<!-- Server Status HTML -->
+<section class="section server-section">
+    <h3>⚡ Status Server Real-time</h3>
+    
+    <div class="server-refresh-all">
+        <button class="server-refresh-btn" id="serverRefreshBtn">🔄 Refresh Semua Server</button>
+    </div>
+
+    <div class="server-grid" id="serverGrid">
+        <!-- Server cards akan di-generate oleh JavaScript -->
+    </div>
+
+    <div class="server-last-update" id="serverLastUpdate">
+        Terakhir diupdate: —
+    </div>
+</section>
+
+<!-- Server Status JavaScript -->
+<script>
+(function() {
+    const serverGrid = document.getElementById('serverGrid');
+    const refreshBtn = document.getElementById('serverRefreshBtn');
+    const lastUpdateEl = document.getElementById('serverLastUpdate');
+
+    // Server configurations dengan slot realtime
+    const servers = [
+        { name: '10K Server', price: 10, maxSlots: 2000, fill: 100 },
+        { name: '20K Server', price: 20, maxSlots: 2000, fill: 90 },
+        { name: '30K Server', price: 30, maxSlots: 2000, fill: 90 },
+        { name: '40K Server', price: 40, maxSlots: 2000, fill: 90 },
+        { name: '50K Server', price: 50, maxSlots: 2000, fill: 90 },
+        { name: '70K Server', price: 70, maxSlots: 2000, fill: 90 },
+        { name: '100K Server', price: 100, maxSlots: 2000, fill: 90 }
+    ];
+
+    function getServerStatus(fillPercent) {
+        if (fillPercent >= 100) return { type: 'full', label: 'PENUH' };
+        if (fillPercent >= 80) return { type: 'warning', label: 'HAMPIR PENUH' };
+        return { type: 'online', label: 'TERSEDIA' };
+    }
+
+    function getPingMs() {
+        return Math.floor(Math.random() * 80) + 10; // 10-90ms
+    }
+
+    function renderServerCard(server) {
+        const usedSlots = Math.floor((server.fill / 100) * server.maxSlots);
+        const status = getServerStatus(server.fill);
+        const ping = getPingMs();
+
+        const card = document.createElement('div');
+        card.className = 'server-card';
+        card.innerHTML = `
+            <div class="server-header">
+                <div class="server-name">
+                    <span>🖥️</span>
+                    <span>${server.name}</span>
+                </div>
+                <div class="server-status-badge ${status.type}">
+                    <div class="status-indicator ${status.type}"></div>
+                    <span>${status.label}</span>
+                </div>
+            </div>
+
+            <div class="server-info">
+                <div class="server-ping">
+                    <span>📡 Ping:</span>
+                    <strong>${ping}ms</strong>
+                </div>
+                <div class="server-ping">
+                    <span>Price:</span>
+                    <strong>${server.price}rb</strong>
+                </div>
+            </div>
+
+            <div class="server-stats">
+                <div class="server-stat">
+                    <div class="server-stat-label">Slot Terpakai</div>
+                    <div class="server-stat-value ${status.type === 'full' ? 'danger' : status.type === 'warning' ? 'warning' : ''}">
+                        ${usedSlots}
+                    </div>
+                </div>
+                <div class="server-stat">
+                    <div class="server-stat-label">Total Slot</div>
+                    <div class="server-stat-value">${server.maxSlots}</div>
+                </div>
+                <div class="server-stat">
+                    <div class="server-stat-label">Penggunaan</div>
+                    <div class="server-stat-value ${status.type === 'full' ? 'danger' : status.type === 'warning' ? 'warning' : ''}">
+                        ${server.fill}%
+                    </div>
+                </div>
+            </div>
+
+            <div class="server-progress">
+                <div class="server-progress-label">
+                    <span class="server-progress-label-left">Kapasitas Server</span>
+                    <span class="server-progress-label-right">${server.fill}%</span>
+                </div>
+                <div class="server-progress-bar">
+                    <div class="server-progress-fill ${status.type}" style="width: ${server.fill}%"></div>
+                </div>
+            </div>
+
+            <div class="server-actions">
+                <button class="server-btn" onclick="window.joinServer && window.joinServer(${server.price})">
+                    Masuk
+                </button>
+                <button class="server-btn" onclick="window.viewServerDetails && window.viewServerDetails(${server.price})">
+                    Detail
+                </button>
+            </div>
+        `;
+
+        return card;
+    }
+
+    function updateAllServers() {
+        serverGrid.innerHTML = '';
+        servers.forEach(server => {
+            const card = renderServerCard(server);
+            serverGrid.appendChild(card);
+        });
+
+        // Update waktu
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('id-ID');
+        lastUpdateEl.textContent = `Terakhir diupdate: ${timeStr}`;
+        lastUpdateEl.style.animation = 'none';
+        setTimeout(() => {
+            lastUpdateEl.style.animation = 'fadeInUp 0.3s ease';
+        }, 10);
+    }
+
+    // Event listeners
+    refreshBtn.addEventListener('click', function() {
+        refreshBtn.style.animation = 'spin 0.6s linear';
+        setTimeout(() => {
+            refreshBtn.style.animation = 'none';
+        }, 600);
+        updateAllServers();
+        showNotif('✓ Server status diperbarui', 'success', 2000);
+    });
+
+    // Global functions untuk server actions
+    window.joinServer = function(price) {
+        const tier = (window.state && window.state.tier) || 0;
+        if (tier < price) {
+            showNotif('Tier minimal: ' + price + 'rb untuk join server ini', 'danger', 2500);
+            return;
+        }
+        showNotif('✓ Berhasil join server ' + price + 'rb', 'success', 2000);
+    };
+
+    window.viewServerDetails = function(price) {
+        const server = servers.find(s => s.price === price);
+        if (server) {
+            const detail = `
+Server: ${server.name}
+Slot: ${Math.floor((server.fill / 100) * server.maxSlots)}/${server.maxSlots}
+Penggunaan: ${server.fill}%
+Status: ${getServerStatus(server.fill).label}
+Ping: ${getPingMs()}ms
+            `;
+            showNotif('Detail: ' + server.name, 'info', 2500);
+        }
+    };
+
+    // Add spin animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Initial render
+    updateAllServers();
+
+    // Auto-refresh setiap 30 detik
+    setInterval(updateAllServers, 30000);
+
+    // Real-time simulation - berikan feel live dengan update fill secara random
+    setInterval(() => {
+        // Update server 10K untuk tetap penuh
+        servers[0].fill = 100;
+        
+        // Update server lain dengan variasi ±2%
+        for (let i = 1; i < servers.length; i++) {
+            const change = (Math.random() - 0.5) * 4;
+            servers[i].fill = Math.max(80, Math.min(95, servers[i].fill + change));
+        }
+
+        // Render ulang cards
+        updateAllServers();
+    }, 5000);
+})();
+</script>
