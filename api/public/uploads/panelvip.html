@@ -871,6 +871,25 @@
                 </div>
             </section>
 
+
+
+            <section class="section">
+                <h3>Grafik MC</h3>
+                <div class="flex">
+                    <div class="card" data-price="20" id="hd2">
+                        <strong>Grafik Mc Low</strong>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="hd_100"><div class="knob"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="card" data-price="35" id="hd3">
+                        <strong>Grafik Mc Super low</strong>
+                        <div style="margin-top:10px" class="toggle">
+                            <div class="switch" data-key="hd_500"><div class="knob"></div></div>
+                        </div>
+                    </div>
+
             <section class="section">
                 <h3>Damage</h3>
                 <div class="card" style="margin-bottom:12px">
@@ -5332,1471 +5351,1645 @@ html,body{
 
 
 
-
-
-<!-- Termux-style Loading Screen -->
-<style>
-    /* Termux Loading Screen */
-    .termux-loader-overlay {
-        position: fixed;
-        inset: 0;
-        background: #0a0e27;
-        z-index: 9999999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Courier New', monospace;
-        color: #00ff00;
-        overflow: hidden;
-    }
-
-    .termux-loader-overlay.hidden {
-        animation: fadeOutLoader 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        pointer-events: none;
-    }
-
-    @keyframes fadeOutLoader {
-        from {
-            opacity: 1;
-        }
-        to {
-            opacity: 0;
-        }
-    }
-
-    .termux-container {
-        width: 90%;
-        max-width: 600px;
-        background: #0a0e27;
-        border: 2px solid #00ff00;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 0 40px rgba(0, 255, 0, 0.3), inset 0 0 40px rgba(0, 255, 0, 0.05);
-        animation: screenFlicker 0.15s infinite;
-    }
-
-    @keyframes screenFlicker {
-        0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
-        }
-        20%, 24%, 55% {
-            text-shadow: 0 0 5px #00ff00;
-        }
-    }
-
-    .termux-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid rgba(0, 255, 0, 0.3);
-    }
-
-    .termux-icon {
-        font-size: 28px;
-        animation: iconPulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes iconPulse {
-        0%, 100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.5;
-        }
-    }
-
-    .termux-title {
-        font-size: 16px;
-        font-weight: bold;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-    }
-
-    .termux-log {
-        max-height: 350px;
-        overflow-y: auto;
-        margin-bottom: 20px;
-        padding: 15px;
-        background: rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(0, 255, 0, 0.2);
-        border-radius: 4px;
-    }
-
-    .termux-log::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    .termux-log::-webkit-scrollbar-track {
-        background: rgba(0, 255, 0, 0.1);
-    }
-
-    .termux-log::-webkit-scrollbar-thumb {
-        background: #00ff00;
-        border-radius: 4px;
-    }
-
-    .termux-log-item {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 10px;
-        font-size: 12px;
-        line-height: 1.6;
-        animation: slideInLog 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    @keyframes slideInLog {
-        from {
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    .termux-log-time {
-        color: #00cc00;
-        min-width: 60px;
-        font-weight: bold;
-    }
-
-    .termux-log-icon {
-        min-width: 20px;
-        text-align: center;
-    }
-
-    .termux-log-text {
-        flex: 1;
-        word-break: break-word;
-    }
-
-    .termux-log-item.success .termux-log-icon {
-        color: #00ff00;
-    }
-
-    .termux-log-item.warning .termux-log-icon {
-        color: #ffaa00;
-    }
-
-    .termux-log-item.error .termux-log-icon {
-        color: #ff3333;
-    }
-
-    .termux-log-item.info .termux-log-icon {
-        color: #00ddff;
-    }
-
-    .termux-progress {
-        margin-bottom: 20px;
-    }
-
-    .termux-progress-label {
-        display: flex;
-        justify-content: space-between;
-        font-size: 11px;
-        margin-bottom: 8px;
-        color: #00ccff;
-    }
-
-    .termux-progress-bar {
-        width: 100%;
-        height: 20px;
-        background: rgba(0, 0, 0, 0.8);
-        border: 1px solid rgba(0, 255, 0, 0.3);
-        border-radius: 3px;
-        overflow: hidden;
-    }
-
-    .termux-progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #00ff00, #00ccff);
-        width: 0%;
-        transition: width 0.3s ease;
-        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-        position: relative;
-    }
-
-    .termux-progress-fill::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-        animation: progressShimmer 1.5s infinite;
-    }
-
-    @keyframes progressShimmer {
-        0% {
-            transform: translateX(-100%);
-        }
-        100% {
-            transform: translateX(100%);
-        }
-    }
-
-    .termux-progress-text {
-        text-align: center;
-        margin-top: 5px;
-        font-size: 11px;
-        color: #00ff00;
-        font-weight: bold;
-    }
-
-    .termux-status {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        margin-bottom: 15px;
-        font-size: 11px;
-    }
-
-    .termux-stat {
-        background: rgba(0, 255, 0, 0.05);
-        border: 1px solid rgba(0, 255, 0, 0.2);
-        border-radius: 4px;
-        padding: 12px;
-    }
-
-    .termux-stat-label {
-        color: #00ccff;
-        font-weight: bold;
-        margin-bottom: 6px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .termux-stat-value {
-        color: #00ff00;
-        font-weight: bold;
-        word-break: break-all;
-        font-size: 10px;
-    }
-
-    .termux-command {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        font-size: 12px;
-        margin-bottom: 10px;
-        color: #00ff00;
-    }
-
-    .termux-cursor {
-        display: inline-block;
-        width: 10px;
-        height: 16px;
-        background: #00ff00;
-        animation: blink 1s infinite;
-    }
-
-    @keyframes blink {
-        0%, 49% {
-            opacity: 1;
-        }
-        50%, 100% {
-            opacity: 0;
-        }
-    }
-
-    .termux-footer {
-        text-align: center;
-        font-size: 11px;
-        color: #00aa00;
-        border-top: 1px solid rgba(0, 255, 0, 0.2);
-        padding-top: 12px;
-        letter-spacing: 1px;
-    }
-
-    @media (max-width: 480px) {
-        .termux-container {
-            width: 95%;
-            padding: 16px;
-        }
-
-        .termux-title {
-            font-size: 14px;
-        }
-
-        .termux-log {
-            max-height: 280px;
-            padding: 12px;
-        }
-
-        .termux-status {
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        .termux-log-item {
-            font-size: 11px;
-        }
-    }
-
-    /* Scanlines effect */
-    .termux-container::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: repeating-linear-gradient(
-            0deg,
-            rgba(0, 0, 0, 0.15),
-            rgba(0, 0, 0, 0.15) 1px,
-            transparent 1px,
-            transparent 2px
-        );
-        pointer-events: none;
-        border-radius: 8px;
-    }
-</style>
-
-<!-- Termux Loading HTML -->
-<div class="termux-loader-overlay" id="termuxLoader">
-    <div class="termux-container">
-        <div class="termux-header">
-            <div class="termux-icon">🖥️</div>
-            <div class="termux-title">OCIN PANEL INITIALIZER</div>
-        </div>
-
-        <div class="termux-log" id="termuxLog">
-            <!-- Log items akan ditambahkan di sini -->
-        </div>
-
-        <div class="termux-status" id="termuxStatus">
-            <div class="termux-stat">
-                <div class="termux-stat-label">Device</div>
-                <div class="termux-stat-value" id="loaderDevice">Detecting...</div>
-            </div>
-            <div class="termux-stat">
-                <div class="termux-stat-label">Location</div>
-                <div class="termux-stat-value" id="loaderLocation">Loading...</div>
-            </div>
-            <div class="termux-stat">
-                <div class="termux-stat-label">Signal</div>
-                <div class="termux-stat-value" id="loaderSignal">Scanning...</div>
-            </div>
-            <div class="termux-stat">
-                <div class="termux-stat-label">Network</div>
-                <div class="termux-stat-value" id="loaderNetwork">Analyzing...</div>
-            </div>
-        </div>
-
-        <div class="termux-progress">
-            <div class="termux-progress-label">
-                <span>System Boot Progress</span>
-                <span id="progressPercent">0%</span>
-            </div>
-            <div class="termux-progress-bar">
-                <div class="termux-progress-fill" id="progressFill"></div>
-            </div>
-            <div class="termux-progress-text" id="progressStatus">Initializing...</div>
-        </div>
-
-        <div class="termux-footer">
-            ▌ OCIN SECURE INIT v2.0 │ Ready to access panel
-        </div>
-    </div>
-</div>
+<script>
+// Server capacity check for 10k tier
+(function() {
+    const btnLogin = document.getElementById('btnLogin');
+    const loginMsg = document.getElementById('loginMsg');
+    
+    if (!btnLogin) return;
+    
+    btnLogin.addEventListener('click', function() {
+        setTimeout(() => {
+            if (!window.state || !window.state.tier) return;
+            
+            const tier = window.state.tier;
+            
+            // Check if tier is 10k (server full warning)
+            if (tier === 10) {
+                // Show server full warning
+                const overlay = document.createElement('div');
+                overlay.id = 'serverFullOverlay';
+                overlay.style.cssText = `
+                    position: fixed;
+                    inset: 0;
+                    background: rgba(0, 0, 0, 0.85);
+                    backdrop-filter: blur(10px);
+                    z-index: 999995;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 20px;
+                `;
+                
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    background: linear-gradient(180deg, rgba(229, 57, 53, 0.3), rgba(0, 0, 0, 0.6));
+                    border-radius: 20px;
+                    padding: 32px;
+                    max-width: 480px;
+                    width: 100%;
+                    text-align: center;
+                    box-shadow: 0 20px 60px rgba(229, 57, 53, 0.5), 0 0 40px rgba(229, 57, 53, 0.2);
+                    border: 2px solid rgba(229, 57, 53, 0.5);
+                    animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                `;
+                
+                modal.innerHTML = `
+                    <div style="font-size: 64px; margin-bottom: 16px; animation: bounce 0.6s ease;">⚠️</div>
+                    <h2 style="margin: 0 0 12px 0; color: #ff6b6b; font-size: 24px; font-weight: 900;">
+                        SERVER PENUH
+                    </h2>
+                    <div style="color: #ffb3b3; font-size: 14px; margin-bottom: 20px; font-weight: 600;">
+                        Kapasitas: 2000/2000
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, rgba(255, 57, 57, 0.15), rgba(229, 57, 53, 0.1)); 
+                                border: 2px dashed rgba(229, 57, 53, 0.5); border-radius: 14px; padding: 16px; 
+                                margin-bottom: 24px;">
+                        <p style="margin: 0; color: #cfe0ff; font-size: 13px; line-height: 1.6;">
+                            ⚠️ Tier 10k sudah mencapai kapasitas penuh. Semua slot terisi!<br><br>
+                            Untuk akses prioritas dan fitur premium, silakan upgrade ke tier yang lebih tinggi.
+                        </p>
+                    </div>
+                    
+                    <div style="background: linear-gradient(180deg, rgba(46, 204, 113, 0.1), rgba(0, 0, 0, 0.1)); 
+                                border-left: 4px solid #2ecc71; border-radius: 10px; padding: 16px; 
+                                margin-bottom: 24px; text-align: left;">
+                        <div style="color: #2ecc71; font-weight: 800; font-size: 12px; text-transform: uppercase; 
+                                   letter-spacing: 0.5px; margin-bottom: 10px;">✓ Opsi Upgrade Tersedia:</div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="background: rgba(229, 57, 53, 0.1); padding: 10px; border-radius: 8px; 
+                                       color: #cfe0ff; font-size: 12px; font-weight: 600; border-left: 3px solid #ffd700;">
+                                💎 GOLD 20rb - Akses Standar
+                            </div>
+                            <div style="background: rgba(229, 57, 53, 0.1); padding: 10px; border-radius: 8px; 
+                                       color: #cfe0ff; font-size: 12px; font-weight: 600; border-left: 3px solid #c0c0c0;">
+                                💎 SILVER 40rb - Akses Premium
+                            </div>
+                            <div style="background: rgba(229, 57, 53, 0.1); padding: 10px; border-radius: 8px; 
+                                       color: #cfe0ff; font-size: 12px; font-weight: 600; border-left: 3px solid #6495ed;">
+                                👑 DIAMOND 50rb+ - Akses Ultra
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 0;">
+                        <button id="serverUpgradeBtn" style="flex: 1; padding: 12px; border-radius: 10px; 
+                                 background: linear-gradient(135deg, #2ecc71, #16a34a); color: #fff; 
+                                 border: 0; font-weight: 800; cursor: pointer; font-size: 13px; 
+                                 transition: all 0.3s ease;">
+                            📈 Upgrade Sekarang
+                        </button>
+                        <button id="serverCloseBtn" style="flex: 1; padding: 12px; border-radius: 10px; 
+                                 background: transparent; color: #cfe0ff; border: 1px solid rgba(255, 255, 255, 0.2); 
+                                 font-weight: 700; cursor: pointer; font-size: 13px; 
+                                 transition: all 0.3s ease;">
+                            Tutup
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 16px; padding: 12px; background: rgba(107, 0, 0, 0.2); 
+                               border-radius: 10px; border-left: 3px solid #ffb020;">
+                        <small style="color: #ffb3b3; font-weight: 600; font-size: 11px;">
+                            ⏱ Server akan reset setiap 24 jam dengan kapasitas baru
+                        </small>
+                    </div>
+                `;
+                
+                overlay.appendChild(modal);
+                document.body.appendChild(overlay);
+                
+                // Inject animation styles
+                if (!document.getElementById('serverFullStyles')) {
+                    const styles = document.createElement('style');
+                    styles.id = 'serverFullStyles';
+                    styles.textContent = `
+                        @keyframes bounce {
+                            0%, 100% { transform: scale(1); }
+                            50% { transform: scale(1.1); }
+                        }
+                        @keyframes slideUp {
+                            from { transform: translateY(60px); opacity: 0; }
+                            to { transform: translateY(0); opacity: 1; }
+                        }
+                        #serverUpgradeBtn:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 8px 24px rgba(46, 204, 113, 0.4);
+                        }
+                        #serverCloseBtn:hover {
+                            border-color: rgba(255, 255, 255, 0.4);
+                            background: rgba(255, 255, 255, 0.05);
+                        }
+                    `;
+                    document.head.appendChild(styles);
+                }
+                
+                // Event handlers
+                const upgradeBtn = document.getElementById('serverUpgradeBtn');
+                const closeBtn = document.getElementById('serverCloseBtn');
+                
+                upgradeBtn.addEventListener('click', function() {
+                    // Scroll ke membership section
+                    const membershipSection = document.querySelector('.membership-card');
+                    if (membershipSection) {
+                        membershipSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    overlay.remove();
+                    showNotif('Pilih paket membership yang ingin dibeli', 'info', 2500);
+                });
+                
+                closeBtn.addEventListener('click', function() {
+                    overlay.remove();
+                });
+                
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === overlay) overlay.remove();
+                });
+                
+                // Update login message
+                loginMsg.textContent = '⚠️ Server penuh (2000/2000) - Upgrade untuk akses prioritas';
+                loginMsg.style.color = '#ff6b6b';
+                
+            } else if (tier > 10) {
+                // Tier di atas 10k - akses normal
+                loginMsg.textContent = '✓ Login berhasil • Akses diaktifkan!';
+                loginMsg.style.color = '#2ecc71';
+                showNotif('✓ Selamat datang! Semua fitur tersedia', 'success', 2500);
+            }
+        }, 100);
+    });
+})();
+</script>
 
 <script>
+// Remove Support Ranked and Shotguns Damage sections
 (function() {
-    const loader = document.getElementById('termuxLoader');
-    const logContainer = document.getElementById('termuxLog');
-    const progressFill = document.getElementById('progressFill');
-    const progressPercent = document.getElementById('progressPercent');
-    const progressStatus = document.getElementById('progressStatus');
-    const loaderDevice = document.getElementById('loaderDevice');
-    const loaderLocation = document.getElementById('loaderLocation');
-    const loaderSignal = document.getElementById('loaderSignal');
-    const loaderNetwork = document.getElementById('loaderNetwork');
-
-    let progress = 0;
-
-    function addLog(text, type = 'info', icon = '►') {
-        const item = document.createElement('div');
-        item.className = `termux-log-item ${type}`;
-        const time = new Date().toLocaleTimeString();
-
-        item.innerHTML = `
-            <div class="termux-log-time">${time}</div>
-            <div class="termux-log-icon">${icon}</div>
-            <div class="termux-log-text">${text}</div>
-        `;
-
-        logContainer.appendChild(item);
-        logContainer.scrollTop = logContainer.scrollHeight;
-    }
-
-    function updateProgress(value, status) {
-        progress = Math.min(100, value);
-        progressFill.style.width = progress + '%';
-        progressPercent.textContent = progress + '%';
-        progressStatus.textContent = status;
-    }
-
-    async function detectDevice() {
-        addLog('Scanning hardware information...', 'info', '📡');
-        
-        const ua = navigator.userAgent;
-        let deviceName = 'Unknown Device';
-        let deviceType = 'Unknown';
-
-        if (/android/i.test(ua)) {
-            deviceType = 'Android';
-            const match = ua.match(/SM-([A-Z0-9]+)|Pixel\s?[\w\-]+|ONEPLUS/i);
-            deviceName = match ? match[0] : 'Android Phone';
-        } else if (/iphone|ipad/i.test(ua)) {
-            deviceType = 'iOS';
-            deviceName = /ipad/i.test(ua) ? 'iPad' : 'iPhone';
-        } else if (/windows/i.test(ua)) {
-            deviceType = 'Windows';
-            deviceName = 'Windows PC';
-        } else if (/mac/i.test(ua)) {
-            deviceType = 'macOS';
-            deviceName = 'MacBook';
+    // Find and remove Support Ranked section
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => {
+        const h3 = section.querySelector('h3');
+        if (h3 && (h3.textContent.includes('Support Ranked') || h3.textContent.includes('Shotguns Damage'))) {
+            section.remove();
         }
-
-        loaderDevice.textContent = `${deviceName} (${deviceType})`;
-        addLog(`Device identified: ${deviceName}`, 'success', '✓');
-        updateProgress(25, 'Device detection complete');
-    }
-
-    async function detectLocation() {
-        addLog('Requesting geolocation access...', 'info', '🌍');
-
-        try {
-            return new Promise((resolve) => {
-                if (!navigator.geolocation) {
-                    throw new Error('Geolocation not available');
-                }
-
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const { latitude, longitude } = position.coords;
-                        loaderLocation.textContent = `${latitude.toFixed(4)}°, ${longitude.toFixed(4)}°`;
-                        addLog(`Location acquired: ${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`, 'success', '✓');
-                        updateProgress(50, 'Geolocation acquired');
-                        resolve();
-                    },
-                    (error) => {
-                        loaderLocation.textContent = 'Permission denied';
-                        addLog('Geolocation permission denied', 'warning', '⚠');
-                        updateProgress(50, 'Geolocation skipped');
-                        resolve();
-                    },
-                    { timeout: 10000, enableHighAccuracy: true }
-                );
-            });
-        } catch (e) {
-            loaderLocation.textContent = 'Unavailable';
-            addLog('Geolocation error: ' + e.message, 'warning', '⚠');
-            updateProgress(50, 'Geolocation unavailable');
-        }
-    }
-
-    async function detectNetwork() {
-        addLog('Analyzing network connection...', 'info', '📶');
-
-        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-
-        if (conn) {
-            const type = conn.type || 'Unknown';
-            const effectiveType = conn.effectiveType || 'Unknown';
-            loaderNetwork.textContent = `${effectiveType} (${type})`;
-            loaderSignal.textContent = '📡 ' + effectiveType.toUpperCase();
-            addLog(`Network: ${effectiveType} - ${type}`, 'success', '✓');
-        } else {
-            loaderNetwork.textContent = 'Detecting...';
-            loaderSignal.textContent = '📡 Auto-detect';
-            addLog('Network API unavailable, using auto-detect', 'warning', '⚠');
-        }
-
-        updateProgress(75, 'Network analysis complete');
-    }
-
-    async function initializeSystem() {
-        addLog('Initializing OCIN Panel System...', 'info', '⚙️');
-        
-        // Simulasi beberapa proses tambahan
-        const steps = [
-            'Loading security protocols...',
-            'Verifying credentials...',
-            'Initializing database connection...',
-            'Loading UI components...',
-            'Preparing dashboard...'
-        ];
-
-        for (let i = 0; i < steps.length; i++) {
-            await new Promise(r => setTimeout(r, 300));
-            addLog(steps[i], 'info', '►');
-            updateProgress(75 + (i * 4), steps[i]);
-        }
-    }
-
-    async function runInitialization() {
-        try {
-            addLog('OCIN Panel boot sequence initiated', 'success', '▶');
-            updateProgress(5, 'Starting initialization...');
-
-            await new Promise(r => setTimeout(r, 600));
-            await detectDevice();
-
-            await new Promise(r => setTimeout(r, 400));
-            await detectLocation();
-
-            await new Promise(r => setTimeout(r, 400));
-            await detectNetwork();
-
-            await new Promise(r => setTimeout(r, 400));
-            await initializeSystem();
-
-            await new Promise(r => setTimeout(r, 400));
-            addLog('All systems operational', 'success', '✓');
-            addLog('Boot sequence complete. Access granted!', 'success', '✓');
-
-            updateProgress(100, 'System ready - Welcome!');
-
-            // Tunggu sebentar sebelum hide loader
-            await new Promise(r => setTimeout(r, 1200));
-            loader.classList.add('hidden');
-
-            // Hapus dari DOM setelah animasi selesai
-            await new Promise(r => setTimeout(r, 800));
-            loader.style.display = 'none';
-        } catch (error) {
-            addLog('Critical error: ' + error.message, 'error', '✗');
-            updateProgress(100, 'Error occurred');
-        }
-    }
-
-    // Mulai initialization dengan delay kecil
-    setTimeout(runInitialization, 500);
+    });
 })();
 </script>
 
 
 
 
-<!-- TERMUX REAL THEME - Complete Redesign -->
-<style>
-/* ===== TERMUX REAL THEME ===== */
-
-:root {
-    --termux-bg: #0a0e27;
-    --termux-text: #00ff00;
-    --termux-accent: #00cc00;
-    --termux-warn: #ffaa00;
-    --termux-error: #ff3333;
-    --termux-info: #00ddff;
-    --termux-success: #00ff00;
-}
-
-/* Override existing theme */
-html, body {
-    background: #0a0e27;
-    color: #00ff00;
-    font-family: 'Courier New', 'JetBrains Mono', monospace;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.2);
-}
-
-body::before {
-    background: none;
-}
-
-/* Scanlines effect */
-body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.15),
-        rgba(0, 0, 0, 0.15) 1px,
-        transparent 1px,
-        transparent 2px
-    );
-    pointer-events: none;
-    z-index: 1;
-}
-
-.app {
-    background: #0a0e27;
-}
-
-/* Header Terminal Style */
-header.site {
-    background: linear-gradient(135deg, #0a0e27 0%, #1a1530 100%);
-    border: 2px solid #00ff00;
-    border-radius: 0;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3), inset 0 -1px 0 rgba(0, 255, 0, 0.1);
-    position: relative;
-}
-
-header.site::before {
-    content: "$ ocin-panel";
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #00ff00;
-    font-weight: 800;
-    font-size: 11px;
-    opacity: 0.6;
-}
-
-.logo img {
-    border: 1px solid #00ff00;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
-}
-
-.title {
-    color: #00ff00;
-    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-    font-weight: 900;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-
-.subtitle {
-    color: #00ccff;
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-/* Panel Sidebar */
-.panel {
-    background: linear-gradient(180deg, rgba(0, 50, 60, 0.4), rgba(0, 0, 0, 0.6));
-    border: 1px solid #00ff00;
-    border-radius: 0;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2), inset 0 0 10px rgba(0, 255, 0, 0.05);
-}
-
-.panel::before {
-    content: "[ USER PANEL ]";
-    display: block;
-    width: 100%;
-    padding: 8px;
-    border-bottom: 1px solid rgba(0, 255, 0, 0.3);
-    color: #00ccff;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-align: center;
-    margin: -18px -18px 18px -18px;
-}
-
-.user-card {
-    background: rgba(0, 100, 100, 0.2);
-    border: 1px solid #00ff00;
-    padding: 12px;
-    border-radius: 0;
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.15);
-}
-
-.avatar {
-    background: linear-gradient(135deg, rgba(0, 255, 0, 0.1), rgba(0, 204, 255, 0.1));
-    border: 2px solid #00ff00;
-    color: #00ff00;
-    font-weight: 900;
-    text-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
-}
-
-#who {
-    color: #00ff00;
-    text-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
-}
-
-#tierNote {
-    color: #00ccff;
-    font-size: 10px;
-}
-
-.input {
-    background: rgba(0, 50, 60, 0.8);
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    border-radius: 0;
-    box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.1);
-}
-
-.input:focus {
-    background: rgba(0, 80, 100, 0.9);
-    border-color: #00ccff;
-    box-shadow: 0 0 10px rgba(0, 204, 255, 0.3), inset 0 0 5px rgba(0, 255, 0, 0.1);
-}
-
-.input::placeholder {
-    color: rgba(0, 255, 0, 0.5);
-}
-
-.btn {
-    border: 1px solid #00ff00;
-    border-radius: 0;
-    font-weight: 800;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    font-size: 11px;
-    transition: all 0.2s ease;
-}
-
-.btn:hover {
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
-    text-shadow: 0 0 10px rgba(0, 255, 0, 0.6);
-}
-
-.btn:active {
-    transform: scale(0.98);
-}
-
-.btn-red {
-    background: rgba(200, 0, 0, 0.8);
-    color: #ff3333;
-    border-color: #ff3333;
-    box-shadow: 0 0 8px rgba(255, 51, 51, 0.3);
-    text-shadow: 0 0 5px rgba(255, 51, 51, 0.5);
-}
-
-.btn-red:hover {
-    background: rgba(255, 0, 0, 0.9);
-    box-shadow: 0 0 20px rgba(255, 51, 51, 0.5);
-}
-
-.btn-outline {
-    background: transparent;
-    color: #00ff00;
-    border-color: #00ff00;
-}
-
-.btn-outline:hover {
-    background: rgba(0, 255, 0, 0.1);
-}
-
-.status {
-    background: rgba(0, 100, 100, 0.3);
-    border: 1px solid #00ccff;
-    color: #00ccff;
-    border-radius: 0;
-    box-shadow: 0 0 8px rgba(0, 204, 255, 0.2);
-    font-size: 11px;
-    text-shadow: 0 0 5px rgba(0, 204, 255, 0.3);
-}
-
-/* Content Area */
-.content {
-    background: linear-gradient(180deg, rgba(0, 40, 60, 0.3), rgba(0, 0, 0, 0.5));
-    border: 1px solid #00ff00;
-    border-radius: 0;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2), inset 0 0 10px rgba(0, 255, 0, 0.05);
-}
-
-.content::before {
-    content: "[ FEATURE TERMINAL ]";
-    display: block;
-    width: 100%;
-    padding: 8px;
-    border-bottom: 1px solid rgba(0, 255, 0, 0.3);
-    color: #00ccff;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-align: center;
-    margin: -18px -18px 18px -18px;
-}
-
-.section {
-    background: rgba(0, 60, 80, 0.4);
-    border: 1px solid rgba(0, 255, 0, 0.4);
-    border-left: 3px solid #00ff00;
-    border-radius: 0;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.15);
-    position: relative;
-}
-
-.section::before {
-    content: "▌";
-    position: absolute;
-    left: 10px;
-    top: 15px;
-    color: #00ff00;
-    font-weight: 900;
-    opacity: 0.7;
-}
-
-.section h3 {
-    color: #00ccff;
-    text-shadow: 0 0 8px rgba(0, 204, 255, 0.4);
-    font-weight: 900;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    font-size: 12px;
-    margin-left: 15px;
-}
-
-/* Cards */
-.card {
-    background: rgba(0, 40, 60, 0.6);
-    border: 1px solid rgba(0, 255, 0, 0.3);
-    border-radius: 0;
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.1);
-    transition: all 0.3s ease;
-    padding: 14px;
-    position: relative;
-}
-
-.card:hover {
-    border-color: #00ff00;
-    background: rgba(0, 60, 80, 0.7);
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-}
-
-.card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 3px;
-    height: 100%;
-    background: linear-gradient(180deg, #00ff00, transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.card:hover::before {
-    opacity: 1;
-}
-
-.card strong {
-    color: #00ff00;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
-}
-
-.price {
-    color: #ffaa00;
-    font-weight: 800;
-    text-shadow: 0 0 5px rgba(255, 170, 0, 0.3);
-}
-
-.toggle {
-    color: #00ccff;
-    font-size: 11px;
-}
-
-/* Switch Toggle */
-.switch {
-    background: rgba(0, 40, 60, 0.8);
-    border: 1px solid #00ff00;
-    border-radius: 0;
-    box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.1);
-}
-
-.knob {
-    background: #00ff00;
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
-    border-radius: 0;
-}
-
-.switch.on {
-    background: linear-gradient(90deg, rgba(0, 255, 0, 0.2), rgba(0, 204, 0, 0.3));
-    border-color: #00ff00;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3), inset 0 0 8px rgba(0, 255, 0, 0.1);
-}
-
-/* Sliders */
-.slider {
-    background: linear-gradient(90deg, #ff0000, #ffaa00, #00ff00, #00ccff, #0000ff);
-    border: 1px solid #00ff00;
-    border-radius: 0;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    background: #00ff00;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.6);
-    border-radius: 0;
-}
-
-/* Buttons Hologram */
-.holo-btn {
-    border: 1px solid #00ff00;
-    border-radius: 0;
-    color: #000;
-    font-weight: 900;
-    text-transform: uppercase;
-    font-size: 10px;
-    letter-spacing: 1px;
-    transition: all 0.2s ease;
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.2);
-}
-
-.holo-btn:hover {
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
-    transform: translateY(-2px);
-}
-
-.h-red {
-    background: #ff3333;
-    color: #000;
-    border-color: #ff3333;
-}
-
-.h-yellow {
-    background: #ffaa00;
-    color: #000;
-    border-color: #ffaa00;
-}
-
-.h-green {
-    background: #00ff00;
-    color: #000;
-    border-color: #00ff00;
-}
-
-.h-blue {
-    background: #00ccff;
-    color: #000;
-    border-color: #00ccff;
-}
-
-.h-purple {
-    background: #cc00ff;
-    color: #000;
-    border-color: #cc00ff;
-}
-
-/* Fancy buttons */
-.fancy {
-    background: linear-gradient(90deg, rgba(0, 100, 0, 0.6), rgba(0, 60, 80, 0.6));
-    border: 1px solid #00ff00;
-    border-radius: 0;
-    color: #00ff00;
-    font-weight: 800;
-    text-transform: uppercase;
-    font-size: 11px;
-    letter-spacing: 1px;
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.2);
-}
-
-.fancy:hover {
-    background: linear-gradient(90deg, rgba(0, 150, 0, 0.7), rgba(0, 100, 120, 0.7));
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
-}
-
-/* Locked Overlay */
-.locked-overlay {
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), rgba(100, 0, 0, 0.5));
-    border: 2px dashed #ff3333;
-    border-radius: 0;
-    box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
-    color: #ff3333;
-}
-
-.locked-overlay small {
-    color: #ffaa00;
-}
-
-/* Loader */
-.loader {
-    border: 2px solid rgba(0, 255, 0, 0.3);
-}
-
-.loader:before {
-    border-top-color: #00ff00;
-    border-right-color: #00ccff;
-    border-bottom-color: transparent;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
-}
-
-.loader:after {
-    border-left-color: #00ccff;
-    border-top-color: #00ff00;
-    box-shadow: 0 0 10px rgba(0, 204, 255, 0.4);
-}
-
-/* Badge */
-.badge {
-    background: linear-gradient(135deg, rgba(0, 255, 0, 0.2), rgba(0, 204, 255, 0.2));
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    animation: badgeGlow 2s ease-in-out infinite;
-}
-
-@keyframes badgeGlow {
-    0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 0, 0.3); }
-    50% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
-}
-
-.note {
-    color: #00ccff;
-    font-size: 11px;
-}
-
-/* Membership Cards Termux Style */
-.membership-card {
-    background: rgba(0, 40, 60, 0.5);
-    border: 1px solid #00ff00;
-    border-radius: 0;
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.15);
-}
-
-.membership-card:hover {
-    border-color: #00ccff;
-    background: rgba(0, 60, 80, 0.6);
-    box-shadow: 0 0 15px rgba(0, 204, 255, 0.3);
-}
-
-.membership-badge {
-    background: rgba(0, 255, 0, 0.15);
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.4);
-    border-radius: 0;
-}
-
-.membership-price {
-    color: #ffaa00;
-    text-shadow: 0 0 5px rgba(255, 170, 0, 0.3);
-}
-
-.btn-membership {
-    background: linear-gradient(135deg, rgba(0, 255, 0, 0.2), rgba(0, 204, 0, 0.15));
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    border-radius: 0;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
-    text-transform: uppercase;
-    font-weight: 800;
-    font-size: 11px;
-    letter-spacing: 1px;
-}
-
-.btn-membership:hover {
-    background: linear-gradient(135deg, rgba(0, 255, 0, 0.3), rgba(0, 204, 0, 0.25));
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
-}
-
-/* Modal Styles */
-.membership-overlay {
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(2px);
-}
-
-.membership-modal {
-    background: linear-gradient(180deg, rgba(0, 40, 60, 0.9), rgba(0, 0, 0, 0.9));
-    border: 2px solid #00ff00;
-    border-radius: 0;
-    box-shadow: 0 0 30px rgba(0, 255, 0, 0.4), inset 0 0 20px rgba(0, 255, 0, 0.05);
-}
-
-.membership-modal-header {
-    border-bottom: 1px dashed #00ff00;
-}
-
-.membership-modal-header h2 {
-    color: #00ff00;
-    text-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.modal-close {
-    color: #00ff00;
-    transition: all 0.2s ease;
-}
-
-.modal-close:hover {
-    color: #ff3333;
-    text-shadow: 0 0 8px rgba(255, 51, 51, 0.4);
-}
-
-.payment-info {
-    background: rgba(0, 60, 80, 0.4);
-    border-left: 3px solid #00ff00;
-    border: 1px solid rgba(0, 255, 0, 0.3);
-}
-
-.info-item .label {
-    color: #00ccff;
-}
-
-.info-item .value {
-    color: #00ff00;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
-}
-
-.payment-method h3 {
-    color: #00ccff;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.payment-btn {
-    background: rgba(0, 60, 80, 0.6);
-    border: 1px solid #00ff00;
-    border-radius: 0;
-    color: #00ff00;
-}
-
-.payment-btn:hover {
-    background: rgba(0, 100, 120, 0.7);
-    border-color: #00ccff;
-    box-shadow: 0 0 12px rgba(0, 204, 255, 0.3);
-}
-
-.payment-btn.active {
-    background: rgba(0, 255, 0, 0.1);
-    border-color: #00ff00;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
-}
-
-.qr-container {
-    background: #fff;
-    border: 1px solid #00ff00;
-}
-
-.qr-section h3 {
-    color: #00ccff;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Device Card */
-.device-card {
-    background: rgba(0, 60, 80, 0.5);
-    border: 1px solid #00ff00;
-    border-radius: 0;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.15);
-}
-
-.device-card .icon {
-    background: rgba(0, 100, 0, 0.3);
-    border: 1px solid #00ff00;
-    border-radius: 0;
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.2);
-}
-
-.device-grid .k {
-    color: #00ccff;
-}
-
-.device-badge {
-    background: linear-gradient(135deg, rgba(0, 255, 0, 0.2), rgba(0, 204, 0, 0.15));
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    border-radius: 0;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
-    text-transform: uppercase;
-    font-weight: 800;
-}
-
-/* Profile Menu */
-.profile-overlay {
-    background: rgba(0, 0, 0, 0.95);
-}
-
-.profile-modal {
-    background: linear-gradient(180deg, rgba(0, 40, 60, 0.9), rgba(0, 0, 0, 0.9));
-    border: 2px solid #00ff00;
-    border-radius: 0;
-    box-shadow: 0 0 30px rgba(0, 255, 0, 0.4);
-}
-
-.profile-header {
-    border-bottom: 1px dashed #00ff00;
-}
-
-.profile-header h2 {
-    color: #00ff00;
-    text-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
-    text-transform: uppercase;
-}
-
-.profile-avatar {
-    border: 2px solid #00ff00;
-    background: linear-gradient(135deg, rgba(0, 100, 0, 0.3), rgba(0, 60, 80, 0.3));
-    border-radius: 0;
-    box-shadow: 0 0 12px rgba(0, 255, 0, 0.3);
-}
-
-.profile-name {
-    color: #00ff00;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
-    text-transform: uppercase;
-}
-
-.profile-tier {
-    color: #00ccff;
-}
-
-.stat-box {
-    background: rgba(0, 60, 80, 0.4);
-    border: 1px solid #00ff00;
-    border-radius: 0;
-}
-
-.stat-label {
-    color: #00ccff;
-    text-transform: uppercase;
-}
-
-.stat-value {
-    color: #00ff00;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
-}
-
-.purchase-item {
-    background: rgba(0, 60, 80, 0.3);
-    border-left: 3px solid #00ff00;
-    border: 1px solid rgba(0, 255, 0, 0.2);
-}
-
-.purchase-name {
-    color: #00ff00;
-}
-
-.purchase-price {
-    background: rgba(0, 255, 0, 0.15);
-    color: #00ff00;
-    border: 1px solid rgba(0, 255, 0, 0.3);
-}
-
-/* Buy Locked Modal */
-.buy-locked-modal {
-    background: linear-gradient(180deg, rgba(0, 40, 60, 0.9), rgba(0, 0, 0, 0.9));
-    border: 2px solid #ff3333;
-    border-radius: 0;
-    box-shadow: 0 0 30px rgba(255, 51, 51, 0.4);
-}
-
-.buy-locked-header {
-    border-bottom: 1px dashed #ff3333;
-}
-
-.buy-locked-header h2 {
-    color: #ff3333;
-    text-shadow: 0 0 8px rgba(255, 51, 51, 0.4);
-    text-transform: uppercase;
-}
-
-.feature-info {
-    background: rgba(100, 0, 0, 0.2);
-    border: 1px solid #ff3333;
-    border-radius: 0;
-}
-
-.feature-icon {
-    background: rgba(100, 0, 0, 0.3);
-    border: 1px solid #ff3333;
-    border-radius: 0;
-    box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
-}
-
-.price-box {
-    background: rgba(100, 0, 0, 0.2);
-    border: 2px dashed #ff3333;
-    border-radius: 0;
-    box-shadow: 0 0 15px rgba(255, 51, 51, 0.3);
-}
-
-.price-amount {
-    color: #ff3333;
-    text-shadow: 0 0 8px rgba(255, 51, 51, 0.4);
-    font-family: 'Courier New', monospace;
-}
-
-.qr-payment-section h3 {
-    color: #ff3333;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.method-badge {
-    background: rgba(255, 51, 51, 0.15);
-    border: 1px solid #ff3333;
-    color: #ff3333;
-    border-radius: 0;
-}
-
-.payment-confirmation {
-    background: rgba(100, 0, 0, 0.2);
-    border-left: 3px solid #ff3333;
-    border: 1px solid rgba(255, 51, 51, 0.3);
-}
-
-.checkmark {
-    border: 1px solid #ff3333;
-    border-radius: 0;
-}
-
-.checkbox-container input:checked + .checkmark {
-    background: #ff3333;
-    border-color: #ff3333;
-}
-
-#buyLockedWABtn {
-    background: rgba(100, 0, 0, 0.7);
-    border: 1px solid #ff3333;
-    color: #ff3333;
-    border-radius: 0;
-    text-transform: uppercase;
-    font-weight: 800;
-    letter-spacing: 1px;
-}
-
-#buyLockedWABtn:hover {
-    background: rgba(255, 51, 51, 0.2);
-    box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
-}
-
-.buy-locked-note {
-    background: rgba(100, 0, 0, 0.15);
-    border-left: 3px solid #ff3333;
-    border: 1px solid rgba(255, 51, 51, 0.3);
-    border-radius: 0;
-}
-
-/* OJK Footer */
-.ojk-footer {
-    background: linear-gradient(180deg, rgba(0, 60, 80, 0.4), rgba(0, 0, 0, 0.5));
-    border-top: 2px solid #00ff00;
-    border-radius: 0;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
-}
-
-.ojk-title {
-    color: #00ff00;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.ojk-subtitle {
-    color: #00ccff;
-}
-
-.ojk-description {
-    color: rgba(0, 255, 0, 0.9);
-}
-
-.ojk-link {
-    color: #00ccff;
-    border-bottom: 2px solid #00ff00;
-}
-
-.ojk-badge {
-    background: rgba(0, 100, 0, 0.2);
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    border-radius: 0;
-    text-transform: uppercase;
-    font-weight: 800;
-    letter-spacing: 1px;
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.2);
-}
-
-/* Responsive adjustments */
-@media (max-width: 880px) {
-    .panel::before,
-    .content::before {
-        display: none;
-    }
-}
-
-/* Smooth transitions */
-* {
-    transition: all 0.2s ease;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: rgba(0, 40, 60, 0.5);
-    border-left: 1px solid #00ff00;
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #00ff00, #00ccff);
-    border-radius: 0;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #00ccff, #00ff00);
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
-}
-</style>
-
+<!-- Real-time Server Status Section -->
 <script>
-// Termux Theme Enhancements
 (function() {
-    // Add terminal prompt prefix to inputs
-    const inputs = document.querySelectorAll('.input');
-    inputs.forEach(input => {
-        const wrapper = document.createElement('div');
-        wrapper.style.display = 'flex';
-        wrapper.style.alignItems = 'center';
-        wrapper.style.gap = '8px';
-        
-        const prompt = document.createElement('span');
-        prompt.textContent = '$';
-        prompt.style.color = '#00ff00';
-        prompt.style.fontWeight = '900';
-        prompt.style.textShadow = '0 0 5px rgba(0, 255, 0, 0.3)';
-        
-        input.parentNode.insertBefore(wrapper, input);
-        wrapper.appendChild(prompt);
-        wrapper.appendChild(input);
-    });
+    // Remove existing ESP section if present
+    const espSection = document.querySelector('.device-section')?.nextElementSibling;
+    if (espSection && espSection.querySelector('h3')?.textContent.includes('ESP')) {
+        espSection.remove();
+    }
 
-    // Add click effects
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('btn') || 
-            e.target.classList.contains('holo-btn') ||
-            e.target.closest('.switch')) {
+    // Create server status section
+    const main = document.querySelector('main.content');
+    if (!main) return;
+
+    const serverSection = document.createElement('section');
+    serverSection.className = 'section';
+    serverSection.style.marginTop = '20px';
+    serverSection.innerHTML = `
+        <h3>📊 Status Server Real-time</h3>
+        <div class="flex" style="gap: 16px;">
+            <!-- Server 1 -->
+            <div class="card server-status-card" data-server="1">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <strong style="color: #fff;">Server 1 (SG)</strong>
+                    <div class="server-status-badge" id="server1-badge">● ONLINE</div>
+                </div>
+                
+                <div class="server-capacity-bar">
+                    <div class="capacity-fill" id="server1-fill" style="width: 45%; background: linear-gradient(90deg, #2ecc71, #27ae60);"></div>
+                </div>
+                
+                <div class="server-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Pemain Aktif:</span>
+                        <span class="stat-value" id="server1-players">900/2000</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Ping Rata-rata:</span>
+                        <span class="stat-value" id="server1-ping">45ms</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Load:</span>
+                        <span class="stat-value" id="server1-load">45%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Region:</span>
+                        <span class="stat-value">Singapore</span>
+                    </div>
+                </div>
+                
+                <div class="server-recommendation" id="server1-rec" style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.15), rgba(46, 204, 113, 0.08)); border-left: 3px solid #2ecc71; padding: 10px; border-radius: 8px; margin-top: 10px;">
+                    <small style="color: #2ecc71; font-weight: 700;">✓ Rekomendasi: Pilih server ini</small>
+                </div>
+            </div>
+
+            <!-- Server 2 -->
+            <div class="card server-status-card" data-server="2">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <strong style="color: #fff;">Server 2 (US)</strong>
+                    <div class="server-status-badge" id="server2-badge">● ONLINE</div>
+                </div>
+                
+                <div class="server-capacity-bar">
+                    <div class="capacity-fill" id="server2-fill" style="width: 82%; background: linear-gradient(90deg, #ffd700, #ff8c00);"></div>
+                </div>
+                
+                <div class="server-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Pemain Aktif:</span>
+                        <span class="stat-value" id="server2-players">1640/2000</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Ping Rata-rata:</span>
+                        <span class="stat-value" id="server2-ping">95ms</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Load:</span>
+                        <span class="stat-value" id="server2-load">82%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Region:</span>
+                        <span class="stat-value">USA (East)</span>
+                    </div>
+                </div>
+                
+                <div class="server-recommendation" id="server2-rec" style="background: linear-gradient(135deg, rgba(255, 192, 0, 0.15), rgba(255, 192, 0, 0.08)); border-left: 3px solid #ffb020; padding: 10px; border-radius: 8px; margin-top: 10px;">
+                    <small style="color: #ffb020; font-weight: 700;">⚠ Hampir penuh (82%)</small>
+                </div>
+            </div>
+
+            <!-- Server 3 -->
+            <div class="card server-status-card" data-server="3">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <strong style="color: #fff;">Server 3 (EU)</strong>
+                    <div class="server-status-badge" id="server3-badge">● OFFLINE</div>
+                </div>
+                
+                <div class="server-capacity-bar">
+                    <div class="capacity-fill" id="server3-fill" style="width: 100%; background: linear-gradient(90deg, #e53935, #c41c1c);"></div>
+                </div>
+                
+                <div class="server-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Pemain Aktif:</span>
+                        <span class="stat-value" id="server3-players">2000/2000</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Ping Rata-rata:</span>
+                        <span class="stat-value" id="server3-ping">—</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Load:</span>
+                        <span class="stat-value" id="server3-load">100%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Region:</span>
+                        <span class="stat-value">Europe</span>
+                    </div>
+                </div>
+                
+                <div class="server-recommendation" id="server3-rec" style="background: linear-gradient(135deg, rgba(229, 57, 53, 0.15), rgba(229, 57, 53, 0.08)); border-left: 3px solid #e53935; padding: 10px; border-radius: 8px; margin-top: 10px;">
+                    <small style="color: #ff6b6b; font-weight: 700;">✕ Server penuh (100%)</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 16px; background: linear-gradient(180deg, rgba(107, 0, 0, 0.1), rgba(0, 0, 0, 0.2));">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <strong style="color: #fff;">📈 Statistik Global</strong>
+                <button id="refreshServerStats" class="btn h-blue" style="padding: 6px 12px; font-size: 12px;">🔄 Refresh</button>
+            </div>
             
-            const ripple = document.createElement('div');
-            ripple.style.position = 'absolute';
-            ripple.style.width = '10px';
-            ripple.style.height = '10px';
-            ripple.style.background = '#00ff00';
-            ripple.style.borderRadius = '0';
-            ripple.style.boxShadow = '0 0 10px rgba(0, 255, 0, 0.5)';
-            ripple.style.animation = 'termuxRipple 0.6s ease-out forwards';
-            ripple.style.pointerEvents = 'none';
-            ripple.style.left = (e.clientX) + 'px';
-            ripple.style.top = (e.clientY) + 'px';
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+                <div style="background: rgba(46, 204, 113, 0.1); padding: 12px; border-radius: 10px; border-left: 3px solid #2ecc71;">
+                    <div style="color: #9fb6ff; font-size: 11px; font-weight: 700; margin-bottom: 6px;">Total Pemain Online</div>
+                    <div style="color: #2ecc71; font-size: 20px; font-weight: 900;" id="total-players">4540</div>
+                </div>
+                
+                <div style="background: rgba(52, 152, 219, 0.1); padding: 12px; border-radius: 10px; border-left: 3px solid #3498db;">
+                    <div style="color: #9fb6ff; font-size: 11px; font-weight: 700; margin-bottom: 6px;">Server Aktif</div>
+                    <div style="color: #3498db; font-size: 20px; font-weight: 900;" id="active-servers">2</div>
+                </div>
+                
+                <div style="background: rgba(255, 193, 7, 0.1); padding: 12px; border-radius: 10px; border-left: 3px solid #ffc107;">
+                    <div style="color: #9fb6ff; font-size: 11px; font-weight: 700; margin-bottom: 6px;">Kapasitas Rata-rata</div>
+                    <div style="color: #ffc107; font-size: 20px; font-weight: 900;" id="avg-capacity">75.7%</div>
+                </div>
+                
+                <div style="background: rgba(229, 57, 53, 0.1); padding: 12px; border-radius: 10px; border-left: 3px solid #e53935;">
+                    <div style="color: #9fb6ff; font-size: 11px; font-weight: 700; margin-bottom: 6px;">Ping Global</div>
+                    <div style="color: #ff9f9f; font-size: 20px; font-weight: 900;" id="global-ping">70ms</div>
+                </div>
+            </div>
             
-            document.body.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 600);
+            <div style="margin-top: 14px; padding: 12px; background: rgba(0, 0, 0, 0.2); border-radius: 10px; border-left: 3px solid rgba(229, 57, 53, 0.4);">
+                <small style="color: #9fb6ff; font-weight: 600; font-size: 11px;">
+                    🔄 Data diperbarui setiap 10 detik • Last update: <span id="last-update">sekarang</span>
+                </small>
+            </div>
+        </div>
+    `;
+
+    main.appendChild(serverSection);
+
+    // Inject styles
+    const styles = document.createElement('style');
+    styles.textContent = `
+        .server-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
         }
-    });
 
-    // Inject animation
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes termuxRipple {
-            to {
-                width: 100px;
-                height: 100px;
-                opacity: 0;
-                transform: translate(-50%, -50%);
+        .server-status-badge:has(+ :not(*)) {
+            color: #2ecc71;
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid rgba(46, 204, 113, 0.4);
+        }
+
+        .server-capacity-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 14px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .capacity-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
+        }
+
+        .server-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            padding: 6px 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 6px;
+        }
+
+        .stat-label {
+            color: #9fb6ff;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            color: #cfe0ff;
+            font-weight: 700;
+            font-family: monospace;
+        }
+
+        .server-status-card {
+            min-height: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .server-status-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(229, 57, 53, 0.2);
+        }
+
+        @media (max-width: 880px) {
+            .flex {
+                grid-template-columns: 1fr !important;
             }
         }
     `;
-    document.head.appendChild(style);
+    document.head.appendChild(styles);
 
-    // Terminal startup message
-    console.log('%c[OCIN PANEL v2.0]', 'color: #00ff00; font-weight: bold; font-size: 14px; text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);');
-    console.log('%cTermux Real Theme Loaded', 'color: #00ccff; font-weight: bold;');
-    console.log('%c$ ./init.sh', 'color: #00ff00;');
+    // Server data simulation
+    const serverData = [
+        { id: 1, name: 'Server 1 (SG)', players: 900, max: 2000, ping: 45, region: 'Singapore' },
+        { id: 2, name: 'Server 2 (US)', players: 1640, max: 2000, ping: 95, region: 'USA (East)' },
+        { id: 3, name: 'Server 3 (EU)', players: 2000, max: 2000, ping: 150, region: 'Europe' }
+    ];
+
+    function updateServerStats() {
+        // Simulate real-time data changes
+        serverData.forEach((server, idx) => {
+            // Random fluctuation
+            const variation = Math.floor(Math.random() * 50) - 25;
+            const newPlayers = Math.max(0, Math.min(server.max, server.players + variation));
+            serverData[idx].players = newPlayers;
+
+            const capacity = (newPlayers / server.max) * 100;
+            const fill = document.getElementById(`server${server.id}-fill`);
+            const badge = document.getElementById(`server${server.id}-badge`);
+            const playersEl = document.getElementById(`server${server.id}-players`);
+            const loadEl = document.getElementById(`server${server.id}-load`);
+            const recEl = document.getElementById(`server${server.id}-rec`);
+
+            if (fill) {
+                fill.style.width = capacity + '%';
+                
+                if (capacity < 50) {
+                    fill.style.background = 'linear-gradient(90deg, #2ecc71, #27ae60)';
+                } else if (capacity < 85) {
+                    fill.style.background = 'linear-gradient(90deg, #ffd700, #ff8c00)';
+                } else {
+                    fill.style.background = 'linear-gradient(90deg, #e53935, #c41c1c)';
+                }
+            }
+
+            if (badge) {
+                if (capacity >= 100) {
+                    badge.textContent = '● PENUH';
+                    badge.style.color = '#e53935';
+                    badge.style.background = 'rgba(229, 57, 53, 0.2)';
+                    badge.style.border = '1px solid rgba(229, 57, 53, 0.4)';
+                } else if (capacity >= 85) {
+                    badge.textContent = '● PENUH 85%';
+                    badge.style.color = '#ffb020';
+                    badge.style.background = 'rgba(255, 192, 0, 0.2)';
+                    badge.style.border = '1px solid rgba(255, 192, 0, 0.4)';
+                } else {
+                    badge.textContent = '● ONLINE';
+                    badge.style.color = '#2ecc71';
+                    badge.style.background = 'rgba(46, 204, 113, 0.2)';
+                    badge.style.border = '1px solid rgba(46, 204, 113, 0.4)';
+                }
+            }
+
+            if (playersEl) playersEl.textContent = newPlayers + '/' + server.max;
+            if (loadEl) loadEl.textContent = Math.round(capacity) + '%';
+
+            if (recEl) {
+                if (capacity >= 100) {
+                    recEl.innerHTML = '<small style="color: #ff6b6b; font-weight: 700;">✕ Server penuh (100%)</small>';
+                    recEl.style.background = 'linear-gradient(135deg, rgba(229, 57, 53, 0.15), rgba(229, 57, 53, 0.08))';
+                    recEl.style.borderLeft = '3px solid #e53935';
+                } else if (capacity >= 85) {
+                    recEl.innerHTML = '<small style="color: #ffb020; font-weight: 700;">⚠ Hampir penuh (' + Math.round(capacity) + '%)</small>';
+                    recEl.style.background = 'linear-gradient(135deg, rgba(255, 192, 0, 0.15), rgba(255, 192, 0, 0.08))';
+                    recEl.style.borderLeft = '3px solid #ffb020';
+                } else {
+                    recEl.innerHTML = '<small style="color: #2ecc71; font-weight: 700;">✓ Rekomendasi: Pilih server ini</small>';
+                    recEl.style.background = 'linear-gradient(135deg, rgba(46, 204, 113, 0.15), rgba(46, 204, 113, 0.08))';
+                    recEl.style.borderLeft = '3px solid #2ecc71';
+                }
+            }
+        });
+
+        // Update global stats
+        const totalPlayers = serverData.reduce((sum, s) => sum + s.players, 0);
+        const activeServers = serverData.filter(s => s.players < s.max).length;
+        const avgCapacity = Math.round(serverData.reduce((sum, s) => sum + (s.players / s.max) * 100, 0) / serverData.length * 10) / 10;
+        const avgPing = Math.round(serverData.reduce((sum, s) => sum + s.ping, 0) / serverData.length);
+
+        const totalPlayersEl = document.getElementById('total-players');
+        const activeServersEl = document.getElementById('active-servers');
+        const avgCapacityEl = document.getElementById('avg-capacity');
+        const globalPingEl = document.getElementById('global-ping');
+        const lastUpdateEl = document.getElementById('last-update');
+
+        if (totalPlayersEl) totalPlayersEl.textContent = totalPlayers.toLocaleString();
+        if (activeServersEl) activeServersEl.textContent = activeServers;
+        if (avgCapacityEl) avgCapacityEl.textContent = avgCapacity.toFixed(1) + '%';
+        if (globalPingEl) globalPingEl.textContent = avgPing + 'ms';
+        if (lastUpdateEl) lastUpdateEl.textContent = new Date().toLocaleTimeString('id-ID');
+    }
+
+    // Initial update
+    updateServerStats();
+
+    // Auto refresh setiap 10 detik
+    setInterval(updateServerStats, 10000);
+
+    // Manual refresh button
+    const refreshBtn = document.getElementById('refreshServerStats');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', function() {
+            updateServerStats();
+            showNotif('✓ Data server diperbarui', 'success', 1500);
+        });
+    }
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<!-- Indonesian Flag Theme (Red-White) Implementation -->
+<style>
+    /* Update CSS Variables untuk tema Bendera Indonesia */
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-red: #c41e3a;
+        --bg-white: #ffffff;
+        --panel: #c41e3a;
+        --accent-red: #dc143c;
+        --accent-white: #f5f5f5;
+        --accent-gold: #ffd700;
+        --glass: rgba(255, 255, 255, 0.06);
+        --unlock-green: #2ecc71;
+    }
+
+    /* Main Background dengan Gradien Merah-Putih */
+    html, body {
+        height: 100%;
+        margin: 0;
+        font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        color: #f5f5f5;
+        background: linear-gradient(135deg, #c41e3a 0%, #1a1a2e 50%, #ffffff 100%);
+        background-attachment: fixed;
+        position: relative;
+    }
+
+    /* Background Pattern Bendera Indonesia */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: 
+            repeating-linear-gradient(
+                0deg,
+                rgba(196, 30, 58, 0.03) 0px,
+                rgba(196, 30, 58, 0.03) 50px,
+                rgba(255, 255, 255, 0.02) 50px,
+                rgba(255, 255, 255, 0.02) 100px
+            );
+        opacity: 0.5;
+        filter: blur(1px);
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    /* Header dengan Tema Merah-Putih */
+    header.site {
+        grid-column: 1/-1;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #c41e3a 0%, #a0152b 50%, #ffffff 100%);
+        box-shadow: 0 8px 32px rgba(196, 30, 58, 0.4), inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Header Animated Border */
+    header.site::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #c41e3a, #ffffff, #c41e3a);
+        background-size: 200% 100%;
+        animation: headerBorderFlow 3s ease infinite;
+    }
+
+    @keyframes headerBorderFlow {
+        0%, 100% { background-position: 0% 0%; }
+        50% { background-position: 100% 0%; }
+    }
+
+    /* Logo with Flag Theme */
+    .logo img {
+        width: 56px;
+        height: 56px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 3px solid #c41e3a;
+        box-shadow: 0 4px 12px rgba(196, 30, 58, 0.4);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .logo img:hover {
+        transform: scale(1.08) rotateZ(2deg);
+        box-shadow: 0 8px 20px rgba(196, 30, 58, 0.6);
+        border-color: #ffffff;
+    }
+
+    /* Title dengan Gradient Indonesia */
+    .title {
+        font-size: 20px;
+        font-weight: 900;
+        background: linear-gradient(90deg, #c41e3a, #ffffff, #c41e3a);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 2px 8px rgba(196, 30, 58, 0.3);
+        letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+        color: #ffffff;
+        opacity: 0.95;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    /* Panel (Left Sidebar) dengan Tema Merah-Putih */
+    .panel {
+        background: linear-gradient(180deg, rgba(196, 30, 58, 0.15), rgba(26, 26, 46, 0.5));
+        padding: 18px;
+        border-radius: 14px;
+        min-height: 520px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        border: 2px solid rgba(196, 30, 58, 0.3);
+        box-shadow: 0 8px 24px rgba(196, 30, 58, 0.2);
+    }
+
+    .panel::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: linear-gradient(180deg, #c41e3a, #ffffff, #c41e3a);
+        border-radius: 14px 0 0 14px;
+    }
+
+    /* User Card dengan Badge Merah-Putih */
+    .user-card {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 12px;
+        background: linear-gradient(135deg, rgba(196, 30, 58, 0.2), rgba(255, 255, 255, 0.08));
+        border-radius: 10px;
+        border: 1px solid rgba(196, 30, 58, 0.3);
+    }
+
+    /* Avatar dengan Tema Flag */
+    .avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #c41e3a, #ffffff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        color: #ffffff;
+        font-size: 22px;
+        border: 3px solid #ffffff;
+        box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
+    }
+
+    /* Content Area dengan Tema Merah-Putih */
+    .content {
+        background: linear-gradient(180deg, rgba(26, 26, 46, 0.5), rgba(196, 30, 58, 0.08));
+        padding: 18px;
+        border-radius: 14px;
+        min-height: 520px;
+        overflow: auto;
+        border: 2px solid rgba(196, 30, 58, 0.2);
+        box-shadow: 0 8px 24px rgba(196, 30, 58, 0.15);
+    }
+
+    /* Section dengan Accent Merah */
+    .section {
+        margin-bottom: 18px;
+        padding: 16px;
+        border-radius: 12px;
+        background: linear-gradient(180deg, rgba(196, 30, 58, 0.08), rgba(255, 255, 255, 0.05));
+        border-left: 4px solid #c41e3a;
+        border-top: 2px solid rgba(196, 30, 58, 0.3);
+        box-shadow: 0 4px 16px rgba(196, 30, 58, 0.12);
+        transition: all 0.3s ease;
+    }
+
+    .section:hover {
+        border-left: 4px solid #ffffff;
+        background: linear-gradient(180deg, rgba(196, 30, 58, 0.12), rgba(255, 255, 255, 0.08));
+        box-shadow: 0 6px 20px rgba(196, 30, 58, 0.2);
+    }
+
+    .section h3 {
+        margin: 0 0 12px 0;
+        color: #ffffff;
+        font-weight: 900;
+        background: linear-gradient(90deg, #c41e3a, #ffffff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+    }
+
+    /* Card dengan Tema Bendera */
+    .card {
+        flex: 1 1 240px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(196, 30, 58, 0.05));
+        padding: 14px;
+        border-radius: 12px;
+        border: 2px solid rgba(196, 30, 58, 0.2);
+        border-top: 3px solid #c41e3a;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(196, 30, 58, 0.15), transparent);
+        transition: left 0.5s ease;
+        pointer-events: none;
+    }
+
+    .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 32px rgba(196, 30, 58, 0.3);
+        border-color: rgba(196, 30, 58, 0.5);
+        border-top-color: #ffffff;
+    }
+
+    .card:hover::before {
+        left: 100%;
+    }
+
+    .card strong {
+        color: #ffffff;
+        font-weight: 900;
+        text-shadow: 0 2px 4px rgba(196, 30, 58, 0.3);
+    }
+
+    /* Price dengan Warna Emas-Merah */
+    .price {
+        font-size: 13px;
+        color: #c41e3a;
+        margin-top: 8px;
+        font-weight: 800;
+        background: rgba(196, 30, 58, 0.1);
+        padding: 4px 8px;
+        border-radius: 6px;
+        display: inline-block;
+    }
+
+    /* Button dengan Tema Merah-Putih */
+    .btn {
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 0;
+        cursor: pointer;
+        font-weight: 800;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-red {
+        background: linear-gradient(135deg, #c41e3a, #a0152b);
+        color: #ffffff;
+        box-shadow: 0 6px 20px rgba(196, 30, 58, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-red::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-red:active::after {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-red:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(196, 30, 58, 0.5);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-outline {
+        background: transparent;
+        border: 2px solid rgba(196, 30, 58, 0.5);
+        color: #ffffff;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+        background: rgba(196, 30, 58, 0.15);
+        border-color: #c41e3a;
+        box-shadow: 0 4px 12px rgba(196, 30, 58, 0.2);
+    }
+
+    /* Fancy Button */
+    .btn.fancy {
+        background: linear-gradient(90deg, #c41e3a, #800020);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .btn.fancy:hover {
+        box-shadow: 0 8px 24px rgba(196, 30, 58, 0.4);
+        transform: translateY(-2px);
+    }
+
+    /* Switch dengan Tema Merah-Putih */
+    .switch {
+        width: 52px;
+        height: 28px;
+        border-radius: 20px;
+        background: rgba(196, 30, 58, 0.4);
+        padding: 3px;
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .switch.on {
+        background: linear-gradient(90deg, #2ecc71, #27ae60);
+        box-shadow: 0 0 20px rgba(46, 204, 113, 0.6), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .knob {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #ffffff;
+        transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 2px 8px rgba(196, 30, 58, 0.4);
+    }
+
+    .switch.on .knob {
+        transform: translateX(24px);
+        box-shadow: 0 2px 8px rgba(46, 204, 113, 0.6);
+    }
+
+    /* Locked Overlay dengan Tema Merah */
+    .locked-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(196, 30, 58, 0.6), rgba(0, 0, 0, 0.7));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 20px;
+        backdrop-filter: blur(4px);
+        border: 2px dashed rgba(196, 30, 58, 0.5);
+    }
+
+    .locked-overlay small {
+        display: block;
+        font-size: 12px;
+        margin-top: 8px;
+        color: #f5f5f5;
+        opacity: 0.9;
+    }
+
+    /* Status Message */
+    .status {
+        font-size: 13px;
+        padding: 10px;
+        border-radius: 10px;
+        border-left: 3px solid #c41e3a;
+        background: linear-gradient(90deg, rgba(196, 30, 58, 0.1), rgba(255, 255, 255, 0.05));
+        color: #c41e3a;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    /* Hologram Buttons dengan Warna Indonesia */
+    .holo-btn {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 0;
+        color: #ffffff;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .h-red {
+        background: linear-gradient(135deg, #c41e3a, #a0152b);
+        box-shadow: 0 4px 12px rgba(196, 30, 58, 0.4);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .h-red:hover {
+        box-shadow: 0 8px 20px rgba(196, 30, 58, 0.6);
+        transform: translateY(-2px);
+    }
+
+    .h-white {
+        background: linear-gradient(135deg, #ffffff, #f5f5f5);
+        color: #c41e3a;
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+        text-shadow: none;
+    }
+
+    .h-white:hover {
+        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+    }
+
+    /* Badge dengan Tema Merah-Putih */
+    .badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(196, 30, 58, 0.3), rgba(255, 255, 255, 0.2));
+        font-weight: 800;
+        border: 2px solid #c41e3a;
+        color: #ffffff;
+        animation: badgePulseIndonesia 2s ease-in-out infinite;
+    }
+
+    @keyframes badgePulseIndonesia {
+        0%, 100% {
+            box-shadow: 0 0 10px rgba(196, 30, 58, 0.4);
+        }
+        50% {
+            box-shadow: 0 0 20px rgba(196, 30, 58, 0.8);
+        }
+    }
+
+    /* Scrollbar dengan Tema Merah */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(196, 30, 58, 0.1);
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #c41e3a, #a0152b);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(196, 30, 58, 0.4);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #ffffff, #f5f5f5);
+    }
+
+    /* Responsive untuk Mobile */
+    @media (max-width: 880px) {
+        header.site {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+        }
+
+        .title {
+            font-size: 18px;
+        }
+
+        .subtitle {
+            font-size: 11px;
+        }
+
+        .panel, .content {
+            min-height: unset;
+            border-radius: 12px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        header.site {
+            gap: 8px;
+            padding: 10px;
+        }
+
+        .logo img {
+            width: 48px;
+            height: 48px;
+        }
+
+        .title {
+            font-size: 14px;
+        }
+
+        .card {
+            padding: 12px;
+            flex: 1 1 100%;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+    }
+</style>
+
+<!-- Indonesian Flag Color Palette Reference -->
+<div style="display: none;" id="flagColorReference">
+    <!-- Merah: #c41e3a (Primary) -->
+    <!-- Putih: #ffffff (Secondary) -->
+    <!-- Hitam: #0a0e27 (Background) -->
+    <!-- Gold Accent: #ffd700 -->
+</div>
+
+<script>
+(function() {
+    // Enhanced Indonesian Flag Theme Animations
+    
+    // 1. Animate cards on scroll
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.card, .section').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+    }
+
+    // 2. Add color ripple effect on hover
+    document.querySelectorAll('.btn-red, .holo-btn').forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+            const rect = this.getBoundingClientRect();
+            const ripple = document.createElement('span');
+            ripple.style.position = 'absolute';
+            ripple.style.left = '50%';
+            ripple.style.top = '50%';
+            ripple.style.width = '10px';
+            ripple.style.height = '10px';
+            ripple.style.background = 'rgba(255, 255, 255, 0.5)';
+            ripple.style.borderRadius = '50%';
+            ripple.style.transform = 'translate(-50%, -50%)';
+            ripple.style.animation = 'indonesiaRipple 0.8s ease-out';
+            ripple.style.pointerEvents = 'none';
+            
+            this.style.position = 'relative';
+            this.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 800);
+        });
+    });
+
+    // 3. Inject animation keyframes
+    if (!document.getElementById('indonesianThemeAnimations')) {
+        const style = document.createElement('style');
+        style.id = 'indonesianThemeAnimations';
+        style.textContent = `
+            @keyframes slideInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(40px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @keyframes indonesiaRipple {
+                to {
+                    width: 400px;
+                    height: 400px;
+                    opacity: 0;
+                }
+            }
+
+            @keyframes flagWave {
+                0%, 100% { transform: skewX(0deg); }
+                25% { transform: skewX(2deg); }
+                75% { transform: skewX(-2deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // 4. Flag wave effect on header
+    const header = document.querySelector('header.site');
+    if (header) {
+        header.style.animation = 'flagWave 3s ease-in-out infinite';
+    }
+
+    // 5. Dynamic color based on time of day (Pancasila principle)
+    function updateThemeByTime() {
+        const hour = new Date().getHours();
+        const root = document.documentElement;
+        
+        if (hour >= 6 && hour < 12) {
+            // Morning - Brighter
+            root.style.setProperty('--bg-red', '#e53935');
+        } else if (hour >= 12 && hour < 17) {
+            // Afternoon - Standard
+            root.style.setProperty('--bg-red', '#c41e3a');
+        } else {
+            // Evening/Night - Darker
+            root.style.setProperty('--bg-red', '#a0152b');
+        }
+    }
+
+    updateThemeByTime();
+    setInterval(updateThemeByTime, 3600000); // Update every hour
+
+    // 6. Add Indonesian cultural elements
+    console.log('%c🇮🇩 Tema Bendera Merah Putih Diaktifkan 🇮🇩', 
+        'color: #c41e3a; font-size: 16px; font-weight: bold; background: linear-gradient(90deg, #c41e3a, #ffffff); padding: 10px; border-radius: 5px;');
+})();
+</script>
+
+
+
+<!-- OJK Loading Screen & Certification -->
+<style>
+    /* Loading Screen Overlay */
+    .ojk-loading-overlay {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(135deg, #c41e3a 0%, #1a1a2e 50%, #ffffff 100%);
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 24px;
+        padding: 20px;
+        overflow: hidden;
+    }
+
+    .ojk-loading-overlay.hidden {
+        animation: fadeOutLoading 0.6s ease-out forwards;
+        pointer-events: none;
+    }
+
+    @keyframes fadeOutLoading {
+        from {
+            opacity: 1;
+            transform: scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: scale(1.05);
+        }
+    }
+
+    /* Loading Container */
+    .ojk-loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        animation: loadingBounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    }
+
+    @keyframes loadingBounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-15px);
+        }
+    }
+
+    /* Main Logo */
+    .ojk-main-logo {
+        width: 100px;
+        height: 100px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(196, 30, 58, 0.2), rgba(255, 255, 255, 0.1));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 60px;
+        border: 3px solid #c41e3a;
+        box-shadow: 0 8px 32px rgba(196, 30, 58, 0.4), inset 0 -2px 8px rgba(255, 255, 255, 0.2);
+        animation: logoPulse 2s ease-in-out infinite;
+        position: relative;
+    }
+
+    @keyframes logoPulse {
+        0%, 100% {
+            box-shadow: 0 8px 32px rgba(196, 30, 58, 0.4), inset 0 -2px 8px rgba(255, 255, 255, 0.2);
+            transform: scale(1);
+        }
+        50% {
+            box-shadow: 0 12px 48px rgba(196, 30, 58, 0.6), inset 0 -2px 12px rgba(255, 255, 255, 0.3);
+            transform: scale(1.08);
+        }
+    }
+
+    /* Loading Text */
+    .ojk-loading-text {
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .ojk-loading-title {
+        font-size: 20px;
+        font-weight: 900;
+        margin-bottom: 8px;
+        background: linear-gradient(90deg, #c41e3a, #ffffff, #c41e3a);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: 1px;
+    }
+
+    .ojk-loading-subtitle {
+        font-size: 13px;
+        color: #f5f5f5;
+        font-weight: 600;
+        opacity: 0.9;
+        letter-spacing: 0.5px;
+    }
+
+    /* Loading Progress */
+    .ojk-loading-progress {
+        width: 280px;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(196, 30, 58, 0.3);
+    }
+
+    .ojk-loading-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #c41e3a, #ffffff, #c41e3a);
+        background-size: 200% 100%;
+        border-radius: 10px;
+        animation: progressFlow 2s ease-in-out infinite;
+        box-shadow: 0 0 10px rgba(196, 30, 58, 0.6);
+    }
+
+    @keyframes progressFlow {
+        0% {
+            width: 0%;
+            background-position: 0% 0%;
+        }
+        50% {
+            width: 100%;
+            background-position: 100% 0%;
+        }
+        100% {
+            width: 0%;
+            background-position: 0% 0%;
+        }
+    }
+
+    /* OJK Logo Section */
+    .ojk-cert-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        margin-top: 24px;
+        padding: 20px;
+        background: linear-gradient(135deg, rgba(46, 204, 113, 0.15), rgba(46, 204, 113, 0.08));
+        border: 2px solid rgba(46, 204, 113, 0.4);
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(46, 204, 113, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        animation: certGlow 2s ease-in-out infinite;
+        max-width: 400px;
+    }
+
+    @keyframes certGlow {
+        0%, 100% {
+            box-shadow: 0 8px 24px rgba(46, 204, 113, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        50% {
+            box-shadow: 0 12px 32px rgba(46, 204, 113, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+    }
+
+    .ojk-cert-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .ojk-cert-icon {
+        font-size: 32px;
+        animation: certBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    }
+
+    @keyframes certBounce {
+        0%, 100% { transform: scale(1) rotateZ(0deg); }
+        50% { transform: scale(1.15) rotateZ(5deg); }
+    }
+
+    .ojk-cert-title {
+        color: #2ecc71;
+        font-weight: 900;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* OJK Official Logo */
+    .ojk-official-logo {
+        width: 70px;
+        height: 70px;
+        object-fit: contain;
+        filter: drop-shadow(0 2px 8px rgba(46, 204, 113, 0.4));
+        transition: transform 0.3s ease;
+    }
+
+    .ojk-official-logo:hover {
+        transform: scale(1.08);
+    }
+
+    .ojk-cert-details {
+        text-align: center;
+        font-size: 11px;
+        color: #a8e6c1;
+        line-height: 1.6;
+        font-weight: 600;
+    }
+
+    .ojk-cert-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        background: rgba(46, 204, 113, 0.2);
+        border: 1px solid rgba(46, 204, 113, 0.5);
+        border-radius: 20px;
+        color: #2ecc71;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+        margin-top: 8px;
+    }
+
+    /* Bottom Status */
+    .ojk-loading-status {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(196, 30, 58, 0.2));
+        backdrop-filter: blur(10px);
+        padding: 12px 20px;
+        border-radius: 20px;
+        border: 1px solid rgba(46, 204, 113, 0.4);
+        color: #2ecc71;
+        font-size: 12px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 16px rgba(46, 204, 113, 0.2);
+        animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateX(-50%) translateY(30px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .ojk-status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #2ecc71;
+        animation: statusPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+        0%, 100% {
+            opacity: 1;
+            box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+        }
+        50% {
+            opacity: 0.7;
+            box-shadow: 0 0 0 6px rgba(46, 204, 113, 0);
+        }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 480px) {
+        .ojk-loading-container {
+            gap: 16px;
+        }
+
+        .ojk-main-logo {
+            width: 80px;
+            height: 80px;
+            font-size: 48px;
+        }
+
+        .ojk-loading-title {
+            font-size: 16px;
+        }
+
+        .ojk-loading-subtitle {
+            font-size: 12px;
+        }
+
+        .ojk-loading-progress {
+            width: 220px;
+        }
+
+        .ojk-cert-container {
+            max-width: 90%;
+            padding: 16px;
+        }
+
+        .ojk-official-logo {
+            width: 60px;
+            height: 60px;
+        }
+
+        .ojk-loading-status {
+            font-size: 11px;
+            padding: 10px 16px;
+            bottom: 16px;
+        }
+    }
+
+    /* Accessibility */
+    .ojk-loading-overlay {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Print styles */
+    @media print {
+        .ojk-loading-overlay {
+            display: none;
+        }
+    }
+</style>
+
+<!-- Loading Screen HTML -->
+<div id="ojkLoadingOverlay" class="ojk-loading-overlay">
+    <!-- Loading Container -->
+    <div class="ojk-loading-container">
+        <!-- Main Logo (Your Logo) -->
+        <div class="ojk-main-logo" id="mainLogoPlaceholder">
+            🎮
+        </div>
+
+        <!-- Loading Text -->
+        <div class="ojk-loading-text">
+            <div class="ojk-loading-title">OCIN SHOP</div>
+            <div class="ojk-loading-subtitle">Panel VIP Loading...</div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="ojk-loading-progress">
+            <div class="ojk-loading-progress-fill"></div>
+        </div>
+    </div>
+
+    <!-- OJK Certification -->
+    <div class="ojk-cert-container">
+        <div class="ojk-cert-header">
+            <span class="ojk-cert-icon">✓</span>
+            <span class="ojk-cert-title">Terverifikasi OJK</span>
+        </div>
+
+        <!-- OJK Official Logo -->
+        <img 
+            src="https://ojk.go.id/_catalogs/masterpage/responsive-master/images/logo.png" 
+            alt="Logo OJK Official" 
+            class="ojk-official-logo"
+            loading="eager"
+            onerror="this.style.display='none'"
+        />
+
+        <div class="ojk-cert-details">
+            Platform ini diawasi dan diregulasi oleh<br>
+            <strong>Otoritas Jasa Keuangan (OJK)</strong><br>
+            untuk keamanan transaksi Anda
+        </div>
+
+        <div class="ojk-cert-badge">
+            <span>🔒</span>
+            <span>Aman & Terpercaya</span>
+        </div>
+    </div>
+
+    <!-- Status at Bottom -->
+    <div class="ojk-loading-status">
+        <div class="ojk-status-dot"></div>
+        <span id="ojkStatusText">Verifikasi OJK: Aktif</span>
+    </div>
+</div>
+
+<!-- Loading Script -->
+<script>
+(function() {
+    const overlay = document.getElementById('ojkLoadingOverlay');
+    const statusText = document.getElementById('ojkStatusText');
+    
+    // Simulate loading stages
+    const stages = [
+        { time: 800, text: 'Inisialisasi Sistem...' },
+        { time: 1600, text: 'Verifikasi OJK...' },
+        { time: 2400, text: 'Memproses Sertifikasi...' },
+        { time: 3000, text: 'Verifikasi OJK: Selesai ✓' }
+    ];
+
+    stages.forEach(stage => {
+        setTimeout(() => {
+            statusText.textContent = stage.text;
+        }, stage.time);
+    });
+
+    // Hide loading screen setelah 3500ms
+    setTimeout(() => {
+        overlay.classList.add('hidden');
+        
+        // Remove dari DOM setelah animasi selesai
+        setTimeout(() => {
+            overlay.style.display = 'none';
+        }, 600);
+    }, 3500);
+
+    // Prevent interaction during loading
+    overlay.addEventListener('click', (e) => e.preventDefault());
+    overlay.addEventListener('scroll', (e) => e.preventDefault());
+
+    // Backup: Hide loading jika ada error
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            if (!overlay.classList.contains('hidden')) {
+                overlay.classList.add('hidden');
+            }
+        }, 4000);
+    });
+
+    // Inject main logo dari file yang ada
+    window.addEventListener('DOMContentLoaded', () => {
+        const mainLogoEl = document.getElementById('mainLogoPlaceholder');
+        const existingLogo = document.querySelector('.logo img');
+        
+        if (existingLogo && mainLogoEl) {
+            mainLogoEl.innerHTML = `<img src="${existingLogo.src}" alt="Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">`;
+        }
+    });
+
+    // Console message
+    console.log('%c🇮🇩 Sistem Keamanan OJK Aktif 🇮🇩', 
+        'color: #fff; font-size: 14px; font-weight: bold; background: linear-gradient(90deg, #2ecc71, #27ae60); padding: 8px 16px; border-radius: 4px;');
+    console.log('%cPlatform ini diawasi oleh Otoritas Jasa Keuangan (OJK)', 
+        'color: #2ecc71; font-size: 12px; font-weight: 600;');
 })();
 </script>
