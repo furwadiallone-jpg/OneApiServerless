@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamVibe | Modern Video Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #f43f5e;
+            --bg: #0f172a;
+            --card: rgba(30, 41, 59, 0.7);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at top right, #1e1b4b, transparent),
+                              radial-gradient(circle at bottom left, #1e1b4b, transparent);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header UI */
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #818cf8, #f43f5e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Input Area (Modern Glassmorphism) */
+        .search-box {
+            background: var(--card);
+            backdrop-filter: blur(12px);
+            padding: 10px;
+            border-radius: 16px;
+            display: flex;
+            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 15px 20px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Player UI */
+        .player-card {
+            background: var(--card);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+        }
+
+        .video-container iframe, 
+        .video-container video {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: none;
+        }
+
+        .video-info {
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-dot {
+            height: 8px;
+            width: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 10px #22c55e;
+        }
+
+        .controls-hint {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .search-box { flex-direction: column; }
+            header h1 { font-size: 1.8rem; }
+            button { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>StreamVibe</h1>
+        <p style="color: #94a3b8; margin-top: 10px;">Streaming video apa pun dalam satu platform modern</p>
+    </header>
+
+    <div class="search-box">
+        <input type="text" id="videoUrl" placeholder="Tempel Link YouTube, MP4, atau Stream URL...">
+        <button onclick="startStreaming()">Play Now</button>
+    </div>
+
+    <div class="player-card">
+        <div class="video-container" id="playerWrapper">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <p style="color: #475569;">Ready to Stream</p>
+            </div>
+        </div>
+        
+        <div class="video-info">
+            <div>
+                <span class="status-dot"></span>
+                <span id="videoTitle" style="font-weight: 500;">No Media Detected</span>
+            </div>
+            <div class="controls-hint">
+                Support: YouTube, Direct Video, & Embeds
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function extractYouTubeId(url) {
+        const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[7].length == 11) ? match[7] : false;
+    }
+
+    function startStreaming() {
+        const url = document.getElementById('videoUrl').value.trim();
+        const wrapper = document.getElementById('playerWrapper');
+        const titleText = document.getElementById('videoTitle');
+
+        if (!url) {
+            alert("Silakan masukkan link terlebih dahulu!");
+            return;
+        }
+
+        const ytId = extractYouTubeId(url);
+
+        if (ytId) {
+            // Jika Link YouTube
+            wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            titleText.innerText = "YouTube Stream: " + ytId;
+        } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
+            // Jika Direct Link Video (MP4/WebM)
+            wrapper.innerHTML = `
+                <video controls autoplay>
+                    <source src="${url}" type="video/mp4">
+                    Browser kamu tidak mendukung pemutar video ini.
+                </video>`;
+            titleText.innerText = "Direct File Stream";
+        } else {
+            // Jika Link Lain, coba gunakan Iframe Universal
+            wrapper.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
+            titleText.innerText = "External Source Stream";
+        }
+
+        // Animasi halus saat video muncul
+        wrapper.style.opacity = 0;
+        setTimeout(() => { wrapper.style.opacity = 1; }, 300);
+    }
+</script>
+
+</body>
+</html>
