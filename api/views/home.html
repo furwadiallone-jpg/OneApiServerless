@@ -2514,7 +2514,7 @@ html, body {
         icon.className = 'icon';
         icon.innerHTML = ({
             success: '✅',
-            error: '⚠️',
+            error: 'X',
             warn: '⚠',
             info: 'ℹ️'
         })[type] || 'ℹ️';
@@ -2956,7 +2956,7 @@ html, body {
             const voucher = loadVoucher();
             let voucherLine = voucher ? `\nVoucher: ${voucher.code}` : '';
             const msg = `Halo min Saya akan membayar Sebesar RP ${amount}\nKode Pesanan : ${code}\nNama Produk : ${productLines}${voucherLine}\nOcin Shop`;
-            const waNumber = '639094023904';
+            const waNumber = '62856508758739';
             const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
 
             // clear cart & voucher, persist & UI update
