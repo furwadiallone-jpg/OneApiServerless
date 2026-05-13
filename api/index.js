@@ -54,7 +54,7 @@ app.use(express.static(uploadDir));
 
 // route utama -> kirim file home.html
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "Panelv2.html"));
+  res.sendFile(path.join(__dirname, "views", "home.html"));
 });
 
 // API daftar file
