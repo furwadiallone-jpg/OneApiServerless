@@ -143,7 +143,6 @@
             transform: translateY(-2px);
         }
 
-        /* Tombol Beli Lisensi (Outline) */
         .btn-secondary {
             width: 100%;
             padding: 14px;
@@ -170,11 +169,11 @@
             height: 15px;
         }
 
-        /* --- PRICELIST SCREEN (MENU BELI) --- */
+        /* --- PRICELIST SCREEN --- */
         #pricelist-screen {
             display: none;
             padding: 20px;
-            max-height: 480px;
+            max-height: 550px;
             overflow-y: auto;
         }
 
@@ -215,13 +214,16 @@
 
         .pkg-title { font-size: 16px; font-weight: 700; color: #333; }
         .pkg-price { font-size: 14px; font-weight: 600; color: #ff5100; margin-bottom: 8px; }
-        .pkg-features { font-size: 11px; color: #555; line-height: 1.5; margin-bottom: 15px; }
-        .pkg-features ul { padding-left: 18px; margin-top: 5px; }
+        
+        .pkg-features { font-size: 11px; color: #444; line-height: 1.6; margin-bottom: 15px; }
+        .pkg-features ul { list-style: none; padding-left: 0; margin-top: 5px; }
+        .pkg-features li { position: relative; padding-left: 18px; margin-bottom: 4px; font-weight: 600;}
+        .pkg-features li::before { content: "✓"; color: #28a745; font-weight: bold; position: absolute; left: 0; font-size: 12px; }
         
         .btn-wa {
             width: 100%;
             padding: 10px;
-            background: #25D366; /* Warna WA */
+            background: #25D366; 
             color: white;
             border: none;
             border-radius: 8px;
@@ -515,15 +517,14 @@
                 <div class="pkg-title">Paket Basic</div>
                 <div class="pkg-price">Rp 10.000</div>
                 <div class="pkg-features">
-                    Fitur Terbuka:
+                    Fitur yang didapat:
                     <ul>
-                        <li>Aimbot</li>
+                        <li>Aim Bot</li>
                         <li>Aim Lock</li>
+                        <li>BypassNoban</li>
                     </ul>
                 </div>
-                <button class="btn-wa" onclick="beliWa('Paket Basic', '10.000')">
-                    Beli via WhatsApp
-                </button>
+                <button class="btn-wa" onclick="beliWa('Paket Basic', '10.000')">Beli via WhatsApp</button>
             </div>
 
             <!-- Paket 20K -->
@@ -531,16 +532,16 @@
                 <div class="pkg-title">Paket Standar</div>
                 <div class="pkg-price">Rp 20.000</div>
                 <div class="pkg-features">
-                    Fitur Terbuka:
+                    Fitur yang didapat:
                     <ul>
-                        <li>Semua Fitur Basic</li>
+                        <li>Aim Bot</li>
+                        <li>Aim Lock</li>
                         <li>Body Lock</li>
-                        <li>Bypass Server</li>
+                        <li>Headshot Body (Nembak Badan HS)</li>
+                        <li>BypassNoban</li>
                     </ul>
                 </div>
-                <button class="btn-wa" onclick="beliWa('Paket Standar', '20.000')">
-                    Beli via WhatsApp
-                </button>
+                <button class="btn-wa" onclick="beliWa('Paket Standar', '20.000')">Beli via WhatsApp</button>
             </div>
 
             <!-- Paket 30K -->
@@ -548,17 +549,20 @@
                 <div class="pkg-title">Paket Pro</div>
                 <div class="pkg-price">Rp 30.000</div>
                 <div class="pkg-features">
-                    Fitur Terbuka:
+                    Fitur yang didapat:
                     <ul>
-                        <li>Semua Fitur Standar</li>
-                        <li>Auto Headshot Ganas</li>
+                        <li>Aim Bot</li>
+                        <li>Aim Lock</li>
+                        <li>Body Lock</li>
+                        <li>Auto Headshot (Ganas)</li>
+                        <li>Headshot Body (Nembak Badan HS)</li>
+                        <li>Headshot Neck (Nembak Leher HS)</li>
                         <li>ESP Name & Distance</li>
                         <li>Wallhack (Tembus Pandang)</li>
+                        <li>BypassNoban</li>
                     </ul>
                 </div>
-                <button class="btn-wa" onclick="beliWa('Paket Pro', '30.000')">
-                    Beli via WhatsApp
-                </button>
+                <button class="btn-wa" onclick="beliWa('Paket Pro', '30.000')">Beli via WhatsApp</button>
             </div>
 
             <!-- Paket 40K -->
@@ -566,17 +570,21 @@
                 <div class="pkg-title">Paket Elite</div>
                 <div class="pkg-price">Rp 40.000</div>
                 <div class="pkg-features">
-                    Fitur Terbuka:
+                    Fitur yang didapat:
                     <ul>
-                        <li>Semua Fitur Pro</li>
+                        <li>Aim Bot</li>
+                        <li>Aim Lock</li>
+                        <li>Body Lock</li>
+                        <li>Auto Headshot (Ganas)</li>
+                        <li>Headshot Body (Nembak Badan HS)</li>
+                        <li>Headshot Neck (Nembak Leher HS)</li>
                         <li>Hologram 3D</li>
-                        <li>Nembak Badan Auto HS</li>
-                        <li>Nembak Leher Auto HS</li>
+                        <li>ESP Name & Distance</li>
+                        <li>Wallhack (Tembus Pandang)</li>
+                        <li>BypassNoban</li>
                     </ul>
                 </div>
-                <button class="btn-wa" onclick="beliWa('Paket Elite', '40.000')">
-                    Beli via WhatsApp
-                </button>
+                <button class="btn-wa" onclick="beliWa('Paket Elite', '40.000')">Beli via WhatsApp</button>
             </div>
 
             <!-- Paket 50K -->
@@ -586,14 +594,21 @@
                 <div class="pkg-features">
                     Fitur FULL UNLOCK:
                     <ul>
-                        <li>Semua Fitur Elite</li>
-                        <li>Aim God (Damage No Miss)</li>
-                        <li><b>Fitur Rahasia:</b> Anti-Banned VIP</li>
+                        <li>Aim Bot</li>
+                        <li>Aim Lock</li>
+                        <li>Body Lock</li>
+                        <li>Auto Headshot (Ganas)</li>
+                        <li>Headshot Body (Nembak Badan HS)</li>
+                        <li>Headshot Neck (Nembak Leher HS)</li>
+                        <li>Aim God (Magic Bullet / No Miss)</li>
+                        <li>Hologram 3D</li>
+                        <li>ESP Name & Distance</li>
+                        <li>Wallhack (Tembus Pandang)</li>
+                        <li>BypassNoban</li>
+                        <li style="color: #ff5100; font-weight: bold;">+ Anti-Banned VIP (Fitur Rahasia)</li>
                     </ul>
                 </div>
-                <button class="btn-wa" onclick="beliWa('Paket GOD TIER', '50.000')">
-                    Beli via WhatsApp
-                </button>
+                <button class="btn-wa" onclick="beliWa('Paket GOD TIER', '50.000')">Beli via WhatsApp</button>
             </div>
         </div>
 
@@ -688,7 +703,7 @@
             <div class="tab-content" id="server">
                 <div class="feature-row" id="row-bypass">
                     <div class="feature-info">
-                        <span class="feature-title">Enable Bypass Smart Route <span class="locked-tag">LOCKED</span></span>
+                        <span class="feature-title">BypassNoban <span class="locked-tag">LOCKED</span></span>
                         <span class="feature-desc">Gunakan rute server aman</span>
                     </div>
                     <label class="toggle-switch"><input type="checkbox" id="chk-bypass"><span class="slider"></span></label>
@@ -765,13 +780,8 @@
 
         // --- REDIRECT KE WHATSAPP ---
         function beliWa(namaPaket, harga) {
-            // Nomor WA Admin (format internasional tanpa '+')
             const noWa = "62856508758739"; 
-            
-            // Teks Pesan Otomatis
             const teksPesan = `Halo Admin Ocin.id, saya tertarik untuk membeli Lisensi Panel *${namaPaket}* seharga *Rp ${harga}*. Mohon info metode pembayarannya ya. Terima kasih!`;
-            
-            // Redirect ke Link WA
             const url = `https://wa.me/${noWa}?text=${encodeURIComponent(teksPesan)}`;
             window.open(url, '_blank');
         }
@@ -820,20 +830,25 @@
             badge.innerText = tierData.name;
 
             // Unlock Berdasarkan Tier
+            // Tier 1 (10k)
             unlockFeature('row-aimbot', 'chk-aimbot', tier >= 1);
             unlockFeature('row-aimlock', 'chk-aimlock', tier >= 1);
+            unlockFeature('row-bypass', 'chk-bypass', tier >= 1);
 
+            // Tier 2 (20k)
             unlockFeature('row-bodylock', 'chk-bodylock', tier >= 2);
-            unlockFeature('row-bypass', 'chk-bypass', tier >= 2);
+            unlockFeature('row-hsbody', 'chk-hsbody', tier >= 2);
 
+            // Tier 3 (30k)
             unlockFeature('row-autohs', 'chk-autohs', tier >= 3);
             unlockFeature('row-esp', 'chk-esp', tier >= 3);
             unlockFeature('row-wallhack', 'chk-wallhack', tier >= 3);
+            unlockFeature('row-hsneck', 'chk-hsneck', tier >= 3);
 
+            // Tier 4 (40k)
             unlockFeature('row-hologram', 'chk-hologram', tier >= 4);
-            unlockFeature('row-hsbody', 'chk-hsbody', tier >= 4);
-            unlockFeature('row-hsneck', 'chk-hsneck', tier >= 4);
 
+            // Tier 5 (50k)
             unlockFeature('row-aimgod', 'chk-aimgod', tier >= 5);
             
             if(tier >= 5) {
@@ -896,7 +911,7 @@
 
             setTimeout(() => { bar.style.width = '15%'; text.innerText = "Menghubungkan ke API Garena..."; }, 500);
             setTimeout(() => { bar.style.width = '35%'; text.innerText = "Mengalihkan IP Address..."; routeText.innerText = "[+] Terhubung ke Server Thailand (TH)"; }, 2000);
-            setTimeout(() => { bar.style.width = '55%'; text.innerText = "Menerapkan Modul Bypass..."; routeText.innerText = "[+] Reroute ke Server Malaysia (MY)"; }, 3500);
+            setTimeout(() => { bar.style.width = '55%'; text.innerText = "Menerapkan Modul BypassNoban..."; routeText.innerText = "[+] Reroute ke Server Malaysia (MY)"; }, 3500);
             setTimeout(() => { bar.style.width = '75%'; text.innerText = "Menyuntikkan Fitur Aktif..."; routeText.innerText = "[+] Reroute ke Server Singapura (SG)"; }, 5000);
             setTimeout(() => { bar.style.width = '90%'; text.innerText = "Finalisasi keamanan memori..."; routeText.innerText = "[+] Kembali ke Server Indonesia (ID) - AMAN"; routeText.style.color = "#28a745"; }, 7000);
             setTimeout(() => {
