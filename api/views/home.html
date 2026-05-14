@@ -6,751 +6,214 @@
     <title>FF Panel Dashboard by ocin.id</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            user-select: none;
-        }
-
-        body {
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-        }
-
-        .app-container {
-            background: #ffffff;
-            width: 400px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #ff7b00, #ff5100);
-            padding: 25px 20px;
-            text-align: center;
-            color: white;
-            position: relative;
-        }
-
-        .ff-logo {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .ff-logo img {
-            width: 30px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-        }
-
-        .header p {
-            font-size: 12px;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
-
-        /* --- LOGIN SCREEN --- */
-        #login-screen {
-            padding: 30px 25px;
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .form-group input[type="text"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            font-size: 14px;
-            outline: none;
-            transition: 0.3s;
-            background: #f9f9f9;
-            text-transform: uppercase;
-            text-align: center;
-            letter-spacing: 2px;
-            font-weight: bold;
-        }
-
-        .form-group input:focus {
-            border-color: #ff7b00;
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(255, 123, 0, 0.1);
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 20px;
-            cursor: pointer;
-        }
-
-        .checkbox-group input {
-            cursor: pointer;
-            width: 16px;
-            height: 16px;
-            accent-color: #ff5100;
-        }
-
-        .checkbox-group label {
-            font-size: 12px;
-            color: #666;
-            cursor: pointer;
-            margin-bottom: 0;
-            font-weight: normal;
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 14px;
-            background: #ff5100;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 81, 0, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: #e64a00;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            width: 100%;
-            padding: 14px;
-            background: transparent;
-            color: #ff5100;
-            border: 2px solid #ff5100;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 81, 0, 0.05);
-        }
-
-        .error-text {
-            color: #d93025;
-            font-size: 12px;
-            text-align: center;
-            margin-top: 10px;
-            height: 15px;
-        }
-
-        /* --- PRICELIST SCREEN --- */
-        #pricelist-screen {
-            display: none;
-            padding: 20px;
-            max-height: 550px;
-            overflow-y: auto;
-        }
-
-        #pricelist-screen::-webkit-scrollbar { width: 4px; }
-        #pricelist-screen::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
-
-        .price-header {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .price-header h3 {
-            color: #ff5100;
-            font-size: 18px;
-        }
-
-        .back-link {
-            font-size: 11px;
-            color: #666;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        .pkg-card {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            position: relative;
-            transition: 0.3s;
-        }
-
-        .pkg-card:hover {
-            border-color: #ff5100;
-            box-shadow: 0 4px 10px rgba(255, 81, 0, 0.1);
-        }
-
-        .pkg-title { font-size: 16px; font-weight: 700; color: #333; }
-        .pkg-price { font-size: 14px; font-weight: 600; color: #ff5100; margin-bottom: 8px; }
-        
-        .pkg-features { font-size: 11px; color: #444; line-height: 1.6; margin-bottom: 15px; }
-        .pkg-features ul { list-style: none; padding-left: 0; margin-top: 5px; }
-        .pkg-features li { position: relative; padding-left: 18px; margin-bottom: 4px; font-weight: 600;}
-        .pkg-features li::before { content: "✓"; color: #28a745; font-weight: bold; position: absolute; left: 0; font-size: 12px; }
-        
-        .btn-wa {
-            width: 100%;
-            padding: 10px;
-            background: #25D366; 
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-wa:hover {
-            background: #1ebe57;
-        }
-
-        /* --- MAIN DASHBOARD --- */
-        #dashboard-screen {
-            display: none;
-            padding: 20px;
-        }
-
-        .tier-badge {
-            background: #ffe5d0;
-            color: #ff5100;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 700;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            border: 1px solid #ff5100;
-        }
-
-        .tabs-nav {
-            display: flex;
-            background: #f0f2f5;
-            border-radius: 12px;
-            padding: 5px;
-            margin-bottom: 15px;
-            margin-top: 10px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            text-align: center;
-            padding: 8px;
-            border: none;
-            background: transparent;
-            font-size: 13px;
-            font-weight: 600;
-            color: #666;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .tab-btn.active {
-            background: #fff;
-            color: #ff5100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .tab-content {
-            display: none;
-            height: 230px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .tab-content::-webkit-scrollbar { width: 4px; }
-        .tab-content::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
-
-        .feature-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-            transition: 0.3s;
-        }
-
-        .feature-row:last-child { border-bottom: none; }
-
-        .feature-row.locked {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-        
-        .locked-tag {
-            font-size: 9px;
-            color: #d93025;
-            font-weight: bold;
-            background: #fce8e6;
-            padding: 2px 5px;
-            border-radius: 4px;
-            margin-left: 5px;
-        }
-
-        .feature-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .feature-title { font-size: 13px; font-weight: 600; color: #333; display: flex; align-items: center; }
-        .feature-desc { font-size: 10px; color: #888; }
-
-        .toggle-switch {
-            position: relative;
-            width: 42px;
-            height: 22px;
-        }
-
-        .toggle-switch input { display: none; }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px; width: 16px;
-            left: 3px; bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        input:checked + .slider { background-color: #ff5100; }
-        input:checked + .slider:before { transform: translateX(20px); }
-        .locked .slider { background-color: #e0e0e0; }
-
-        /* --- LOADING OVERLAY --- */
-        .loading-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(5px);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .spinner {
-            width: 40px; height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #ff5100;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .progress-container {
-            width: 100%;
-            background: #eee;
-            border-radius: 10px;
-            height: 8px;
-            margin-bottom: 15px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: #ff5100;
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
-
-        .loading-text {
-            font-size: 13px;
-            font-weight: 600;
-            color: #444;
-        }
-
-        .loading-route {
-            font-size: 11px;
-            color: #888;
-            margin-top: 5px;
-            font-family: monospace;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 12px;
-            color: #999;
-            background: #fafafa;
-            border-top: 1px solid #eee;
-        }
-
-        .footer span { font-weight: 700; color: #ff5100; }
-
-        .server-route-box {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
-        .server-route-box p { font-size: 11px; color: #555; margin-bottom: 6px; }
-        .server-badge {
-            display: inline-block;
-            background: #fff;
-            border: 1px solid #ccc;
-            padding: 3px 6px;
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: bold;
-            margin: 2px;
-            color: #333;
-        }
-        
-        .logout-btn {
-            color: #d93025;
-            font-size: 11px;
-            text-decoration: none;
-            margin-top: 8px;
-            display: inline-block;
-            font-weight: 600;
-            cursor: pointer;
-            display: none; 
-        }
-        
-        .logout-btn:hover {
-            text-decoration: underline;
-        }
-
-        #row-antibanned { display: none; }
+        /* --- TEMA MERAH PUTIH & MINIFIED CSS --- */
+        :root{--bg-main:#f4f6f9;--bg-panel:#ffffff;--primary-red:#e53935;--primary-red-hover:#c62828;--text-dark:#222222;--text-muted:#757575;--border-light:#e0e0e0;--danger:#d32f2f;--success:#2e7d32}
+        *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;user-select:none}
+        body{background-color:var(--bg-main);display:flex;justify-content:center;align-items:center;height:100vh;color:var(--text-dark)}
+        .app-container{background:var(--bg-panel);width:400px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.1);overflow:hidden;position:relative}
+        .header{background:linear-gradient(135deg,#d32f2f,#f44336);padding:25px 20px;text-align:center;color:white;position:relative}
+        .ff-logo{font-size:24px;font-weight:700;letter-spacing:1px;display:flex;justify-content:center;align-items:center;gap:10px;text-shadow:0 2px 4px rgba(0,0,0,0.2)}
+        .header p{font-size:12px;color:#ffcdd2;margin-top:5px;letter-spacing:1px;font-weight:600}
+        #login-screen{padding:30px 25px;display:block}
+        .form-group{margin-bottom:20px}
+        .form-group label{display:block;font-size:13px;color:var(--text-dark);margin-bottom:8px;font-weight:600;text-align:center}
+        .form-group input[type="text"], .form-group input[type="number"], .form-group textarea, .form-group select {width:100%;padding:10px 15px;border:2px solid var(--border-light);border-radius:10px;font-size:14px;outline:none;transition:0.3s;background:#fafafa;color:var(--text-dark);font-weight:500;}
+        #login-screen .form-group input[type="text"]{padding:14px 15px;text-transform:uppercase;text-align:center;letter-spacing:3px;font-weight:bold;font-size:16px;}
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus{border-color:var(--primary-red);background:#fff;box-shadow:0 0 0 3px rgba(229,57,53,0.1)}
+        .checkbox-group{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px;cursor:pointer}
+        .checkbox-group input{cursor:pointer;width:16px;height:16px;accent-color:var(--primary-red)}
+        .checkbox-group label{font-size:13px;color:var(--text-muted);cursor:pointer}
+        .btn-primary{width:100%;padding:14px;background:var(--primary-red);color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:0.3s;text-transform:uppercase;box-shadow:0 4px 10px rgba(229,57,53,0.3)}
+        .btn-primary:hover{background:var(--primary-red-hover);transform:translateY(-2px);box-shadow:0 6px 15px rgba(229,57,53,0.4)}
+        .btn-secondary{width:100%;padding:14px;background:transparent;color:var(--text-muted);border:1px solid var(--border-light);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:0.3s;margin-top:10px}
+        .btn-secondary:hover{border-color:var(--text-dark);color:var(--text-dark);background:#f9f9f9}
+        .error-text{color:var(--danger);font-size:13px;text-align:center;margin-top:15px;height:15px;font-weight:600}
+        #pricelist-screen{display:none;padding:20px;max-height:550px;overflow-y:auto}
+        #pricelist-screen::-webkit-scrollbar{width:6px} #pricelist-screen::-webkit-scrollbar-thumb{background:#ccc;border-radius:10px}
+        .price-header{text-align:center;margin-bottom:20px} .price-header h3{color:var(--text-dark);font-size:18px;font-weight:700}
+        .back-link{font-size:12px;color:var(--text-muted);cursor:pointer;transition:0.3s;display:inline-block;margin-top:5px} .back-link:hover{color:var(--primary-red)}
+        .pkg-card{background:#fff;border:1px solid var(--border-light);border-radius:12px;padding:18px;margin-bottom:15px;transition:0.3s;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+        .pkg-card:hover{border-color:var(--primary-red);box-shadow:0 5px 15px rgba(229,57,53,0.1)}
+        .pkg-title{font-size:16px;font-weight:700;color:var(--text-dark)} .pkg-price{font-size:18px;font-weight:700;color:var(--primary-red);margin-bottom:10px}
+        .pkg-features{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:15px} .pkg-features ul{list-style:none;padding-left:0;margin-top:8px}
+        .pkg-features li{position:relative;padding-left:20px;margin-bottom:4px;color:var(--text-dark)} .pkg-features li::before{content:"✓";color:var(--success);font-weight:bold;position:absolute;left:0;font-size:14px}
+        .btn-wa{width:100%;padding:12px;background:#25D366;color:white;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:0.3s}
+        .btn-wa:hover{background:#1ebe57;transform:translateY(-2px);box-shadow:0 4px 10px rgba(37,211,102,0.3)}
+        #dashboard-screen{display:none;padding:20px}
+        .tier-badge{background:white;color:var(--primary-red);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;position:absolute;top:25px;right:20px;box-shadow:0 2px 10px rgba(0,0,0,0.1);letter-spacing:1px;text-transform:uppercase}
+        .tabs-nav{display:flex;overflow-x:auto;border-bottom:2px solid var(--border-light);margin-bottom:15px;scrollbar-width:none;}
+        .tabs-nav::-webkit-scrollbar{display:none;}
+        .tab-btn{flex:0 0 auto;text-align:center;padding:10px;border:none;background:transparent;font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:0.3s;position:relative}
+        .tab-btn.active{color:var(--primary-red)} .tab-btn.active::after{content:'';position:absolute;bottom:-2px;left:0;width:100%;height:2px;background:var(--primary-red)}
+        .tab-content{display:none;height:240px;overflow-y:auto;padding-right:5px}
+        .tab-content.active{display:block} .tab-content::-webkit-scrollbar{width:5px} .tab-content::-webkit-scrollbar-thumb{background:#ddd;border-radius:10px}
+        .feature-row{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;background:#fafafa;border-radius:10px;margin-bottom:8px;border:1px solid var(--border-light);transition:0.2s}
+        .feature-row:hover{background:#f0f0f0;border-color:#ccc} .feature-row.locked{opacity:0.5;pointer-events:none;background:#f9f9f9}
+        .locked-tag{font-size:10px;color:white;font-weight:bold;background:var(--text-muted);padding:2px 6px;border-radius:4px;margin-left:8px}
+        .feature-info{display:flex;flex-direction:column} .feature-title{font-size:13px;font-weight:600;color:var(--text-dark);display:flex;align-items:center} .feature-desc{font-size:11px;color:var(--text-muted);margin-top:2px}
+        .toggle-switch{position:relative;width:40px;height:22px} .toggle-switch input{display:none}
+        .slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.3s;border-radius:24px}
+        .slider:before{position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
+        input:checked + .slider{background-color:var(--primary-red)} input:checked + .slider:before{transform:translateX(18px)}
+        .loading-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(5px);display:none;flex-direction:column;justify-content:center;align-items:center;z-index:10;padding:30px;text-align:center}
+        .spinner{width:50px;height:50px;border:4px solid #f3f3f3;border-top:4px solid var(--primary-red);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:25px}
+        @keyframes spin{0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)}}
+        .progress-container{width:100%;background:#e0e0e0;border-radius:10px;height:8px;margin-bottom:15px;overflow:hidden}
+        .progress-bar{height:100%;width:0%;background:var(--primary-red);border-radius:10px;transition:width 0.3s ease}
+        .loading-text{font-size:14px;font-weight:700;color:var(--text-dark);letter-spacing:1px} .loading-route{font-size:12px;color:var(--text-muted);margin-top:8px}
+        .footer{text-align:center;padding:15px;font-size:12px;color:var(--text-muted);background:#fafafa;border-top:1px solid var(--border-light)} .footer span{font-weight:700;color:var(--text-dark)}
+        .server-route-box{background:#fff;border:1px solid var(--border-light);padding:15px;border-radius:10px;margin-top:15px} .server-route-box p{font-size:12px;color:var(--text-dark);margin-bottom:10px;font-weight:600}
+        .server-badge{display:inline-block;background:#f0f0f0;border:1px solid #ddd;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:bold;margin:2px;color:var(--text-dark)}
+        .logout-btn{color:var(--danger);font-size:12px;font-weight:600;text-decoration:none;margin-top:10px;display:inline-block;cursor:pointer;transition:0.3s;display:none} .logout-btn:hover{text-decoration:underline}
+        #row-antibanned{display:none}
+        /* --- NEW CSS ADDITIONS --- */
+        .terminal-log{background:#111;color:#0f0;font-family:monospace;font-size:11px;padding:10px;border-radius:8px;height:80px;overflow-y:auto;margin-top:10px;display:none;border:1px solid #333;}
+        .terminal-log p{margin:2px 0; line-height: 1.3;}
+        .profile-img-placeholder{width:60px;height:60px;background:var(--border-light);border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--text-muted);}
+        .license-info{background:#e8f5e9;border:1px solid #c8e6c9;color:#2e7d32;padding:10px;border-radius:8px;font-size:12px;font-weight:600;text-align:center;margin-bottom:15px;}
+        .form-row{display:flex;gap:10px;}
+        .form-row .form-group{flex:1; margin-bottom: 10px;}
+        .form-group label {text-align: left; margin-bottom: 4px;}
+        .btn-small{padding:8px 15px; font-size:12px; margin-top:5px;}
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        
         <div class="header">
             <div class="tier-badge" id="userTierBadge" style="display: none;">VIP</div>
             <div class="ff-logo">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
-                FREE FIRE VIP
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+                FREE FIRE PANEL
             </div>
-            <p>Control Center V2.0</p>
+            <p>CONTROL CENTER V2.0</p>
         </div>
 
-        <!-- SCREEN 1: LOGIN -->
         <div id="login-screen">
             <div class="form-group">
-                <label style="text-align: center;">KODE LISENSI VIP</label>
-                <input type="text" id="licenseCode" placeholder="Masukkan Kode" autocomplete="off">
+                <label>KODE LISENSI VIP</label>
+                <input type="text" id="licenseCode" placeholder="Ketik Di Sini..." autocomplete="off">
             </div>
-            
             <div class="checkbox-group">
                 <input type="checkbox" id="rememberMe" checked>
-                <label for="rememberMe">Simpan Login</label>
+                <label for="rememberMe">Simpan Sesi Login</label>
             </div>
-
-            <button class="btn-primary" onclick="doLogin()">Akses Panel</button>
-            <button class="btn-secondary" onclick="tampilPricelist()">Belum Punya Lisensi? Beli Disini</button>
-            
+            <button class="btn-primary" onclick="doLogin()">Masuk Panel</button>
+            <button class="btn-secondary" onclick="tampilPricelist()">Daftar Harga & Beli Lisensi</button>
             <div class="error-text" id="loginError"></div>
         </div>
 
-        <!-- SCREEN EXTRA: PRICELIST / MENU BELI -->
         <div id="pricelist-screen">
             <div class="price-header">
                 <h3>DAFTAR PAKET VIP</h3>
-                <span class="back-link" onclick="tutupPricelist()">❮ Kembali ke Halaman Login</span>
+                <span class="back-link" onclick="tutupPricelist()">❮ Kembali ke Login</span>
             </div>
-
-            <!-- Paket 10K -->
-            <div class="pkg-card">
-                <div class="pkg-title">Paket Basic</div>
-                <div class="pkg-price">Rp 10.000</div>
-                <div class="pkg-features">
-                    Fitur yang didapat:
-                    <ul>
-                        <li>Aim Bot</li>
-                        <li>Aim Lock</li>
-                        <li>BypassNoban</li>
-                    </ul>
-                </div>
-                <button class="btn-wa" onclick="beliWa('Paket Basic', '10.000')">Beli via WhatsApp</button>
-            </div>
-
-            <!-- Paket 20K -->
-            <div class="pkg-card">
-                <div class="pkg-title">Paket Standar</div>
-                <div class="pkg-price">Rp 20.000</div>
-                <div class="pkg-features">
-                    Fitur yang didapat:
-                    <ul>
-                        <li>Aim Bot</li>
-                        <li>Aim Lock</li>
-                        <li>Body Lock</li>
-                        <li>Headshot Body (Nembak Badan HS)</li>
-                        <li>BypassNoban</li>
-                    </ul>
-                </div>
-                <button class="btn-wa" onclick="beliWa('Paket Standar', '20.000')">Beli via WhatsApp</button>
-            </div>
-
-            <!-- Paket 30K -->
-            <div class="pkg-card">
-                <div class="pkg-title">Paket Pro</div>
-                <div class="pkg-price">Rp 30.000</div>
-                <div class="pkg-features">
-                    Fitur yang didapat:
-                    <ul>
-                        <li>Aim Bot</li>
-                        <li>Aim Lock</li>
-                        <li>Body Lock</li>
-                        <li>Auto Headshot (Ganas)</li>
-                        <li>Headshot Body (Nembak Badan HS)</li>
-                        <li>Headshot Neck (Nembak Leher HS)</li>
-                        <li>ESP Name & Distance</li>
-                        <li>Wallhack (Tembus Pandang)</li>
-                        <li>BypassNoban</li>
-                    </ul>
-                </div>
-                <button class="btn-wa" onclick="beliWa('Paket Pro', '30.000')">Beli via WhatsApp</button>
-            </div>
-
-            <!-- Paket 40K -->
-            <div class="pkg-card">
-                <div class="pkg-title">Paket Elite</div>
-                <div class="pkg-price">Rp 40.000</div>
-                <div class="pkg-features">
-                    Fitur yang didapat:
-                    <ul>
-                        <li>Aim Bot</li>
-                        <li>Aim Lock</li>
-                        <li>Body Lock</li>
-                        <li>Auto Headshot (Ganas)</li>
-                        <li>Headshot Body (Nembak Badan HS)</li>
-                        <li>Headshot Neck (Nembak Leher HS)</li>
-                        <li>Hologram 3D</li>
-                        <li>ESP Name & Distance</li>
-                        <li>Wallhack (Tembus Pandang)</li>
-                        <li>BypassNoban</li>
-                    </ul>
-                </div>
-                <button class="btn-wa" onclick="beliWa('Paket Elite', '40.000')">Beli via WhatsApp</button>
-            </div>
-
-            <!-- Paket 50K -->
-            <div class="pkg-card" style="border-color: #ff5100; box-shadow: 0 0 10px rgba(255,81,0,0.2);">
-                <div class="pkg-title" style="color: #ff5100;">★ Paket GOD TIER ★</div>
-                <div class="pkg-price">Rp 50.000</div>
-                <div class="pkg-features">
-                    Fitur FULL UNLOCK:
-                    <ul>
-                        <li>Aim Bot</li>
-                        <li>Aim Lock</li>
-                        <li>Body Lock</li>
-                        <li>Auto Headshot (Ganas)</li>
-                        <li>Headshot Body (Nembak Badan HS)</li>
-                        <li>Headshot Neck (Nembak Leher HS)</li>
-                        <li>Aim God (Magic Bullet / No Miss)</li>
-                        <li>Hologram 3D</li>
-                        <li>ESP Name & Distance</li>
-                        <li>Wallhack (Tembus Pandang)</li>
-                        <li>BypassNoban</li>
-                        <li style="color: #ff5100; font-weight: bold;">+ Anti-Banned VIP (Fitur Rahasia)</li>
-                    </ul>
-                </div>
-                <button class="btn-wa" onclick="beliWa('Paket GOD TIER', '50.000')">Beli via WhatsApp</button>
-            </div>
+            <div class="pkg-card"><div class="pkg-title">Paket Basic</div><div class="pkg-price">Rp 10.000</div><div class="pkg-features">Fitur Aktif:<ul><li>Aim Bot</li><li>Aim Lock</li><li>BypassNoban</li></ul></div><button class="btn-wa" onclick="beliWa('Paket Basic', '10.000')">Beli via WhatsApp</button></div>
+            <div class="pkg-card"><div class="pkg-title">Paket Standar</div><div class="pkg-price">Rp 20.000</div><div class="pkg-features">Fitur Aktif:<ul><li>Aim Bot</li><li>Aim Lock</li><li>Body Lock</li><li>Headshot Body</li><li>BypassNoban</li></ul></div><button class="btn-wa" onclick="beliWa('Paket Standar', '20.000')">Beli via WhatsApp</button></div>
+            <div class="pkg-card"><div class="pkg-title">Paket Pro</div><div class="pkg-price">Rp 30.000</div><div class="pkg-features">Fitur Aktif:<ul><li>Aim Bot & Lock</li><li>Auto Headshot</li><li>Headshot Neck</li><li>ESP Name & Distance</li><li>Wallhack</li></ul></div><button class="btn-wa" onclick="beliWa('Paket Pro', '30.000')">Beli via WhatsApp</button></div>
+            <div class="pkg-card"><div class="pkg-title">Paket Elite</div><div class="pkg-price">Rp 40.000</div><div class="pkg-features">Fitur Aktif:<ul><li>Semua Fitur Pro</li><li>Hologram 3D</li><li>Wallhack Plus</li><li>BypassNoban</li></ul></div><button class="btn-wa" onclick="beliWa('Paket Elite', '40.000')">Beli via WhatsApp</button></div>
+            <div class="pkg-card" style="border-color: var(--primary-red); background: #fff8f8;"><div class="pkg-title" style="color: var(--primary-red);">★ Paket GOD TIER ★</div><div class="pkg-price">Rp 50.000</div><div class="pkg-features">Fitur FULL UNLOCK:<ul><li>Semua Fitur Elite</li><li>Aim God (Magic Bullet)</li><li style="color: var(--primary-red); font-weight: bold;">+ Anti-Banned VIP</li></ul></div><button class="btn-wa" onclick="beliWa('Paket GOD TIER', '50.000')">Beli via WhatsApp</button></div>
         </div>
 
-        <!-- SCREEN 2: MAIN DASHBOARD -->
         <div id="dashboard-screen">
-            
             <div class="tabs-nav">
                 <button class="tab-btn active" onclick="switchTab('aimbot', this)">Aimbot</button>
                 <button class="tab-btn" onclick="switchTab('visual', this)">Visual</button>
                 <button class="tab-btn" onclick="switchTab('server', this)">Server</button>
+                <button class="tab-btn" onclick="switchTab('profil', this)">Profil</button>
+                <button class="tab-btn" onclick="switchTab('setting', this)">Setting</button>
             </div>
 
-            <!-- TAB 1: AIMBOT -->
             <div class="tab-content active" id="aimbot">
-                <div class="feature-row" id="row-aimbot">
-                    <div class="feature-info">
-                        <span class="feature-title">Aim Bot</span>
-                        <span class="feature-desc">Asisten bidikan otomatis penuh</span>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="chk-aimbot"><span class="slider"></span></label>
-                </div>
-                <div class="feature-row" id="row-aimlock">
-                    <div class="feature-info">
-                        <span class="feature-title">Aim Lock</span>
-                        <span class="feature-desc">Kunci target presisi pada musuh</span>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="chk-aimlock"><span class="slider"></span></label>
-                </div>
-                <div class="feature-row" id="row-bodylock">
-                    <div class="feature-info">
-                        <span class="feature-title">Body Lock <span class="locked-tag">LOCKED</span></span>
-                        <span class="feature-desc">Fokus bidikan mengunci di badan</span>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="chk-bodylock"><span class="slider"></span></label>
-                </div>
-                <div class="feature-row" id="row-autohs">
-                    <div class="feature-info">
-                        <span class="feature-title">Auto Headshot (Ganas) <span class="locked-tag">LOCKED</span></span>
-                        <span class="feature-desc">Target instan ke kepala</span>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="chk-autohs"><span class="slider"></span></label>
-                </div>
-                <div class="feature-row" id="row-hsbody">
-                    <div class="feature-info">
-                        <span class="feature-title">Headshot Body <span class="locked-tag">LOCKED</span></span>
-                        <span class="feature-desc">Nembak badan terhitung HS</span>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="chk-hsbody"><span class="slider"></span></label>
-                </div>
-                <div class="feature-row" id="row-hsneck">
-                    <div class="feature-info">
-                        <span class="feature-title">Headshot Neck <span class="locked-tag">LOCKED</span></span>
-                        <span class="feature-desc">Nembak leher instan kill</span>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="chk-hsneck"><span class="slider"></span></label>
-                </div>
-                <div class="feature-row" id="row-aimgod">
-                    <div class="feature-info">
-                        <span class="feature-title">Aim God / Magic Bullet <span class="locked-tag">LOCKED</span></span>
-                        <span class="feature-desc">Damage No Miss (100% Akurat)</span>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="chk-aimgod"><span class="slider"></span></label>
-                </div>
+                <div class="feature-row" id="row-aimbot"><div class="feature-info"><span class="feature-title">Aim Bot</span><span class="feature-desc">Asisten bidikan otomatis penuh</span></div><label class="toggle-switch"><input type="checkbox" id="chk-aimbot"><span class="slider"></span></label></div>
+                <div class="feature-row" id="row-aimlock"><div class="feature-info"><span class="feature-title">Aim Lock</span><span class="feature-desc">Kunci target presisi pada musuh</span></div><label class="toggle-switch"><input type="checkbox" id="chk-aimlock"><span class="slider"></span></label></div>
+                <div class="feature-row" id="row-bodylock"><div class="feature-info"><span class="feature-title">Body Lock <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Fokus bidikan mengunci di badan</span></div><label class="toggle-switch"><input type="checkbox" id="chk-bodylock"><span class="slider"></span></label></div>
+                <div class="feature-row" id="row-autohs"><div class="feature-info"><span class="feature-title">Auto Headshot <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Target instan ke kepala</span></div><label class="toggle-switch"><input type="checkbox" id="chk-autohs"><span class="slider"></span></label></div>
+                <div class="feature-row" id="row-hsbody"><div class="feature-info"><span class="feature-title">Headshot Body <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Nembak badan terhitung HS</span></div><label class="toggle-switch"><input type="checkbox" id="chk-hsbody"><span class="slider"></span></label></div>
+                <div class="feature-row" id="row-hsneck"><div class="feature-info"><span class="feature-title">Headshot Neck <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Nembak leher instan kill</span></div><label class="toggle-switch"><input type="checkbox" id="chk-hsneck"><span class="slider"></span></label></div>
+                <div class="feature-row" id="row-aimgod"><div class="feature-info"><span class="feature-title" style="color: var(--primary-red);">Aim God (Magic) <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Damage No Miss (100% Akurat)</span></div><label class="toggle-switch"><input type="checkbox" id="chk-aimgod"><span class="slider"></span></label></div>
             </div>
 
-            <!-- TAB 2: VISUALS -->
             <div class="tab-content" id="visual">
-                <div class="feature-row" id="row-esp">
-                    <div class="feature-info">
-                        <span class="feature-title">ESP Name & Distance <span class="locked-tag">LOCKED</span></span>
-                        <span class="feature-desc">Tampilkan nama & jarak</span>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="chk-esp"><span class="slider"></span></label>
-                </div>
-                <div class="feature-row" id="row-wallhack">
-                    <div class="feature-info">
-                        <span class="feature-title">Wallhack <span class="locked-tag">LOCKED</span></span>
-                        <span class="feature-desc">Tembus pandang tembok</span>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="chk-wallhack"><span class="slider"></span></label>
-                </div>
-                <div class="feature-row" id="row-hologram">
-                    <div class="feature-info">
-                        <span class="feature-title">Hologram 3D <span class="locked-tag">LOCKED</span></span>
-                        <span class="feature-desc">Proyeksi posisi musuh 3D</span>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="chk-hologram"><span class="slider"></span></label>
-                </div>
+                <div class="feature-row" id="row-esp"><div class="feature-info"><span class="feature-title">ESP Name & Distance <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Tampilkan nama & jarak</span></div><label class="toggle-switch"><input type="checkbox" id="chk-esp"><span class="slider"></span></label></div>
+                <div class="feature-row" id="row-wallhack"><div class="feature-info"><span class="feature-title">Wallhack <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Tembus pandang tembok</span></div><label class="toggle-switch"><input type="checkbox" id="chk-wallhack"><span class="slider"></span></label></div>
+                <div class="feature-row" id="row-hologram"><div class="feature-info"><span class="feature-title">Hologram 3D <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Proyeksi posisi musuh 3D</span></div><label class="toggle-switch"><input type="checkbox" id="chk-hologram"><span class="slider"></span></label></div>
             </div>
 
-            <!-- TAB 3: SERVER BYPASS -->
             <div class="tab-content" id="server">
-                <div class="feature-row" id="row-bypass">
-                    <div class="feature-info">
-                        <span class="feature-title">BypassNoban <span class="locked-tag">LOCKED</span></span>
-                        <span class="feature-desc">Gunakan rute server aman</span>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="chk-bypass"><span class="slider"></span></label>
-                </div>
-                
-                <div class="feature-row" id="row-antibanned">
-                    <div class="feature-info">
-                        <span class="feature-title" style="color: #ff5100;">Anti-Banned VIP ★</span>
-                        <span class="feature-desc">Menghapus log report otomatis</span>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="chk-antibanned"><span class="slider"></span></label>
-                </div>
-
-                <div class="server-route-box">
-                    <p><strong>Jalur Bypass Otomatis:</strong></p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 5px; align-items: center;">
-                        <span class="server-badge">🇹🇭 TH</span> ➔ 
-                        <span class="server-badge">🇲🇾 MY</span> ➔ 
-                        <span class="server-badge">🇸🇬 SG</span> ➔ 
-                        <span class="server-badge" style="border-color:#ff5100; color:#ff5100;">🇮🇩 ID</span>
-                    </div>
-                </div>
+                <div class="feature-row" id="row-bypass"><div class="feature-info"><span class="feature-title">BypassNoban <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Gunakan rute server aman</span></div><label class="toggle-switch"><input type="checkbox" id="chk-bypass"><span class="slider"></span></label></div>
+                <div class="feature-row" id="row-antibanned"><div class="feature-info"><span class="feature-title" style="color: var(--primary-red);">Anti-Banned VIP ★</span><span class="feature-desc">Menghapus log report otomatis</span></div><label class="toggle-switch"><input type="checkbox" id="chk-antibanned"><span class="slider"></span></label></div>
+                <div class="server-route-box"><p>Jalur Server Otomatis:</p><div style="display: flex; flex-wrap: wrap; gap: 5px; align-items: center;"><span class="server-badge">🇹🇭 TH</span> <span style="color:var(--text-muted)">➔</span> <span class="server-badge">🇲🇾 MY</span> <span style="color:var(--text-muted)">➔</span> <span class="server-badge">🇸🇬 SG</span> <span style="color:var(--text-muted)">➔</span> <span class="server-badge" style="border: 2px solid var(--primary-red); color: var(--primary-red);">🇮🇩 ID</span></div></div>
             </div>
 
-            <button class="btn-primary" style="margin-top: 15px;" onclick="startInjectionProcess()">Jalankan Mod & Buka FF</button>
+            <div class="tab-content" id="profil" style="padding-left: 5px;">
+                <div class="profile-img-placeholder">👤</div>
+                <div class="form-row">
+                    <div class="form-group"><label>Nama Profil</label><input type="text" id="profName" placeholder="Nama Anda" style="text-align:left; letter-spacing:normal; text-transform:none;"></div>
+                    <div class="form-group"><label>No. Telp / WA</label><input type="number" id="profPhone" placeholder="08xxx"></div>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label>Alamat</label><input type="text" id="profAddress" placeholder="Kota / Negara" style="text-align:left; letter-spacing:normal; text-transform:none;">
+                </div>
+                <div class="form-group">
+                    <label>Info / Deskripsi</label><textarea id="profInfo" rows="2" placeholder="Tulis bio atau status..."></textarea>
+                </div>
+                <button class="btn-primary btn-small" onclick="saveProfile()">Simpan Profil</button>
+            </div>
+
+            <div class="tab-content" id="setting" style="padding-left: 5px;">
+                <div class="license-info" id="license-info-box">
+                    Status: <strong style="color:var(--primary-red)">VIP AKTIF</strong><br>
+                    Berakhir: <span id="license-expiry">Memuat...</span> (2 Tahun)
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label>Verifikasi ID Free Fire</label>
+                    <div style="display:flex; gap:10px;">
+                        <input type="number" id="ffIdInput" placeholder="Masukkan ID FF...">
+                        <button class="btn-primary" style="width:auto; padding:10px 15px; font-size:12px;" onclick="verifId()">Cek</button>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Versi Game</label>
+                        <select id="setVersion">
+                            <option value="ff">Free Fire Biasa</option>
+                            <option value="ffmax">Free Fire MAX</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Kualitas Grafik</label>
+                        <select id="setGraphic">
+                            <option value="smooth">Smooth</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High (Ultra)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary btn-small" onclick="saveSettings()">Terapkan Pengaturan</button>
+            </div>
+
+            <div class="terminal-log" id="terminalLog">
+                <p style="color:#888;">[root@ocin-panel ~]# Menunggu instruksi...</p>
+            </div>
+
+            <button class="btn-primary" style="margin-top: 15px;" onclick="startInjectionProcess()">JALANKAN MOD & BUKA FF</button>
         </div>
 
-        <!-- LOADING OVERLAY -->
         <div class="loading-overlay" id="loadingOverlay">
             <div class="spinner"></div>
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            <div class="loading-text" id="loadText">Mempersiapkan data...</div>
+            <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+            <div class="loading-text" id="loadText">Mempersiapkan sistem...</div>
             <div class="loading-route" id="loadRoute"></div>
         </div>
 
-        <!-- Footer / Developer Signature -->
         <div class="footer">
             Developed by <span>ocin.id</span><br>
-            <a class="logout-btn" id="logoutBtn" onclick="doLogout()">[ Keluar Lisensi ]</a>
+            <a class="logout-btn" id="logoutBtn" onclick="doLogout()">[ Keluar / Ganti Lisensi ]</a>
         </div>
-
     </div>
 
     <script>
-        // --- DATABASE KODE VIP ---
         const vipCodes = {
             "OCAZK": { tier: 1, name: "Paket 10K" },
             "OCSXK": { tier: 2, name: "Paket 20K" },
@@ -765,170 +228,150 @@
             if (savedCode && vipCodes[savedCode]) {
                 masukDashboard(savedCode);
             }
+            loadProfileAndSettings();
+            setupTerminalTriggers();
         });
 
-        // --- NAVIGASI KE MENU BELI ---
-        function tampilPricelist() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('pricelist-screen').style.display = 'block';
-        }
-
-        function tutupPricelist() {
-            document.getElementById('pricelist-screen').style.display = 'none';
-            document.getElementById('login-screen').style.display = 'block';
-        }
-
-        // --- REDIRECT KE WHATSAPP ---
+        function tampilPricelist() { document.getElementById('login-screen').style.display='none'; document.getElementById('pricelist-screen').style.display='block'; }
+        function tutupPricelist() { document.getElementById('pricelist-screen').style.display='none'; document.getElementById('login-screen').style.display='block'; }
         function beliWa(namaPaket, harga) {
             const noWa = "62856508758739"; 
-            const teksPesan = `Halo Admin Ocin.id, saya tertarik untuk membeli Lisensi Panel *${namaPaket}* seharga *Rp ${harga}*. Mohon info metode pembayarannya ya. Terima kasih!`;
-            const url = `https://wa.me/${noWa}?text=${encodeURIComponent(teksPesan)}`;
-            window.open(url, '_blank');
+            const teksPesan = `Halo Admin Ocin.id, saya tertarik membeli Lisensi Panel *${namaPaket}* seharga *Rp ${harga}*. Info pembayaran?`;
+            window.open(`https://wa.me/${noWa}?text=${encodeURIComponent(teksPesan)}`, '_blank');
         }
 
-        // --- LOGIC LOGIN ---
         function doLogin() {
             const code = document.getElementById('licenseCode').value.toUpperCase().trim();
-            const remember = document.getElementById('rememberMe').checked;
             const error = document.getElementById('loginError');
-
-            if (code === "") {
-                error.style.color = "#d93025";
-                error.innerText = "Kode Lisensi tidak boleh kosong!";
-                return;
-            }
-
-            if (vipCodes[code]) {
-                error.style.color = "#ff5100";
-                error.innerText = "Lisensi Diterima. Mengakses Panel...";
-                
-                if (remember) {
-                    localStorage.setItem('ff_vip_code', code);
-                }
-
-                setTimeout(() => {
-                    masukDashboard(code);
-                }, 800);
+            if(code === "") return error.style.color="var(--danger)", error.innerText="Kode tidak boleh kosong!";
+            if(vipCodes[code]) {
+                error.style.color="var(--success)"; error.innerText="Lisensi Diterima. Membuka Panel...";
+                if(document.getElementById('rememberMe').checked) localStorage.setItem('ff_vip_code', code);
+                setTimeout(() => masukDashboard(code), 800);
             } else {
-                error.style.color = "#d93025";
-                error.innerText = "Kode Lisensi salah atau tidak terdaftar!";
+                error.style.color="var(--danger)"; error.innerText="Kode salah atau tidak terdaftar!";
             }
         }
 
-        // --- MENGATUR DASHBOARD ---
         function masukDashboard(code) {
-            const tierData = vipCodes[code];
-            const tier = tierData.tier;
-
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('pricelist-screen').style.display = 'none';
-            document.getElementById('dashboard-screen').style.display = 'block';
-            document.getElementById('logoutBtn').style.display = 'inline-block';
+            const tierData = vipCodes[code]; const tier = tierData.tier;
+            document.getElementById('login-screen').style.display='none';
+            document.getElementById('pricelist-screen').style.display='none';
+            document.getElementById('dashboard-screen').style.display='block';
+            document.getElementById('logoutBtn').style.display='inline-block';
             
             const badge = document.getElementById('userTierBadge');
-            badge.style.display = 'block';
-            badge.innerText = tierData.name;
+            badge.style.display='block'; badge.innerText=tierData.name;
 
-            // Unlock Berdasarkan Tier
-            // Tier 1 (10k)
-            unlockFeature('row-aimbot', 'chk-aimbot', tier >= 1);
-            unlockFeature('row-aimlock', 'chk-aimlock', tier >= 1);
-            unlockFeature('row-bypass', 'chk-bypass', tier >= 1);
-
-            // Tier 2 (20k)
-            unlockFeature('row-bodylock', 'chk-bodylock', tier >= 2);
-            unlockFeature('row-hsbody', 'chk-hsbody', tier >= 2);
-
-            // Tier 3 (30k)
-            unlockFeature('row-autohs', 'chk-autohs', tier >= 3);
-            unlockFeature('row-esp', 'chk-esp', tier >= 3);
-            unlockFeature('row-wallhack', 'chk-wallhack', tier >= 3);
-            unlockFeature('row-hsneck', 'chk-hsneck', tier >= 3);
-
-            // Tier 4 (40k)
+            unlockFeature('row-aimbot', 'chk-aimbot', tier >= 1); unlockFeature('row-aimlock', 'chk-aimlock', tier >= 1); unlockFeature('row-bypass', 'chk-bypass', tier >= 1);
+            unlockFeature('row-bodylock', 'chk-bodylock', tier >= 2); unlockFeature('row-hsbody', 'chk-hsbody', tier >= 2);
+            unlockFeature('row-autohs', 'chk-autohs', tier >= 3); unlockFeature('row-esp', 'chk-esp', tier >= 3); unlockFeature('row-wallhack', 'chk-wallhack', tier >= 3); unlockFeature('row-hsneck', 'chk-hsneck', tier >= 3);
             unlockFeature('row-hologram', 'chk-hologram', tier >= 4);
-
-            // Tier 5 (50k)
             unlockFeature('row-aimgod', 'chk-aimgod', tier >= 5);
             
-            if(tier >= 5) {
-                document.getElementById('row-antibanned').style.display = 'flex';
-                unlockFeature('row-antibanned', 'chk-antibanned', true);
-            } else {
-                document.getElementById('row-antibanned').style.display = 'none';
-            }
+            if(tier >= 5) { document.getElementById('row-antibanned').style.display='flex'; unlockFeature('row-antibanned', 'chk-antibanned', true); } 
+            else { document.getElementById('row-antibanned').style.display='none'; }
+
+            // Set 2 Years Expiry Date
+            let expDate = new Date();
+            expDate.setFullYear(expDate.getFullYear() + 2);
+            document.getElementById('license-expiry').innerText = expDate.toLocaleDateString('id-ID', {day: '2-digit', month: 'long', year: 'numeric'});
         }
 
         function unlockFeature(rowId, chkId, isUnlocked) {
-            const row = document.getElementById(rowId);
-            const chk = document.getElementById(chkId);
-            const tag = row.querySelector('.locked-tag');
-
-            if (isUnlocked) {
-                row.classList.remove('locked');
-                chk.disabled = false;
-                if (tag) tag.style.display = 'none';
-            } else {
-                row.classList.add('locked');
-                chk.disabled = true;
-                chk.checked = false;
-                if (tag) tag.style.display = 'inline-block';
-            }
+            const row=document.getElementById(rowId), chk=document.getElementById(chkId), tag=row.querySelector('.locked-tag');
+            if(isUnlocked){ row.classList.remove('locked'); chk.disabled=false; if(tag) tag.style.display='none'; } 
+            else { row.classList.add('locked'); chk.disabled=true; chk.checked=false; if(tag) tag.style.display='inline-block'; }
         }
 
         function doLogout() {
             localStorage.removeItem('ff_vip_code');
-            document.getElementById('licenseCode').value = "";
-            document.getElementById('loginError').innerText = "";
-            
-            document.getElementById('dashboard-screen').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'none';
-            document.getElementById('userTierBadge').style.display = 'none';
-            document.getElementById('login-screen').style.display = 'block';
-
+            document.getElementById('licenseCode').value=""; document.getElementById('loginError').innerText="";
+            document.getElementById('dashboard-screen').style.display='none'; document.getElementById('logoutBtn').style.display='none';
+            document.getElementById('userTierBadge').style.display='none'; document.getElementById('login-screen').style.display='block';
             switchTab('aimbot', document.querySelector('.tab-btn'));
+            document.getElementById('terminalLog').style.display = 'none';
         }
 
         function switchTab(tabId, btnElement) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            btnElement.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active'); document.getElementById(tabId).classList.add('active');
         }
 
-        function startInjectionProcess() {
-            const overlay = document.getElementById('loadingOverlay');
-            const bar = document.getElementById('progressBar');
-            const text = document.getElementById('loadText');
-            const routeText = document.getElementById('loadRoute');
-            const spinner = document.querySelector('.spinner');
-            
-            overlay.style.display = 'flex';
-            bar.style.width = '0%';
-            routeText.innerText = "";
-            routeText.style.color = "#888";
-            spinner.style.display = 'block';
+        /* --- FITUR PROFIL & SETTING --- */
+        function loadProfileAndSettings() {
+            if(localStorage.getItem('profName')) document.getElementById('profName').value = localStorage.getItem('profName');
+            if(localStorage.getItem('profPhone')) document.getElementById('profPhone').value = localStorage.getItem('profPhone');
+            if(localStorage.getItem('profAddress')) document.getElementById('profAddress').value = localStorage.getItem('profAddress');
+            if(localStorage.getItem('profInfo')) document.getElementById('profInfo').value = localStorage.getItem('profInfo');
+            if(localStorage.getItem('ffId')) document.getElementById('ffIdInput').value = localStorage.getItem('ffId');
+            if(localStorage.getItem('setVersion')) document.getElementById('setVersion').value = localStorage.getItem('setVersion');
+            if(localStorage.getItem('setGraphic')) document.getElementById('setGraphic').value = localStorage.getItem('setGraphic');
+        }
 
-            setTimeout(() => { bar.style.width = '15%'; text.innerText = "Menghubungkan ke API Garena..."; }, 500);
-            setTimeout(() => { bar.style.width = '35%'; text.innerText = "Mengalihkan IP Address..."; routeText.innerText = "[+] Terhubung ke Server Thailand (TH)"; }, 2000);
-            setTimeout(() => { bar.style.width = '55%'; text.innerText = "Menerapkan Modul BypassNoban..."; routeText.innerText = "[+] Reroute ke Server Malaysia (MY)"; }, 3500);
-            setTimeout(() => { bar.style.width = '75%'; text.innerText = "Menyuntikkan Fitur Aktif..."; routeText.innerText = "[+] Reroute ke Server Singapura (SG)"; }, 5000);
-            setTimeout(() => { bar.style.width = '90%'; text.innerText = "Finalisasi keamanan memori..."; routeText.innerText = "[+] Kembali ke Server Indonesia (ID) - AMAN"; routeText.style.color = "#28a745"; }, 7000);
+        function saveProfile() {
+            localStorage.setItem('profName', document.getElementById('profName').value);
+            localStorage.setItem('profPhone', document.getElementById('profPhone').value);
+            localStorage.setItem('profAddress', document.getElementById('profAddress').value);
+            localStorage.setItem('profInfo', document.getElementById('profInfo').value);
+            alert("✅ Data profil berhasil disimpan!");
+        }
+
+        function saveSettings() {
+            localStorage.setItem('setVersion', document.getElementById('setVersion').value);
+            localStorage.setItem('setGraphic', document.getElementById('setGraphic').value);
+            alert("⚙️ Pengaturan game berhasil diterapkan!");
+        }
+
+        function verifId() {
+            let id = document.getElementById('ffIdInput').value;
+            if(id.length < 5) return alert("❌ ID tidak valid!");
+            localStorage.setItem('ffId', id);
+            alert(`✅ ID ${id} Terverifikasi dan Terhubung dengan Panel!`);
+        }
+
+        /* --- FITUR TERMINAL LOG --- */
+        function setupTerminalTriggers() {
+            document.querySelectorAll('.toggle-switch input').forEach(input => {
+                input.addEventListener('change', function() {
+                    let fName = this.closest('.feature-row').querySelector('.feature-title').childNodes[0].textContent.trim();
+                    let status = this.checked ? "INJECTED ✅" : "DISABLED ❌";
+                    let color = this.checked ? "#0f0" : "#f44336";
+                    printLog(`> Executing [${fName}] ... <span style="color:${color}">${status}</span>`);
+                });
+            });
+        }
+
+        function printLog(msg) {
+            let term = document.getElementById('terminalLog');
+            term.style.display = 'block';
+            let p = document.createElement('p');
+            p.innerHTML = msg;
+            term.appendChild(p);
+            term.scrollTop = term.scrollHeight;
+        }
+
+        /* --- ANIMASI LOADING & INJECT --- */
+        function startInjectionProcess() {
+            const overlay=document.getElementById('loadingOverlay'), bar=document.getElementById('progressBar'), text=document.getElementById('loadText'), routeText=document.getElementById('loadRoute'), spinner=document.querySelector('.spinner');
+            overlay.style.display='flex'; bar.style.width='0%'; routeText.innerText=""; routeText.style.color="var(--text-muted)"; spinner.style.display='block';
+            
+            const selectedVersion = document.getElementById('setVersion').value;
+            const pkgName = selectedVersion === 'ffmax' ? 'com.dts.freefiremax' : 'com.dts.freefireth';
+
+            setTimeout(() => { bar.style.width='15%'; text.innerText="Menghubungkan ke API Garena..."; }, 500);
+            setTimeout(() => { bar.style.width='35%'; text.innerText="Mengalihkan IP Address..."; routeText.innerText="[+] Terhubung ke Server Thailand (TH)"; }, 2000);
+            setTimeout(() => { bar.style.width='55%'; text.innerText="Menerapkan Modul BypassNoban..."; routeText.innerText="[+] Reroute ke Server Malaysia (MY)"; }, 3500);
+            setTimeout(() => { bar.style.width='75%'; text.innerText="Menyuntikkan Fitur Aktif..."; routeText.innerText="[+] Reroute ke Server Singapura (SG)"; }, 5000);
+            setTimeout(() => { bar.style.width='90%'; text.innerText="Finalisasi keamanan memori..."; routeText.innerText="[+] Kembali ke Server Indonesia (ID) - AMAN"; routeText.style.color="var(--success)"; }, 7000);
             setTimeout(() => {
-                bar.style.width = '100%';
-                text.innerText = "MEMBUKA FREE FIRE...";
-                text.style.color = "#ff5100";
-                spinner.style.display = 'none';
-                routeText.innerText = "Mengalihkan ke aplikasi game...";
-                
+                bar.style.width='100%'; text.innerText="MEMBUKA FREE FIRE..."; text.style.color="var(--primary-red)"; spinner.style.display='none'; routeText.innerText="Mengalihkan ke aplikasi game...";
                 setTimeout(() => {
-                    window.location.href = "intent://#Intent;package=com.dts.freefireth;scheme=freefire;end;";
-                    setTimeout(() => {
-                        overlay.style.display = 'none';
-                        text.style.color = "#444";
-                    }, 1500);
+                    window.location.href = `intent://#Intent;package=${pkgName};scheme=freefire;end;`;
+                    setTimeout(() => { overlay.style.display='none'; text.style.color="var(--text-dark)"; }, 1500);
                 }, 1500);
-            }, 8500);
+            }, 60500);
         }
     </script>
 </body>
