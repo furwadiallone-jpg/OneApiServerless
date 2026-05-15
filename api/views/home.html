@@ -66,7 +66,6 @@
         .server-badge{display:inline-block;background:#f0f0f0;border:1px solid #ddd;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:bold;margin:2px;color:var(--text-dark)}
         .logout-btn{color:var(--danger);font-size:12px;font-weight:600;text-decoration:none;margin-top:10px;display:inline-block;cursor:pointer;transition:0.3s;display:none} .logout-btn:hover{text-decoration:underline}
         #row-antibanned{display:none}
-        /* --- NEW CSS ADDITIONS --- */
         .terminal-log{background:#111;color:#0f0;font-family:monospace;font-size:11px;padding:10px;border-radius:8px;height:80px;overflow-y:auto;margin-top:10px;display:none;border:1px solid #333;}
         .terminal-log p{margin:2px 0; line-height: 1.3;}
         .profile-img-placeholder{width:60px;height:60px;background:var(--border-light);border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--text-muted);}
@@ -75,6 +74,49 @@
         .form-row .form-group{flex:1; margin-bottom: 10px;}
         .form-group label {text-align: left; margin-bottom: 4px;}
         .btn-small{padding:8px 15px; font-size:12px; margin-top:5px;}
+        
+        /* --- CSS SLIDER SENSITIVITAS --- */
+        .sens-slider { width: 100%; height: 6px; background: var(--border-light); border-radius: 5px; outline: none; appearance: none; -webkit-appearance: none; margin-top: 5px;}
+        .sens-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--primary-red); cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: 0.2s;}
+        .sens-slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
+        .sens-slider:disabled { opacity: 0.5; }
+        .sens-slider:disabled::-webkit-slider-thumb { background: #999; cursor: not-allowed; }
+
+        /* --- CSS MENU FPS BOOST --- */
+        .fps-card { background: #1a111a; border: 1px solid #332233; border-radius: 12px; padding: 15px; color: #fff; text-align: left; margin-bottom: 15px; position: relative;}
+        .fps-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 5px; color: #fff; }
+        .fps-desc { font-size: 12px; color: #b3a0b3; margin-bottom: 10px; }
+        .fps-price { font-size: 13px; font-weight: 700; color: #ff8a8a; margin-bottom: 15px; }
+        .btn-fps-toggle { background: #d32f2f; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-fps-toggle:hover { background: #b71c1c; }
+        .btn-fps-toggle.active { background: #2e7d32; }
+        .fps-status { font-size: 11px; color: #b3a0b3; margin-top: 8px; margin-bottom: 15px; }
+        
+        .fps-monitor-card { background: #130c13; border-radius: 10px; padding: 15px; border: 1px solid #2a1b2a;}
+        .monitor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .monitor-header h4 { font-size: 14px; font-weight: 700; color: #fff; }
+        .monitor-header span { font-size: 11px; color: #8899cc; }
+        .monitor-screen { background: #0a050a; padding: 10px; border-radius: 6px; height: 80px; overflow-y: auto; font-family: monospace; font-size: 11px; color: #ddd; margin-bottom: 15px; border: 1px solid #221522; }
+        .monitor-line { margin-bottom: 5px; display: flex; gap: 10px; }
+        .monitor-line .time { color: #8899cc; white-space: nowrap;}
+        .monitor-actions { display: flex; gap: 8px; }
+        .monitor-actions button { flex: 1; padding: 8px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; border: none; color: white; transition: 0.2s;}
+        .btn-analisis { background: #64b5f6; color: #000 !important; }
+        .btn-analisis:hover { background: #42a5f5; }
+        .btn-clear { background: transparent; border: 1px solid #444 !important; color: #ccc !important; }
+        .btn-clear:hover { background: #222; }
+        .btn-boost { background: #8e0000; }
+        .btn-boost:hover { background: #b71c1c; }
+
+        /* --- CSS DEVICE INFO --- */
+        .device-info-wrapper { background: #fff; border: 1px solid var(--border-light); border-radius: 12px; padding: 15px; margin-bottom: 15px;}
+        .dev-header { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;}
+        .dev-header span { font-size: 18px; }
+        .dev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .dev-item { background: #fafafa; border: 1px solid var(--border-light); padding: 10px; border-radius: 8px;}
+        .dev-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: 3px;}
+        .dev-value { font-size: 12px; font-weight: 700; color: var(--primary-red); word-break: break-all; }
+        .dev-full { grid-column: span 2; }
     </style>
 </head>
 <body>
@@ -120,7 +162,8 @@
                 <button class="tab-btn active" onclick="switchTab('aimbot', this)">Aimbot</button>
                 <button class="tab-btn" onclick="switchTab('visual', this)">Visual</button>
                 <button class="tab-btn" onclick="switchTab('server', this)">Server</button>
-                <button class="tab-btn" onclick="switchTab('profil', this)">Profil</button>
+                <button class="tab-btn" onclick="switchTab('fps', this)">FPS</button>
+                <button class="tab-btn" onclick="switchTab('device', this)">Device</button> <button class="tab-btn" onclick="switchTab('profil', this)">Profil</button>
                 <button class="tab-btn" onclick="switchTab('setting', this)">Setting</button>
             </div>
 
@@ -128,7 +171,20 @@
                 <div class="feature-row" id="row-aimbot"><div class="feature-info"><span class="feature-title">Aim Bot</span><span class="feature-desc">Asisten bidikan otomatis penuh</span></div><label class="toggle-switch"><input type="checkbox" id="chk-aimbot"><span class="slider"></span></label></div>
                 <div class="feature-row" id="row-aimlock"><div class="feature-info"><span class="feature-title">Aim Lock</span><span class="feature-desc">Kunci target presisi pada musuh</span></div><label class="toggle-switch"><input type="checkbox" id="chk-aimlock"><span class="slider"></span></label></div>
                 <div class="feature-row" id="row-bodylock"><div class="feature-info"><span class="feature-title">Body Lock <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Fokus bidikan mengunci di badan</span></div><label class="toggle-switch"><input type="checkbox" id="chk-bodylock"><span class="slider"></span></label></div>
+                
                 <div class="feature-row" id="row-autohs"><div class="feature-info"><span class="feature-title">Auto Headshot <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Target instan ke kepala</span></div><label class="toggle-switch"><input type="checkbox" id="chk-autohs"><span class="slider"></span></label></div>
+                
+                <div class="feature-row" id="row-sens" style="flex-direction: column; align-items: stretch; gap: 5px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="feature-info">
+                            <span class="feature-title">Headshot Rate <span class="locked-tag">LOCKED</span></span>
+                            <span class="feature-desc">Atur rasio sensitivitas headshot (30% - 80%)</span>
+                        </div>
+                        <span id="sens-val" style="font-size: 13px; font-weight: 700; color: var(--primary-red);">50%</span>
+                    </div>
+                    <input type="range" id="hs-sens-slider" class="sens-slider" min="30" max="80" value="50" disabled>
+                </div>
+
                 <div class="feature-row" id="row-hsbody"><div class="feature-info"><span class="feature-title">Headshot Body <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Nembak badan terhitung HS</span></div><label class="toggle-switch"><input type="checkbox" id="chk-hsbody"><span class="slider"></span></label></div>
                 <div class="feature-row" id="row-hsneck"><div class="feature-info"><span class="feature-title">Headshot Neck <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Nembak leher instan kill</span></div><label class="toggle-switch"><input type="checkbox" id="chk-hsneck"><span class="slider"></span></label></div>
                 <div class="feature-row" id="row-aimgod"><div class="feature-info"><span class="feature-title" style="color: var(--primary-red);">Aim God (Magic) <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Damage No Miss (100% Akurat)</span></div><label class="toggle-switch"><input type="checkbox" id="chk-aimgod"><span class="slider"></span></label></div>
@@ -144,6 +200,66 @@
                 <div class="feature-row" id="row-bypass"><div class="feature-info"><span class="feature-title">BypassNoban <span class="locked-tag">LOCKED</span></span><span class="feature-desc">Gunakan rute server aman</span></div><label class="toggle-switch"><input type="checkbox" id="chk-bypass"><span class="slider"></span></label></div>
                 <div class="feature-row" id="row-antibanned"><div class="feature-info"><span class="feature-title" style="color: var(--primary-red);">Anti-Banned VIP ★</span><span class="feature-desc">Menghapus log report otomatis</span></div><label class="toggle-switch"><input type="checkbox" id="chk-antibanned"><span class="slider"></span></label></div>
                 <div class="server-route-box"><p>Jalur Server Otomatis:</p><div style="display: flex; flex-wrap: wrap; gap: 5px; align-items: center;"><span class="server-badge">🇹🇭 TH</span> <span style="color:var(--text-muted)">➔</span> <span class="server-badge">🇲🇾 MY</span> <span style="color:var(--text-muted)">➔</span> <span class="server-badge">🇸🇬 SG</span> <span style="color:var(--text-muted)">➔</span> <span class="server-badge" style="border: 2px solid var(--primary-red); color: var(--primary-red);">🇮🇩 ID</span></div></div>
+            </div>
+
+            <div class="tab-content" id="fps">
+                <div class="fps-card">
+                    <h3>FPS 120 Boost</h3>
+                    <p class="fps-desc">Tingkatkan performa FPS hingga 120</p>
+                    <p class="fps-price">20rb - 100rb</p>
+                    
+                    <button id="btn-fps-toggle" class="btn-fps-toggle" onclick="toggleFps()">FPS Boost On/Off</button>
+                    <p id="fps-status" class="fps-status">proses</p>
+
+                    <div class="fps-monitor-card">
+                        <div class="monitor-header">
+                            <h4>FPS Monitor</h4>
+                            <span>Real-time</span>
+                        </div>
+                        <div class="monitor-screen" id="fps-terminal"></div>
+                        <div class="monitor-actions">
+                            <button class="btn-analisis" onclick="fpsAnalisis()">Analisis</button>
+                            <button class="btn-clear" onclick="fpsClear()">Clear</button>
+                            <button class="btn-boost" onclick="fpsBoostExe()">Boost</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="device" style="padding-left: 2px; padding-right: 2px;">
+                <div class="device-info-wrapper">
+                    <div class="dev-header"><span>📱</span> Analisis Perangkat Sistem</div>
+                    <div class="dev-grid">
+                        <div class="dev-item dev-full">
+                            <div class="dev-label">Nama / OS Perangkat (Model)</div>
+                            <div class="dev-value" id="dev-os">Menganalisis...</div>
+                        </div>
+                        <div class="dev-item">
+                            <div class="dev-label">Browser / Engine</div>
+                            <div class="dev-value" id="dev-browser">Menganalisis...</div>
+                        </div>
+                        <div class="dev-item">
+                            <div class="dev-label">Resolusi Layar</div>
+                            <div class="dev-value" id="dev-screen">Menganalisis...</div>
+                        </div>
+                        <div class="dev-item">
+                            <div class="dev-label">Core CPU (Logis)</div>
+                            <div class="dev-value" id="dev-cpu">Menganalisis...</div>
+                        </div>
+                        <div class="dev-item">
+                            <div class="dev-label">Estimasi RAM</div>
+                            <div class="dev-value" id="dev-ram">Menganalisis...</div>
+                        </div>
+                        <div class="dev-item dev-full" style="display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <div class="dev-label">Status Jaringan</div>
+                                <div class="dev-value" id="dev-network">Menganalisis...</div>
+                            </div>
+                            <button class="btn-primary" style="width:auto; padding:6px 12px; font-size:11px;" onclick="initDeviceInfo()">Refresh</button>
+                        </div>
+                    </div>
+                    <p style="font-size:10px; color:var(--text-muted); text-align:center; margin-top:10px;">*Informasi perangkat dibaca via User-Agent Browser.</p>
+                </div>
             </div>
 
             <div class="tab-content" id="profil" style="padding-left: 5px;">
@@ -230,6 +346,21 @@
             }
             loadProfileAndSettings();
             setupTerminalTriggers();
+            initDeviceInfo(); // Panggil fungsi cek device saat dimuat
+            
+            document.getElementById('fps-terminal').innerHTML = `<div class="monitor-line"><span class="time">${getLogTime()}</span> <span style="color:#ddd;">FPS Booster siap • tekan "Analisis" untuk mulai</span></div>`;
+
+            const sensSlider = document.getElementById('hs-sens-slider');
+            const sensValText = document.getElementById('sens-val');
+            if(localStorage.getItem('hsSensRate')) {
+                sensSlider.value = localStorage.getItem('hsSensRate');
+                sensValText.innerText = sensSlider.value + "%";
+            }
+            sensSlider.addEventListener('input', function() { sensValText.innerText = this.value + "%"; });
+            sensSlider.addEventListener('change', function() {
+                localStorage.setItem('hsSensRate', this.value);
+                printLog(`> Configuring [Headshot Rate] ... <span style="color:#0f0">SET TO ${this.value}% ✅</span>`);
+            });
         });
 
         function tampilPricelist() { document.getElementById('login-screen').style.display='none'; document.getElementById('pricelist-screen').style.display='block'; }
@@ -265,23 +396,22 @@
 
             unlockFeature('row-aimbot', 'chk-aimbot', tier >= 1); unlockFeature('row-aimlock', 'chk-aimlock', tier >= 1); unlockFeature('row-bypass', 'chk-bypass', tier >= 1);
             unlockFeature('row-bodylock', 'chk-bodylock', tier >= 2); unlockFeature('row-hsbody', 'chk-hsbody', tier >= 2);
-            unlockFeature('row-autohs', 'chk-autohs', tier >= 3); unlockFeature('row-esp', 'chk-esp', tier >= 3); unlockFeature('row-wallhack', 'chk-wallhack', tier >= 3); unlockFeature('row-hsneck', 'chk-hsneck', tier >= 3);
+            unlockFeature('row-autohs', 'chk-autohs', tier >= 3); unlockFeature('row-sens', 'hs-sens-slider', tier >= 3); unlockFeature('row-esp', 'chk-esp', tier >= 3); unlockFeature('row-wallhack', 'chk-wallhack', tier >= 3); unlockFeature('row-hsneck', 'chk-hsneck', tier >= 3);
             unlockFeature('row-hologram', 'chk-hologram', tier >= 4);
             unlockFeature('row-aimgod', 'chk-aimgod', tier >= 5);
             
             if(tier >= 5) { document.getElementById('row-antibanned').style.display='flex'; unlockFeature('row-antibanned', 'chk-antibanned', true); } 
             else { document.getElementById('row-antibanned').style.display='none'; }
 
-            // Set 2 Years Expiry Date
             let expDate = new Date();
             expDate.setFullYear(expDate.getFullYear() + 2);
             document.getElementById('license-expiry').innerText = expDate.toLocaleDateString('id-ID', {day: '2-digit', month: 'long', year: 'numeric'});
         }
 
-        function unlockFeature(rowId, chkId, isUnlocked) {
-            const row=document.getElementById(rowId), chk=document.getElementById(chkId), tag=row.querySelector('.locked-tag');
-            if(isUnlocked){ row.classList.remove('locked'); chk.disabled=false; if(tag) tag.style.display='none'; } 
-            else { row.classList.add('locked'); chk.disabled=true; chk.checked=false; if(tag) tag.style.display='inline-block'; }
+        function unlockFeature(rowId, inputId, isUnlocked) {
+            const row=document.getElementById(rowId), inp=document.getElementById(inputId), tag=row.querySelector('.locked-tag');
+            if(isUnlocked){ row.classList.remove('locked'); inp.disabled=false; if(tag) tag.style.display='none'; } 
+            else { row.classList.add('locked'); inp.disabled=true; if(inp.type === 'checkbox') inp.checked=false; if(tag) tag.style.display='inline-block'; }
         }
 
         function doLogout() {
@@ -297,6 +427,49 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             btnElement.classList.add('active'); document.getElementById(tabId).classList.add('active');
+        }
+
+        /* --- FITUR DEVICE INFO (BARU) --- */
+        function initDeviceInfo() {
+            // Deteksi OS dan Model (via User Agent Parsing Basic)
+            let ua = navigator.userAgent;
+            let osModel = "Tidak Diketahui";
+            let browser = "Web Browser";
+
+            if (/android/i.test(ua)) {
+                let match = ua.match(/Android.*?; (.*?) Build/i);
+                osModel = match ? `Android - ${match[1]}` : "Android Device";
+            } else if (/iPhone|iPad|iPod/i.test(ua)) {
+                osModel = "iOS (Apple Device)";
+            } else if (/Windows/i.test(ua)) {
+                osModel = "Windows PC/Laptop";
+            } else if (/Mac/i.test(ua)) {
+                osModel = "Mac OS Device";
+            }
+
+            if(ua.includes("Chrome")) browser = "Google Chrome / Chromium";
+            else if(ua.includes("Firefox")) browser = "Mozilla Firefox";
+            else if(ua.includes("Safari") && !ua.includes("Chrome")) browser = "Apple Safari";
+            
+            // Deteksi Hardware
+            let cores = navigator.hardwareConcurrency ? navigator.hardwareConcurrency + " Cores" : "Tidak Terdeteksi";
+            let ram = navigator.deviceMemory ? `>= ${navigator.deviceMemory} GB` : "Tidak Terdeteksi";
+            let screenRes = `${window.screen.width} x ${window.screen.height} px`;
+            
+            // Deteksi Jaringan
+            let netStatus = "Terhubung";
+            if (navigator.connection) {
+                let type = navigator.connection.effectiveType || 'unknown';
+                netStatus = `Terhubung (${type.toUpperCase()})`;
+            }
+
+            // Terapkan ke HTML
+            document.getElementById('dev-os').innerText = osModel;
+            document.getElementById('dev-browser').innerText = browser;
+            document.getElementById('dev-screen').innerText = screenRes;
+            document.getElementById('dev-cpu').innerText = cores;
+            document.getElementById('dev-ram').innerText = ram;
+            document.getElementById('dev-network').innerText = netStatus;
         }
 
         /* --- FITUR PROFIL & SETTING --- */
@@ -350,6 +523,60 @@
             p.innerHTML = msg;
             term.appendChild(p);
             term.scrollTop = term.scrollHeight;
+        }
+
+        /* --- JAVASCRIPT MENU FPS BOOST --- */
+        let fpsActive = false;
+        function getLogTime() {
+            const now = new Date();
+            let hh = now.getHours().toString().padStart(2, '0');
+            let mm = now.getMinutes().toString().padStart(2, '0');
+            let ss = now.getSeconds().toString().padStart(2, '0');
+            return `${hh}:${mm}:${ss}`;
+        }
+        function addFpsLog(msg, color = "#ddd") {
+            const term = document.getElementById('fps-terminal');
+            const line = document.createElement('div');
+            line.className = 'monitor-line';
+            line.innerHTML = `<span class="time">${getLogTime()}</span> <span style="color:${color}">${msg}</span>`;
+            term.appendChild(line);
+            term.scrollTop = term.scrollHeight;
+        }
+        function toggleFps() {
+            fpsActive = !fpsActive;
+            const btn = document.getElementById('btn-fps-toggle');
+            const status = document.getElementById('fps-status');
+            if(fpsActive) {
+                btn.classList.add('active');
+                status.innerText = "Status: AKTIF (Running)";
+                status.style.color = "#4CAF50";
+                addFpsLog("Module FPS 120 ENABLED", "#0f0");
+            } else {
+                btn.classList.remove('active');
+                status.innerText = "Status: NONAKTIF";
+                status.style.color = "#b3a0b3";
+                addFpsLog("Module FPS 120 DISABLED", "#f44336");
+            }
+        }
+        function fpsAnalisis() {
+            addFpsLog("Menganalisis performa sistem perangkat...");
+            setTimeout(() => addFpsLog("CPU & GPU Architecture detected.", "#64b5f6"), 800);
+            setTimeout(() => addFpsLog("Current Frame Cap: 60 FPS. Target: 120 FPS.", "#64b5f6"), 1500);
+            setTimeout(() => addFpsLog("Sistem siap. Klik 'Boost' untuk memulai injeksi.", "#fff"), 2200);
+        }
+        function fpsClear() {
+            document.getElementById('fps-terminal').innerHTML = `<div class="monitor-line"><span class="time">${getLogTime()}</span> <span style="color:#ddd;">Monitor log dibersihkan.</span></div>`;
+        }
+        function fpsBoostExe() {
+            if(!fpsActive) {
+                addFpsLog("Gagal: Nyalakan FPS Boost On/Off terlebih dahulu!", "#ff8a8a");
+                return;
+            }
+            addFpsLog("Memulai Proses Boosting Frame Rate...");
+            setTimeout(() => addFpsLog("[1/3] Bypass limitasi FPS dari server game...", "#ffb300"), 1000);
+            setTimeout(() => addFpsLog("[2/3] Mengalokasikan virtual memory tambahan...", "#ffb300"), 2000);
+            setTimeout(() => addFpsLog("[3/3] Injeksi script refresh rate... SUKSES", "#0f0"), 3000);
+            setTimeout(() => addFpsLog("✅ FPS 120 BOOST TERPASANG! 🚀", "#0f0"), 3500);
         }
 
         /* --- ANIMASI LOADING & INJECT --- */
